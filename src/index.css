@@ -1,0 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap');
+* { box-sizing: border-box; }
+html, body, #root { margin: 0; height: 100%; }
+body { font-family: 'Outfit', system-ui, sans-serif; color: #f4f1ee; background: #0d0b0c; }

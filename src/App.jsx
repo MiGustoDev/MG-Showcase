@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { sorted, categories, images } from './projects';
 import './App.css';
 
-const MONTHS = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const MONTHS = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
 const fmt = (ym) => { const [y, m] = ym.split('-'); return `${MONTHS[+m - 1]} ${y}`; };
 const toIdx = (ym) => { const [y, m] = ym.split('-'); return +y * 12 + (+m - 1); };
 
@@ -18,15 +18,20 @@ function Cover() {
   const counts = Object.keys(categories).map((k) => [k, sorted.filter((p) => p.cat === k).length]);
   return (
     <section className="slide cover">
-      <p className="eyebrow">Mi Gusto · Desarrollo Digital</p>
-      <h1>{sorted.length} proyectos.<br /><span>Un mismo sabor.</span></h1>
-      <p className="lead">Recorrido por todo lo que construimos de {fmt(sorted[0].start)} a hoy.</p>
-      <div className="stats">
-        {counts.map(([k, n]) => (
-          <div key={k} className="stat" style={{ '--c': categories[k].color }}>
-            <strong>{n}</strong><span>{categories[k].label}</span>
-          </div>
-        ))}
+      <div className="cover-content">
+        <p className="eyebrow">Mi Gusto · Desarrollo Digital</p>
+        <h1>{sorted.length} proyectos.<br /><span>Un mismo sabor.</span></h1>
+        <p className="lead">Recorrido por todo lo que construimos de {fmt(sorted[0].start)} hasta el día de hoy.</p>
+        <div className="stats">
+          {counts.map(([k, n]) => (
+            <div key={k} className="stat" style={{ '--c': categories[k].color }}>
+              <strong>{n}</strong><span>{categories[k].label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="cover-visual">
+        <img src="/logo.png" alt="Mi Gusto Logo" className="cover-logo" />
       </div>
       <p className="hint">Usá ← → o espacio · T timeline · F pantalla completa</p>
     </section>
@@ -71,42 +76,42 @@ function ProjectSlide({ p, i }) {
   const [zoom, setZoom] = useState(null);
   return (
     <div className="scroller" style={{ '--c': c.color }}>
-    <section className="slide project">
-      <div className="num">{String(i + 1).padStart(2, '0')}</div>
-      <div className="info">
-        <p className="eyebrow">{c.label}</p>
-        <h2>{p.name}</h2>
-        <p className="tagline">{p.tagline}</p>
-        <p className="desc">{p.desc}</p>
-        <div className="chips">{p.stack.map((s) => <span key={s}>{s}</span>)}</div>
-        <p className="dates">📅 {fmt(p.start)}{p.end !== p.start && ` → ${fmt(p.end)}`}</p>
-      </div>
-      <div className="visual">
-        {shots[0] ? <img className="hero-shot" src={shots[0]} alt={p.name} onClick={() => setZoom(shots[0])} />
-          : <div className="orb">{p.emoji}</div>}
-      </div>
-      {shots.length > 0 && <div className="scroll-hint">↓ Scrolleá para ver {shots.length} captura{shots.length > 1 ? 's' : ''}</div>}
-    </section>
-    {shots.length > 0 && (
-      <section className="gallery">
-        {shots.map((s, k) => (
-          <figure key={s} style={{ animationDelay: `${k * 60}ms` }} onClick={() => setZoom(s)}>
-            <img src={s} alt={`${p.name} captura ${k + 1}`} loading="lazy" />
-          </figure>
-        ))}
+      <section className="slide project">
+        <div className="num">{String(i + 1).padStart(2, '0')}</div>
+        <div className="info">
+          <p className="eyebrow">{c.label}</p>
+          <h2>{p.name}</h2>
+          <p className="tagline">{p.tagline}</p>
+          <p className="desc">{p.desc}</p>
+          <div className="chips">{p.stack.map((s) => <span key={s}>{s}</span>)}</div>
+          <p className="dates">📅 {fmt(p.start)}{p.end !== p.start && ` → ${fmt(p.end)}`}</p>
+        </div>
+        <div className="visual">
+          {shots[0] ? <img className="hero-shot" src={shots[0]} alt={p.name} onClick={() => setZoom(shots[0])} />
+            : <div className="orb">{p.emoji}</div>}
+        </div>
+        {shots.length > 0 && <div className="scroll-hint">↓ Scrolleá para ver {shots.length} captura{shots.length > 1 ? 's' : ''}</div>}
       </section>
-    )}
-    {zoom && <div className="lightbox" onClick={() => setZoom(null)}><img src={zoom} alt="" /></div>}
+      {shots.length > 0 && (
+        <section className="gallery">
+          {shots.map((s, k) => (
+            <figure key={s} style={{ animationDelay: `${k * 60}ms` }} onClick={() => setZoom(s)}>
+              <img src={s} alt={`${p.name} captura ${k + 1}`} loading="lazy" />
+            </figure>
+          ))}
+        </section>
+      )}
+      {zoom && <div className="lightbox" onClick={() => setZoom(null)}><img src={zoom} alt="" /></div>}
     </div>
   );
 }
 
 function Closing() {
   const stack = {};
-  sorted.forEach((p) => p.stack.forEach((s) => (stack[s] = (stack[s] || 0) + 1)));
+  sorted.forEach((p) => p.stack.forEach((s) => (stack[s] || 0) + 1));
   const top = Object.entries(stack).sort((a, b) => b[1] - a[1]).slice(0, 8);
   return (
-    <section className="slide cover">
+    <section className="slide closing">
       <p className="eyebrow">Stack más usado</p>
       <div className="cloud">
         {top.map(([s, n]) => <span key={s} style={{ fontSize: `${1 + n / 6}rem` }}>{s}<sup>{n}</sup></span>)}

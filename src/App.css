@@ -17,7 +17,7 @@
 
 .eyebrow { text-transform: uppercase; letter-spacing: .25em; font-size: .85rem; color: var(--c, #ff4d4d); font-weight: 600; margin: 0 0 1rem; }
 h1 { font-size: clamp(3rem, 7vw, 6.5rem); line-height: 1; margin: 0; font-weight: 800; letter-spacing: -.03em; width: fit-content; }
-h1 span { background: linear-gradient(90deg, #ff4d4d, #ffb020); -webkit-background-clip: text; color: transparent; }
+h1 span { background: linear-gradient(90deg, #ff4d4d, #ffb020); -webkit-background-clip: text; background-clip: text; color: transparent; }
 h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -.02em; }
 .lead { font-size: 1.4rem; color: #bbb; margin-top: 1.5rem; }
 .hint { position: absolute; bottom: 12vh; color: #666; font-size: .9rem; }

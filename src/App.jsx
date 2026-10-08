@@ -163,7 +163,11 @@ export default function App() {
       else if (e.key.toLowerCase() === 't') go(1);
       else if (e.key.toLowerCase() === 'g' || e.key === 'Escape') setGrid((g) => !g);
       else if (e.key.toLowerCase() === 'f') {
-        document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        } else {
+          document.documentElement.requestFullscreen();
+        }
       }
     };
     window.addEventListener('keydown', onKey);

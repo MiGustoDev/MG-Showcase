@@ -15,7 +15,17 @@ const ticks = Array.from({ length: span }, (_, i) => minI + i);
 const TOTAL = sorted.length + 3;
 
 function Cover() {
-  const counts = Object.keys(categories).map((k) => [k, sorted.filter((p) => p.cat === k).length]);
+  const totalProjects = sorted.length;
+  const counts = Object.keys(categories).map((k) => {
+    const count = sorted.filter((p) => p.cat === k).length;
+    const pct = Math.round((count / totalProjects) * 100);
+    return {
+      key: k,
+      count,
+      pct,
+      ...categories[k],
+    };
+  });
   return (
     <section className="slide cover">
       <div className="cover-content">
@@ -23,9 +33,22 @@ function Cover() {
         <h1>{sorted.length} proyectos.<br /><span>Un mismo sabor.</span></h1>
         <p className="lead">Recorrido por todo lo que construimos de {fmt(sorted[0].start)} hasta el día de hoy.</p>
         <div className="stats">
-          {counts.map(([k, n]) => (
-            <div key={k} className="stat" style={{ '--c': categories[k].color }}>
-              <strong>{n}</strong><span>{categories[k].label}</span>
+          {counts.map((cat) => (
+            <div key={cat.key} className="stat" style={{ '--c': cat.color }}>
+              <div className="stat-top">
+                <strong>{cat.count}</strong>
+                <span className="stat-icon">{cat.icon}</span>
+              </div>
+              <div className="stat-info">
+                <span className="stat-label">{cat.label}</span>
+                <span className="stat-desc">{cat.desc}</span>
+              </div>
+              <div className="stat-bar-wrap">
+                <div className="stat-bar-bg">
+                  <div className="stat-bar-fill" style={{ width: `${cat.pct}%` }} />
+                </div>
+                <span className="stat-pct">{cat.pct}%</span>
+              </div>
             </div>
           ))}
         </div>

@@ -38,27 +38,58 @@ const timelineStart = new Date('2025-05-01T00:00:00').getTime();
 const timelineEnd = new Date('2026-10-31T23:59:59').getTime();
 const totalTimelineSpan = timelineEnd - timelineStart;
 
-// Generador de meses para la cabecera del timeline
-const timelineMonths = [
-  { year: '2025', m: 'May', isYear: true },
-  { year: '2025', m: 'Jun' },
-  { year: '2025', m: 'Jul' },
-  { year: '2025', m: 'Ago' },
-  { year: '2025', m: 'Sep' },
-  { year: '2025', m: 'Oct' },
-  { year: '2025', m: 'Nov' },
-  { year: '2025', m: 'Dic' },
-  { year: '2026', m: 'Ene', isYear: true },
-  { year: '2026', m: 'Feb' },
-  { year: '2026', m: 'Mar' },
-  { year: '2026', m: 'Abr' },
-  { year: '2026', m: 'May' },
-  { year: '2026', m: 'Jun' },
-  { year: '2026', m: 'Jul' },
-  { year: '2026', m: 'Ago' },
-  { year: '2026', m: 'Sep' },
-  { year: '2026', m: 'Oct' },
-];
+// ---------- Timeline: helpers de layout ----------
+const toTime = (d, endOfDay) => new Date(d + (endOfDay ? 'T23:59:59' : 'T00:00:00')).getTime();
+const toPct = (t) => ((t - timelineStart) / totalTimelineSpan) * 100;
+
+// Meses del eje (posición real según días de cada mes)
+const axisMonths = Array.from({ length: 18 }, (_, i) => {
+  const d = new Date(2025, 4 + i, 1);
+  return { key: i, label: MONTHS[d.getMonth()], left: toPct(d.getTime()), isJan: d.getMonth() === 0 };
+}).map((m, i, arr) => ({ ...m, width: (arr[i + 1]?.left ?? 100) - m.left }));
+const yearDivider = toPct(new Date(2026, 0, 1).getTime());
+const todayPct = toPct(Date.now());
+const showToday = todayPct > 0 && todayPct < 100;
+
+const indexById = Object.fromEntries(sorted.map((p, i) => [p.id, i]));
+const catCounts = Object.fromEntries(Object.keys(categories).map((k) => [k, sorted.filter((p) => p.cat === k).length]));
+
+// Estimación del espacio visual del nombre (en % del tablero) para evitar colisiones
+const LABEL_CHAR = 0.52;
+const LABEL_PAD = 1.8;
+
+function layoutItem(p) {
+  const s = toTime(p.start);
+  const e = toTime(p.end, true);
+  const left = toPct(s);
+  // Ancho REAL y estricto del proyecto según sus fechas exactas en el calendario
+  const actualW = toPct(e) - left;
+  // Ancho visible mínimo (0.7% ~10px) para que proyectos de 1 día sean visibles y clicables
+  const barW = Math.max(0.7, actualW);
+  // Ancho del texto para empaquetar filas evitando cualquier solapamiento
+  const labelW = (p.name.length + 3) * LABEL_CHAR + LABEL_PAD;
+
+  const vStart = left;
+  // El espacio ocupado incluye hasta donde termine la barra o el texto que fluye de ella
+  const vEnd = left + Math.max(barW, labelW);
+
+  return { p, left, actualW, barW, vStart, vEnd };
+}
+
+// Agrupa en filas los proyectos que no se solapan (respetando duración y etiquetas)
+function pack(items) {
+  const rows = [];
+  items.forEach((it) => {
+    let row = rows.find((r) => r.end + 0.8 < it.vStart);
+    if (!row) { row = { end: -Infinity, items: [] }; rows.push(row); }
+    row.items.push(it);
+    row.end = it.vEnd;
+  });
+  return rows;
+}
+
+const tlItems = sorted.map(layoutItem);
+const laneRows = Object.fromEntries(Object.keys(categories).map((k) => [k, pack(tlItems.filter((it) => it.p.cat === k))]));
 
 // slides: 0 = portada, 1 = timeline, 2..n+1 = proyectos, n+2 = cierre
 const TOTAL = sorted.length + 3;
@@ -110,36 +141,133 @@ function Cover() {
   );
 }
 
-function Timeline({ go, active }) {
+function TlItem({ it, go, onHover, onLeave, active }) {
+  const { p, barW } = it;
+  const idx = indexById[p.id];
+  return (
+    <button
+      type="button"
+      id={`tl-${p.id}`}
+      className={`tl-item bar${active ? ' is-hover' : ''}`}
+      style={{
+        left: `${it.left}%`,
+        width: `${barW}%`,
+        '--c': categories[p.cat].color,
+        animationDelay: `${idx * 28}ms`,
+      }}
+      onMouseEnter={(e) => onHover(p, e)}
+      onMouseMove={(e) => onHover(p, e)}
+      onMouseLeave={onLeave}
+      onFocus={(e) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        onHover(p, { clientX: r.left, clientY: r.bottom });
+      }}
+      onBlur={onLeave}
+      onClick={() => go(idx + 2)}
+      aria-label={`${p.name}: ${fmtDate(p.start)} a ${fmtDate(p.end)}`}
+    >
+      <span className="tl-label">{p.emoji} {p.name}</span>
+    </button>
+  );
+}
+
+function TlTooltip({ hover }) {
+  const { p, x, y } = hover;
+  const c = categories[p.cat];
+  const W = 320;
+  const H = 260;
+  const left = x + W + 24 > window.innerWidth ? Math.max(12, x - W - 16) : x + 16;
+  const top = y + H + 24 > window.innerHeight ? Math.max(12, y - H - 12) : y + 16;
+  return (
+    <div className="tl-tip" style={{ left, top, '--c': c.color }}>
+      <span className="tl-tip-cat">{c.icon} {c.label}</span>
+      <h4>{p.emoji} {p.name}</h4>
+      <p>{p.tagline}</p>
+      <div className="tl-tip-dates">
+        <span>📅 {fmtDate(p.start)}{p.end !== p.start ? ` → ${fmtDate(p.end)}` : ''}</span>
+        <b>{calcDuration(p.start, p.end).replace(/ \(.*\)/, '')}</b>
+      </div>
+      <div className="tl-tip-stack">{p.stack.slice(0, 5).map((s) => <span key={s}>{s}</span>)}</div>
+      <div className="tl-tip-cta">Click para abrir el proyecto →</div>
+    </div>
+  );
+}
+
+function Timeline({ go }) {
+  const [view, setView] = useState('lanes');
+  const [filter, setFilter] = useState('all');
+  const [hover, setHover] = useState(null);
+
+  const visible = filter === 'all' ? tlItems : tlItems.filter((it) => it.p.cat === filter);
+  const onHover = (p, e) => setHover({ p, x: e.clientX, y: e.clientY });
+  const onLeave = () => setHover(null);
+  const renderItem = (it) => (
+    <TlItem key={it.p.id} it={it} go={go} onHover={onHover} onLeave={onLeave} active={hover?.p.id === it.p.id} />
+  );
+
   return (
     <section className="slide timeline">
-      <h2>Línea de tiempo (2025 - 2026)</h2>
-      <div className="gantt">
-        <div className="months">
-          {timelineMonths.map((tm, idx) => (
-            <span key={idx} style={{ width: `${100 / timelineMonths.length}%` }}>
-              {tm.isYear ? <b>{tm.m} {tm.year}</b> : tm.m}
-            </span>
-          ))}
+      <header className="tl-head">
+        <div>
+          <p className="eyebrow">Recorrido 2025 — 2026</p>
+          <h2>Línea de tiempo</h2>
         </div>
-        {sorted.map((p, i) => {
-          const pStart = new Date(p.start + 'T00:00:00').getTime();
-          const pEnd = new Date(p.end + 'T23:59:59').getTime();
-          const left = Math.max(0, Math.min(99, ((pStart - timelineStart) / totalTimelineSpan) * 100));
-          const width = Math.max(2.2, Math.min(100 - left, ((pEnd - pStart) / totalTimelineSpan) * 100));
-          return (
-            <button key={p.id} className={`row ${active === i ? 'on' : ''}`} onClick={() => go(i + 2)}
-              style={{ animationDelay: `${i * 30}ms` }} title={`${p.name} (${fmtDate(p.start)} → ${fmtDate(p.end)})`}>
-              <span className="bar" style={{ left: `${left}%`, width: `${width}%`, '--c': categories[p.cat].color }}>
-                <em>{p.emoji} {p.name}</em>
-              </span>
-            </button>
-          );
-        })}
+        <div className="tl-toggle" role="tablist" aria-label="Tipo de vista">
+          <button id="tl-view-lanes" role="tab" aria-selected={view === 'lanes'} className={view === 'lanes' ? 'on' : ''} onClick={() => setView('lanes')}>☰ Por carriles</button>
+          <button id="tl-view-chrono" role="tab" aria-selected={view === 'chrono'} className={view === 'chrono' ? 'on' : ''} onClick={() => setView('chrono')}>↘ Cronológica</button>
+        </div>
+      </header>
+
+      <div className="tl-filters">
+        <button id="tl-filter-all" className={`tl-chip ${filter === 'all' ? 'on' : ''}`} onClick={() => setFilter('all')}>
+          ✨ Todos <b>{sorted.length}</b>
+        </button>
+        {Object.entries(categories).map(([k, c]) => (
+          <button key={k} id={`tl-filter-${k}`} className={`tl-chip ${filter === k ? 'on' : ''}`} style={{ '--c': c.color }} onClick={() => setFilter(k)}>
+            {c.icon} {c.label} <b>{catCounts[k]}</b>
+          </button>
+        ))}
+        <span className="tl-total">{visible.length} proyectos · May 2025 → Oct 2026</span>
       </div>
-      <div className="legend">
-        {Object.values(categories).map((c) => <span key={c.label} style={{ '--c': c.color }}>{c.label}</span>)}
+
+      <div className="tl-board">
+        <div className="tl-scroll">
+          <div className="tl-axis">
+            <div className="tl-axis-inner">
+              <span className="tl-year" style={{ left: 0 }}>2025</span>
+              <span className="tl-year" style={{ left: `${yearDivider}%` }}>2026</span>
+              {showToday && <span className="tl-today-tag" style={{ left: `${todayPct}%` }}>Hoy</span>}
+              {axisMonths.map((m) => (
+                <span key={m.key} className={`tl-month ${m.isJan ? 'jan' : ''}`} style={{ left: `${m.left}%`, width: `${m.width}%` }}>{m.label}</span>
+              ))}
+            </div>
+          </div>
+
+          <div className={`tl-canvas tl-${view}${hover ? ' has-hover' : ''}`} key={`${view}-${filter}`}>
+            <div className="tl-grid" aria-hidden="true">
+              <div className="tl-zone-2026" style={{ left: `${yearDivider}%` }} />
+              {axisMonths.slice(1).map((m) => <i key={m.key} className={m.isJan ? 'year' : ''} style={{ left: `${m.left}%` }} />)}
+              {showToday && <div className="tl-today" style={{ left: `${todayPct}%` }} />}
+            </div>
+
+            {view === 'lanes'
+              ? Object.entries(categories)
+                .filter(([k]) => filter === 'all' || filter === k)
+                .map(([k, c]) => (
+                  <div className="tl-lane" key={k} style={{ '--c': c.color }}>
+                    <div className="tl-lane-head">
+                      <span>{c.icon} {c.label}</span>
+                      <small>{catCounts[k]} proyectos</small>
+                    </div>
+                    {laneRows[k].map((r, ri) => <div className="tl-row" key={ri}>{r.items.map(renderItem)}</div>)}
+                  </div>
+                ))
+              : visible.map((it) => <div className="tl-row" key={it.p.id}>{renderItem(it)}</div>)}
+          </div>
+        </div>
       </div>
+
+      {hover && <TlTooltip key={hover.p.id} hover={hover} />}
     </section>
   );
 }
@@ -185,7 +313,7 @@ function ProjectSlide({ p, i }) {
 
 function Closing() {
   const stack = {};
-  sorted.forEach((p) => p.stack.forEach((s) => (stack[s] || 0) + 1));
+  sorted.forEach((p) => p.stack.forEach((s) => { stack[s] = (stack[s] || 0) + 1; }));
   const top = Object.entries(stack).sort((a, b) => b[1] - a[1]).slice(0, 8);
   return (
     <section className="slide closing">

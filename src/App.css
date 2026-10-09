@@ -110,6 +110,13 @@ h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -
   pointer-events: auto;
 }
 
+.tl-item.bar.is-flip .tl-label {
+  position: absolute;
+  right: 100%;
+  margin-right: 6px;
+  padding: 0;
+}
+
 .tl-canvas.has-hover .tl-item:not(.is-hover) { opacity: .25; filter: saturate(.4); }
 .tl-item.is-hover { z-index: 5; filter: brightness(1.15); }
 .tl-item.is-hover .tl-label { color: #fff; text-shadow: 0 1px 4px #000, 0 0 14px var(--c); }

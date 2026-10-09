@@ -6,8 +6,9 @@ export const categories = {
   tools: { label: 'Herramientas Internas', color: '#5aa9ff', icon: '🛠️', desc: 'IT, Automatización & Utilidades' },
 };
 
+// Proyectos ordenados cronológicamente de 2025 al 2026 (hasta el día de hoy)
 export const projects = [
-  // WEB & MARCA
+  // 1. Mayo 2025
   {
     id: 'site',
     name: 'Mi Gusto Web',
@@ -19,19 +20,32 @@ export const projects = [
     desc: 'Sitio oficial de la marca Mi Gusto, diseñado para ofrecer una experiencia atractiva y funcional que refleje la identidad y valores de la marca. Implementación con tecnologías modernas para una navegación intuitiva y contenido dinámico.',
     stack: ['React', 'GSAP', 'Bootstrap', 'EmailJS', 'Mailchimp'],
   },
+
+  // 2. Agosto 2025
   {
-    id: 'carta',
-    name: 'Carta Digital MG',
-    emoji: '📖',
-    cat: 'web',
-    start: '2026-06-09',
-    end: '2026-09-15',
-    tagline: 'Gestión y sincronización de carta',
-    desc: 'Sistema de gestión para "Mi Gusto" que permite al admin actualizar y cargar una carta digital, reflejándose automáticamente en la web de la marca. Incluye panel admin para editar menús, precios y productos, con sincronización instantánea en el sitio web. Desarrollado con tecnologías modernas para facilitar la gestión diaria del restaurante.',
-    stack: ['React', 'Firebase', 'Supabase', 'GSAP'],
+    id: 'autoanswers',
+    name: 'Auto Mail Answers',
+    emoji: '🤖',
+    cat: 'tools',
+    start: '2025-08-05',
+    end: '2025-08-05',
+    tagline: 'Respuesta automática & monitoreo',
+    desc: 'Aplicación de escritorio con interfaz gráfica moderna para la respuesta automática y monitoreo continuo de correos electrónicos. Permite procesar mensajes no leídos, prevenir duplicados con historial inteligente y operar en segundo plano de forma eficiente.',
+    stack: ['Python', 'IMAP/SMTP', 'Threading', 'GUI'],
   },
 
-  // MARKETING & EVENTOS
+  // 3. Septiembre 2025
+  {
+    id: 'translate',
+    name: 'Real Time Translate',
+    emoji: '🌐',
+    cat: 'tools',
+    start: '2025-09-15',
+    end: '2026-02-13',
+    tagline: 'Traductor simultáneo con voz y audio',
+    desc: 'Aplicación web de traducción simultánea en tiempo real. Captura voz mediante Web Speech API, traduce de forma automática entre múltiples idiomas con fallback inteligente sin necesidad de API keys y sintetiza el resultado en audio con pronunciación natural. Gratuita, rápida y moderna.',
+    stack: ['React', 'Web Speech API', 'Speech Synthesis', 'Tailwind CSS'],
+  },
   {
     id: 'flamin',
     name: "Mi Gusto x Flamin' Hot",
@@ -42,6 +56,30 @@ export const projects = [
     tagline: 'Lanzamiento y micrositio 3D',
     desc: 'Landing page creada para la campaña de lanzamiento de la nueva empanada Mi Gusto en colaboración con Flamin Hot. Un diseño moderno y responsivo que resalta el sabor picante del producto, con el objetivo de atraer consumidores y potenciar la promoción digital.',
     stack: ['React', 'Three.js', 'GSAP', 'Supabase'],
+  },
+  {
+    id: 'multimail',
+    name: 'Multi Mail Sender',
+    emoji: '📨',
+    cat: 'tools',
+    start: '2025-09-24',
+    end: '2025-10-07',
+    tagline: 'Envíos personalizados multi-servidor',
+    desc: 'Aplicación de escritorio moderna y liviana para el envío masivo y personalizado de correos electrónicos. Incluye gestión de listas de distribución, editor de texto enriquecido con formato HTML, firma automática y soporte para múltiples servidores SMTP (Ferozo Webmail, Gmail, Outlook).',
+    stack: ['Python', 'Tkinter GUI', 'SMTP', 'HTML Editor'],
+  },
+
+  // 4. Octubre 2025
+  {
+    id: 'massivemail',
+    name: 'Massive Mail Sender',
+    emoji: '📧',
+    cat: 'tools',
+    start: '2025-10-08',
+    end: '2025-10-08',
+    tagline: 'Desktop app para envíos masivos',
+    desc: 'Aplicación de escritorio profesional en Python para envíos masivos de correos electrónicos. Incluye editor visual de HTML, incrustación de imágenes inline, plantillas prediseñadas y soporte para importar destinatarios desde Excel, CSV, PDF y Google Sheets con monitoreo en tiempo real.',
+    stack: ['Python', 'CustomTkinter', 'SMTP', 'Pandas'],
   },
   {
     id: 'crunchy',
@@ -65,6 +103,8 @@ export const projects = [
     desc: 'Aplicación web construida con React, TypeScript y Supabase para la campaña IAE x Mi Gusto. Automatiza la validación de correos, asignación de códigos únicos de beneficio y el envío masivo de emails personalizados en HTML con un diseño moderno de alto impacto.',
     stack: ['React', 'TypeScript', 'Supabase', 'Tailwind CSS'],
   },
+
+  // 5. Noviembre 2025
   {
     id: 'influencers',
     name: 'Influencers Form',
@@ -77,6 +117,19 @@ export const projects = [
     stack: ['React', 'TypeScript', 'Supabase', 'Tailwind CSS'],
   },
   {
+    id: 'rooms',
+    name: 'Reminders Rooms',
+    emoji: '🗂️',
+    cat: 'tools',
+    start: '2025-11-25',
+    end: '2026-02-27',
+    tagline: 'Recordatorios colaborativos por salas',
+    desc: 'Aplicación web colaborativa para gestionar recordatorios compartidos por salas (rooms). Ofrece vistas de Tarjetas, Calendario y Gantt, analíticas, notificaciones y sincronización en tiempo real con Supabase. Desarrollada con React 18, TypeScript, Vite y Tailwind CSS.',
+    stack: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Supabase'],
+  },
+
+  // 6. Febrero 2026
+  {
     id: 'games',
     name: 'Mi Gusto Games',
     emoji: '🕹️',
@@ -86,6 +139,17 @@ export const projects = [
     tagline: 'Arcade interactivo para aperturas',
     desc: '🥟 Plataforma interactiva de juegos arcade temáticos desarrollada para la apertura de nuevas sucursales de Mi Gusto. Experiencia web multiplataforma con 6 juegos optimizados para tótems táctiles, computadoras y celulares. 🎮',
     stack: ['Phaser', 'GSAP', 'Howler.js', 'React'],
+  },
+  {
+    id: 'ordercaller',
+    name: 'Order Caller Locales',
+    emoji: '🔔',
+    cat: 'ops',
+    start: '2026-02-18',
+    end: '2026-03-10',
+    tagline: 'Llamador de pedidos para sucursales',
+    desc: 'Llamador de pedidos local desarrollado para Lollapalooza que automatiza la gestión de órdenes del staff. Permite registrar, organizar y notificar pedidos en tiempo real, eliminando la necesidad de despacharlos de forma manual y mejorando la eficiencia operativa durante el evento.',
+    stack: ['React', 'Supabase', 'WebSockets'],
   },
   {
     id: 'golden',
@@ -99,62 +163,18 @@ export const projects = [
     stack: ['React', 'Supabase', 'Framer Motion'],
   },
   {
-    id: 'day',
-    name: 'Mi Gusto Day',
-    emoji: '🎉',
-    cat: 'marketing',
-    start: '2026-04-09',
-    end: '2026-04-09',
-    tagline: 'Landing de captación & cupones',
-    desc: 'Mi Gusto Day es una landing page con formulario inteligente diseñada para el área de marketing de Mi Gusto. Recauda datos de usuarios de forma rápida y segura, enviando automáticamente cupones de descuento para su próxima compra. Aumenta conversiones, fideliza clientes y genera leads cualificados con diseño atractivo y responsive.',
-    stack: ['React', 'Tailwind CSS', 'Supabase'],
-  },
-  {
-    id: 'degu',
-    name: 'Degustación Puertas Cerradas',
-    emoji: '🍷',
-    cat: 'marketing',
-    start: '2026-05-05',
-    end: '2026-09-16',
-    tagline: 'Reserva de eventos VIP en tiempo real',
-    desc: 'Plataforma web boutique para reserva y gestión de cupos en tiempo real de degustaciones gastronómicas VIP. Incluye diseño premium, animaciones fluidas y sincronización en tiempo real con React, TypeScript, GSAP, Tailwind CSS y Supabase.',
-    stack: ['React', 'TypeScript', 'GSAP', 'Tailwind CSS', 'Supabase'],
-  },
-  {
-    id: 'sagrada',
-    name: 'Mi Gusto x La Sagrada',
-    emoji: '🍺',
-    cat: 'marketing',
-    start: '2026-05-26',
-    end: '2026-06-01',
-    tagline: 'Colaboración y experiencia digital',
-    desc: 'Landing page promocional para Mi Gusto, enfocada en el lanzamiento de la nueva empanada “La Sagrada”. Diseño atractivo, moderno y orientado a destacar el producto, generar impacto visual y comunicar la campaña de forma clara y efectiva.',
-    stack: ['React', 'Vite', 'Tailwind CSS', 'GSAP', 'Supabase'],
-  },
-  {
-    id: 'roulette',
-    name: 'Ruleta de Premios Aperturas',
-    emoji: '🎡',
-    cat: 'marketing',
-    start: '2026-07-10',
-    end: '2026-07-16',
-    tagline: 'Gamificación y captación de clientes',
-    desc: 'MG-Roulette es una aplicación web interactiva desarrollada para capturar datos de clientes de "Mi Gusto" y ofrecerles una experiencia gamificada mediante una ruleta de premios premium. Construida con React, Vite, Tailwind CSS, GSAP para animaciones fluidas y Supabase para almacenamiento.',
-    stack: ['React', 'Vite', 'Tailwind CSS', 'GSAP', 'Supabase'],
+    id: 'qr',
+    name: 'QR Generator Pro',
+    emoji: '🔳',
+    cat: 'tools',
+    start: '2026-02-26',
+    end: '2026-08-18',
+    tagline: 'Generador web de códigos QR',
+    desc: 'Generador web de códigos QR de alta calidad con personalización avanzada, duración ilimitada y gestión de historial. Construido con React, TypeScript y Tailwind.',
+    stack: ['React', 'TypeScript', 'Tailwind CSS'],
   },
 
-  // OPERACIONES & INDUSTRIA
-  {
-    id: 'ordercaller',
-    name: 'Order Caller Locales',
-    emoji: '🔔',
-    cat: 'ops',
-    start: '2026-02-18',
-    end: '2026-03-10',
-    tagline: 'Llamador de pedidos para sucursales',
-    desc: 'Llamador de pedidos local desarrollado para Lollapalooza que automatiza la gestión de órdenes del staff. Permite registrar, organizar y notificar pedidos en tiempo real, eliminando la necesidad de despacharlos de forma manual y mejorando la eficiencia operativa durante el evento.',
-    stack: ['React', 'Supabase', 'WebSockets'],
-  },
+  // 7. Marzo 2026
   {
     id: 'lolla',
     name: 'Lollapalooza Order Caller',
@@ -188,95 +208,31 @@ export const projects = [
     desc: 'Ecosistema de gestión y digitalización industrial para la planta Mi Gusto. Control en tiempo real de logística y camiones por GPS, seguimiento de stock de materias primas, reportes de calidad, mantenimiento y auditorías con arquitectura reactiva en tiempo real y diseño Dark Minimalist.',
     stack: ['React', 'Supabase', 'Leaflet', 'Chart.js'],
   },
+
+  // 8. Abril 2026
   {
-    id: 'copa',
-    name: 'Copa Mundial de Inocuidad',
-    emoji: '🏆',
-    cat: 'ops',
-    start: '2026-06-04',
-    end: '2026-09-17',
-    tagline: 'Gamificación de inocuidad alimentaria',
-    desc: 'Juego interactivo en React con temática de Copa Mundial de la Inocuidad Alimentaria. Trivia por fases, animaciones, ranking y pergamino de compromiso para promover buenas prácticas, responsabilidad y trabajo en equipo en un entorno educativo y dinámico.',
-    stack: ['React', 'Tailwind CSS', 'Supabase', 'Canvas Confetti'],
-  },
-  {
-    id: 'capa',
-    name: 'MG Capacitaciones',
-    emoji: '🎓',
-    cat: 'ops',
-    start: '2026-06-16',
-    end: '2026-10-01',
-    tagline: 'Capacitaciones de fábrica & BPM',
-    desc: 'Plataforma web interna de Mi Gusto para capacitaciones de fábrica, con cursos interactivos y otros temas operativos. Diseñada para desktop y mobile, con una experiencia clara, intuitiva y escalable para múltiples formaciones.',
-    stack: ['React', 'TypeScript', 'Supabase', 'Tailwind CSS'],
+    id: 'day',
+    name: 'Mi Gusto Day',
+    emoji: '🎉',
+    cat: 'marketing',
+    start: '2026-04-09',
+    end: '2026-04-09',
+    tagline: 'Landing de captación & cupones',
+    desc: 'Mi Gusto Day es una landing page con formulario inteligente diseñada para el área de marketing de Mi Gusto. Recauda datos de usuarios de forma rápida y segura, enviando automáticamente cupones de descuento para su próxima compra. Aumenta conversiones, fideliza clientes y genera leads cualificados con diseño atractivo y responsive.',
+    stack: ['React', 'Tailwind CSS', 'Supabase'],
   },
 
-  // HERRAMIENTAS INTERNAS
+  // 9. Mayo 2026
   {
-    id: 'autoanswers',
-    name: 'Auto Mail Answers',
-    emoji: '🤖',
-    cat: 'tools',
-    start: '2025-08-05',
-    end: '2025-08-05',
-    tagline: 'Respuesta automática & monitoreo',
-    desc: 'Aplicación de escritorio con interfaz gráfica moderna para la respuesta automática y monitoreo continuo de correos electrónicos. Permite procesar mensajes no leídos, prevenir duplicados con historial inteligente y operar en segundo plano de forma eficiente.',
-    stack: ['Python', 'IMAP/SMTP', 'Threading', 'GUI'],
-  },
-  {
-    id: 'translate',
-    name: 'Real Time Translate',
-    emoji: '🌐',
-    cat: 'tools',
-    start: '2025-09-15',
-    end: '2026-02-13',
-    tagline: 'Traductor simultáneo con voz y audio',
-    desc: 'Aplicación web de traducción simultánea en tiempo real. Captura voz mediante Web Speech API, traduce de forma automática entre múltiples idiomas con fallback inteligente sin necesidad de API keys y sintetiza el resultado en audio con pronunciación natural. Gratuita, rápida y moderna.',
-    stack: ['React', 'Web Speech API', 'Speech Synthesis', 'Tailwind CSS'],
-  },
-  {
-    id: 'multimail',
-    name: 'Multi Mail Sender',
-    emoji: '📨',
-    cat: 'tools',
-    start: '2025-09-24',
-    end: '2025-10-07',
-    tagline: 'Envíos personalizados multi-servidor',
-    desc: 'Aplicación de escritorio moderna y liviana para el envío masivo y personalizado de correos electrónicos. Incluye gestión de listas de distribución, editor de texto enriquecido con formato HTML, firma automática y soporte para múltiples servidores SMTP (Ferozo Webmail, Gmail, Outlook).',
-    stack: ['Python', 'Tkinter GUI', 'SMTP', 'HTML Editor'],
-  },
-  {
-    id: 'massivemail',
-    name: 'Massive Mail Sender',
-    emoji: '📧',
-    cat: 'tools',
-    start: '2025-10-08',
-    end: '2025-10-08',
-    tagline: 'Desktop app para envíos masivos',
-    desc: 'Aplicación de escritorio profesional en Python para envíos masivos de correos electrónicos. Incluye editor visual de HTML, incrustación de imágenes inline, plantillas prediseñadas y soporte para importar destinatarios desde Excel, CSV, PDF y Google Sheets con monitoreo en tiempo real.',
-    stack: ['Python', 'CustomTkinter', 'SMTP', 'Pandas'],
-  },
-  {
-    id: 'rooms',
-    name: 'Reminders Rooms',
-    emoji: '🗂️',
-    cat: 'tools',
-    start: '2025-11-25',
-    end: '2026-02-27',
-    tagline: 'Recordatorios colaborativos por salas',
-    desc: 'Aplicación web colaborativa para gestionar recordatorios compartidos por salas (rooms). Ofrece vistas de Tarjetas, Calendario y Gantt, analíticas, notificaciones y sincronización en tiempo real con Supabase. Desarrollada con React 18, TypeScript, Vite y Tailwind CSS.',
-    stack: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Supabase'],
-  },
-  {
-    id: 'qr',
-    name: 'QR Generator Pro',
-    emoji: '🔳',
-    cat: 'tools',
-    start: '2026-02-26',
-    end: '2026-08-18',
-    tagline: 'Generador web de códigos QR',
-    desc: 'Generador web de códigos QR de alta calidad con personalización avanzada, duración ilimitada y gestión de historial. Construido con React, TypeScript y Tailwind.',
-    stack: ['React', 'TypeScript', 'Tailwind CSS'],
+    id: 'degu',
+    name: 'Degustación Puertas Cerradas',
+    emoji: '🍷',
+    cat: 'marketing',
+    start: '2026-05-05',
+    end: '2026-09-16',
+    tagline: 'Reserva de eventos VIP en tiempo real',
+    desc: 'Plataforma web boutique para reserva y gestión de cupos en tiempo real de degustaciones gastronómicas VIP. Incluye diseño premium, animaciones fluidas y sincronización en tiempo real con React, TypeScript, GSAP, Tailwind CSS y Supabase.',
+    stack: ['React', 'TypeScript', 'GSAP', 'Tailwind CSS', 'Supabase'],
   },
   {
     id: 'tech',
@@ -290,6 +246,65 @@ export const projects = [
     stack: ['React', 'TypeScript', 'Tailwind CSS', 'Supabase'],
   },
   {
+    id: 'sagrada',
+    name: 'Mi Gusto x La Sagrada',
+    emoji: '🍺',
+    cat: 'marketing',
+    start: '2026-05-26',
+    end: '2026-06-01',
+    tagline: 'Colaboración y experiencia digital',
+    desc: 'Landing page promocional para Mi Gusto, enfocada en el lanzamiento de la nueva empanada “La Sagrada”. Diseño atractivo, moderno y orientado a destacar el producto, generar impacto visual y comunicar la campaña de forma clara y efectiva.',
+    stack: ['React', 'Vite', 'Tailwind CSS', 'GSAP', 'Supabase'],
+  },
+
+  // 10. Junio 2026
+  {
+    id: 'copa',
+    name: 'Copa Mundial de Inocuidad',
+    emoji: '🏆',
+    cat: 'ops',
+    start: '2026-06-04',
+    end: '2026-09-17',
+    tagline: 'Gamificación de inocuidad alimentaria',
+    desc: 'Juego interactivo en React con temática de Copa Mundial de la Inocuidad Alimentaria. Trivia por fases, animaciones, ranking y pergamino de compromiso para promover buenas prácticas, responsabilidad y trabajo en equipo en un entorno educativo y dinámico.',
+    stack: ['React', 'Tailwind CSS', 'Supabase', 'Canvas Confetti'],
+  },
+  {
+    id: 'carta',
+    name: 'Carta Digital MG',
+    emoji: '📖',
+    cat: 'web',
+    start: '2026-06-09',
+    end: '2026-09-15',
+    tagline: 'Gestión y sincronización de carta',
+    desc: 'Sistema de gestión para "Mi Gusto" que permite al admin actualizar y cargar una carta digital, reflejándose automáticamente en la web de la marca. Incluye panel admin para editar menús, precios y productos, con sincronización instantánea en el sitio web. Desarrollado con tecnologías modernas para facilitar la gestión diaria del restaurante.',
+    stack: ['React', 'Firebase', 'Supabase', 'GSAP'],
+  },
+  {
+    id: 'capa',
+    name: 'MG Capacitaciones',
+    emoji: '🎓',
+    cat: 'ops',
+    start: '2026-06-16',
+    end: '2026-10-01',
+    tagline: 'Capacitaciones de fábrica & BPM',
+    desc: 'Plataforma web interna de Mi Gusto para capacitaciones de fábrica, con cursos interactivos y otros temas operativos. Diseñada para desktop y mobile, con una experiencia clara, intuitiva y escalable para múltiples formaciones.',
+    stack: ['React', 'TypeScript', 'Supabase', 'Tailwind CSS'],
+  },
+
+  // 11. Julio 2026
+  {
+    id: 'roulette',
+    name: 'Ruleta de Premios Aperturas',
+    emoji: '🎡',
+    cat: 'marketing',
+    start: '2026-07-10',
+    end: '2026-07-16',
+    tagline: 'Gamificación y captación de clientes',
+    desc: 'MG-Roulette es una aplicación web interactiva desarrollada para capturar datos de clientes de "Mi Gusto" y ofrecerles una experiencia gamificada mediante una ruleta de premios premium. Construida con React, Vite, Tailwind CSS, GSAP para animaciones fluidas y Supabase para almacenamiento.',
+    stack: ['React', 'Vite', 'Tailwind CSS', 'GSAP', 'Supabase'],
+  },
+  {
     id: 'screenflow',
     name: 'ScreenFlow',
     emoji: '🎬',
@@ -299,6 +314,19 @@ export const projects = [
     tagline: 'Editor de video local en navegador',
     desc: 'Screen Flow es un editor de video interactivo y moderno que se ejecuta 100% en el navegador de manera local. Permite recortar tramos de video con precisión mediante una línea de tiempo con miniaturas, rotar, espejar, controlar volumen y velocidad, y convertir clips en formatos tipo Video Wall.',
     stack: ['React', 'Vite', 'Canvas', 'Web Audio API'],
+  },
+
+  // 12. Octubre 2026 (El más reciente hasta el día de hoy)
+  {
+    id: 'audit',
+    name: 'MG AuditApp',
+    emoji: '📋',
+    cat: 'ops',
+    start: '2026-10-07',
+    end: '2026-10-09',
+    tagline: 'Planilla operativa & auditoría de locales',
+    desc: 'Aplicación web integral para la auditoría operativa y control de calidad en sucursales de Mi Gusto. Permite relevar desvíos en tiempo real, calcular scoring y veredictos automáticos, adjuntar fotos y gestionar el historial con sincronización en Supabase.',
+    stack: ['React', 'TypeScript', 'Supabase', 'GSAP', 'Lucide'],
   },
 ];
 
@@ -319,5 +347,3 @@ export const images = {
 
 // Proyectos ordenados cronológicamente por fecha exacta de inicio
 export const sorted = [...projects].sort((a, b) => a.start.localeCompare(b.start));
-
-

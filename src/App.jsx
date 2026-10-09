@@ -19,18 +19,41 @@ const fmtMonthYear = (dStr) => {
   return `${MONTHS_FULL[+m - 1]} ${y}`;
 };
 
-// Calcula la duración en días/semanas/meses
+// Calcula la duración en días/semanas/meses/años (formato legible: ej. "1 año - 4 meses")
 const calcDuration = (startStr, endStr) => {
   if (!startStr || !endStr) return '';
-  if (startStr === endStr) return '1 día';
-  const start = new Date(startStr + 'T00:00:00');
-  const end = new Date(endStr + 'T23:59:59');
+  const [y1, m1, d1] = startStr.split('-').map(Number);
+  const [y2, m2, d2] = endStr.split('-').map(Number);
+  const start = new Date(y1, m1 - 1, d1, 0, 0, 0);
+  const end = new Date(y2, m2 - 1, d2, 23, 59, 59);
   const diffDays = Math.max(1, Math.round((end - start) / (1000 * 60 * 60 * 24)));
-  if (diffDays <= 7) return `${diffDays} día${diffDays > 1 ? 's' : ''}`;
-  const diffWeeks = Math.round(diffDays / 7);
-  if (diffDays < 30) return `${diffWeeks} semana${diffWeeks > 1 ? 's' : ''}`;
-  const diffMonths = Math.round(diffDays / 30.44);
-  return `${diffMonths} mes${diffMonths > 1 ? 'es' : ''} (${diffDays} días)`;
+
+  if (diffDays === 1) return '1 día';
+  if (diffDays < 30) {
+    if (diffDays % 7 === 0) {
+      const weeks = diffDays / 7;
+      return `${weeks} semana${weeks > 1 ? 's' : ''}`;
+    }
+    return `${diffDays} días`;
+  }
+
+  // Meses calculados de forma precisa según calendario
+  let totalMonths = (y2 - y1) * 12 + (m2 - m1);
+  if (d2 - d1 >= 15) totalMonths += 1;
+  else if (d1 - d2 >= 15) totalMonths -= 1;
+  totalMonths = Math.max(1, totalMonths);
+
+  const years = Math.floor(totalMonths / 12);
+  const remMonths = totalMonths % 12;
+
+  if (years >= 1) {
+    if (remMonths > 0) {
+      return `${years} año${years > 1 ? 's' : ''} - ${remMonths} mes${remMonths > 1 ? 'es' : ''}`;
+    }
+    return `${years} año${years > 1 ? 's' : ''}`;
+  }
+
+  return `${totalMonths} mes${totalMonths > 1 ? 'es' : ''}`;
 };
 
 // Rango temporal global del timeline (desde 1 de Mayo 2025 hasta 31 de Octubre 2026)
@@ -70,10 +93,12 @@ function layoutItem(p) {
   const labelW = (p.name.length + 3) * LABEL_CHAR + LABEL_PAD;
 
   const vStart = left;
-  // El espacio ocupado incluye hasta donde termine la barra o el texto que fluye de ella
-  const vEnd = left + Math.max(barW, labelW);
+  // Si el texto desbordaría el borde derecho del tablero (100%), se ubica a la izquierda de la barra
+  const flip = left + labelW > 98.5;
+  const vEnd = flip ? (left + barW) : (left + Math.max(barW, labelW));
+  const packedStart = flip ? Math.max(0, left - labelW) : vStart;
 
-  return { p, left, actualW, barW, vStart, vEnd };
+  return { p, left, actualW, barW, flip, vStart: packedStart, vEnd };
 }
 
 // Agrupa en filas los proyectos que no se solapan (respetando duración y etiquetas)
@@ -142,13 +167,13 @@ function Cover() {
 }
 
 function TlItem({ it, go, onHover, onLeave, active }) {
-  const { p, barW } = it;
+  const { p, barW, flip } = it;
   const idx = indexById[p.id];
   return (
     <button
       type="button"
       id={`tl-${p.id}`}
-      className={`tl-item bar${active ? ' is-hover' : ''}`}
+      className={`tl-item bar${flip ? ' is-flip' : ''}${active ? ' is-hover' : ''}`}
       style={{
         left: `${it.left}%`,
         width: `${barW}%`,
@@ -185,7 +210,7 @@ function TlTooltip({ hover }) {
       <p>{p.tagline}</p>
       <div className="tl-tip-dates">
         <span>📅 {fmtDate(p.start)}{p.end !== p.start ? ` → ${fmtDate(p.end)}` : ''}</span>
-        <b>{calcDuration(p.start, p.end).replace(/ \(.*\)/, '')}</b>
+        <b>{calcDuration(p.start, p.end)}</b>
       </div>
       <div className="tl-tip-stack">{p.stack.slice(0, 5).map((s) => <span key={s}>{s}</span>)}</div>
       <div className="tl-tip-cta">Click para abrir el proyecto →</div>
@@ -288,7 +313,7 @@ function ProjectSlide({ p, i }) {
           <div className="chips">{p.stack.map((s) => <span key={s}>{s}</span>)}</div>
           <p className="dates">
             📅 {fmtDate(p.start)}{p.end !== p.start ? ` → ${fmtDate(p.end)}` : ''}
-            <span className="duration-pill"> · ({calcDuration(p.start, p.end)})</span>
+            <span className="duration-pill">{calcDuration(p.start, p.end)}</span>
           </p>
         </div>
         <div className="visual">

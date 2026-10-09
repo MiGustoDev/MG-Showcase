@@ -16,7 +16,7 @@ export const projects = [
     start: '2025-05-27',
     end: '2026-09-28',
     tagline: 'Sitio institucional oficial',
-    desc: 'Sitio oficial de la marca Mi Gusto con experiencia inmersiva: productos, franquicias, sucursales, empleos y contenido dinámico.',
+    desc: 'Sitio oficial de la marca Mi Gusto, diseñado para ofrecer una experiencia atractiva y funcional que refleje la identidad y valores de la marca. Implementación con tecnologías modernas para una navegación intuitiva y contenido dinámico.',
     stack: ['React', 'GSAP', 'Bootstrap', 'EmailJS', 'Mailchimp'],
   },
   {
@@ -27,7 +27,7 @@ export const projects = [
     start: '2026-06-09',
     end: '2026-09-15',
     tagline: 'Gestión y sincronización de carta',
-    desc: 'Sistema de gestión para actualizar y sincronizar menús, precios y productos al instante en la web de la marca con panel de administración.',
+    desc: 'Sistema de gestión para "Mi Gusto" que permite al admin actualizar y cargar una carta digital, reflejándose automáticamente en la web de la marca. Incluye panel admin para editar menús, precios y productos, con sincronización instantánea en el sitio web. Desarrollado con tecnologías modernas para facilitar la gestión diaria del restaurante.',
     stack: ['React', 'Firebase', 'Supabase', 'GSAP'],
   },
 
@@ -40,18 +40,18 @@ export const projects = [
     start: '2025-09-23',
     end: '2026-06-14',
     tagline: 'Lanzamiento y micrositio 3D',
-    desc: 'Landing page para la campaña de lanzamiento de la nueva empanada con modelo 3D interactivo, diseño picante y alta conversión.',
+    desc: 'Landing page creada para la campaña de lanzamiento de la nueva empanada Mi Gusto en colaboración con Flamin Hot. Un diseño moderno y responsivo que resalta el sabor picante del producto, con el objetivo de atraer consumidores y potenciar la promoción digital.',
     stack: ['React', 'Three.js', 'GSAP', 'Supabase'],
   },
   {
     id: 'crunchy',
-    name: 'Validador Promo Crunchy',
+    name: 'Validador Lanzamiento Crunchy',
     emoji: '✨',
     cat: 'marketing',
     start: '2025-10-29',
     end: '2025-11-17',
     tagline: 'Validación de códigos y reservas',
-    desc: 'Sistema web en tiempo real para validación de códigos promocionales y DNI para la campaña Crunchy, con consulta de sucursal y fecha de reserva.',
+    desc: 'Sistema web para la validación en tiempo real de códigos promocionales y DNI de clientes para la campaña Lanzamiento CRUNCHY de Mi Gusto. Integrado con Supabase, ofrece consulta instantánea de sucursal y fecha de reserva con una interfaz moderna, rápida y segura.',
     stack: ['React', 'Supabase', 'Tailwind CSS'],
   },
   {
@@ -62,7 +62,7 @@ export const projects = [
     start: '2025-10-31',
     end: '2025-11-17',
     tagline: 'Campaña corporativa & emailing',
-    desc: 'Aplicación web que automatiza validación de correos, asignación de códigos únicos de beneficio y envío masivo de emails personalizados en HTML.',
+    desc: 'Aplicación web construida con React, TypeScript y Supabase para la campaña IAE x Mi Gusto. Automatiza la validación de correos, asignación de códigos únicos de beneficio y el envío masivo de emails personalizados en HTML con un diseño moderno de alto impacto.',
     stack: ['React', 'TypeScript', 'Supabase', 'Tailwind CSS'],
   },
   {
@@ -73,7 +73,7 @@ export const projects = [
     start: '2025-11-14',
     end: '2025-12-15',
     tagline: 'Gestión y auditoría de canjes',
-    desc: 'Plataforma para gestión e historial de canjes con influencers, con formulario dinámico configurable, panel admin con PIN y exportación.',
+    desc: 'Aplicación web desarrollada en React, TypeScript y Supabase para la gestión e historial de canjes con influencers de Mi Gusto. Cuenta con formulario dinámico configurable, panel de administración protegido por PIN e historial con exportación.',
     stack: ['React', 'TypeScript', 'Supabase', 'Tailwind CSS'],
   },
   {
@@ -84,7 +84,7 @@ export const projects = [
     start: '2026-02-18',
     end: '2026-04-17',
     tagline: 'Arcade interactivo para aperturas',
-    desc: 'Plataforma de 6 juegos arcade temáticos de empanadas desarrollada para aperturas de sucursales en tótems táctiles, computadoras y celulares.',
+    desc: '🥟 Plataforma interactiva de juegos arcade temáticos desarrollada para la apertura de nuevas sucursales de Mi Gusto. Experiencia web multiplataforma con 6 juegos optimizados para tótems táctiles, computadoras y celulares. 🎮',
     stack: ['Phaser', 'GSAP', 'Howler.js', 'React'],
   },
   {
@@ -95,7 +95,7 @@ export const projects = [
     start: '2026-02-24',
     end: '2026-03-20',
     tagline: 'Fidelización Mi Gusto Lovers',
-    desc: 'Sistema para validar tickets premiados, otorgar packs mensuales de empanadas y llevar control seguro de registros y canjes en sucursal.',
+    desc: 'Sistema de fidelización Mi Gusto Lovers basado en Golden Tickets, que permite validar tickets premiados, otorgar packs mensuales de empanadas según el tipo de ticket y llevar un control seguro de registros y canjes en sucursal.',
     stack: ['React', 'Supabase', 'Framer Motion'],
   },
   {
@@ -106,7 +106,7 @@ export const projects = [
     start: '2026-04-09',
     end: '2026-04-09',
     tagline: 'Landing de captación & cupones',
-    desc: 'Landing page con formulario inteligente que recolecta datos de usuarios y envía automáticamente cupones de descuento para fidelización.',
+    desc: 'Mi Gusto Day es una landing page con formulario inteligente diseñada para el área de marketing de Mi Gusto. Recauda datos de usuarios de forma rápida y segura, enviando automáticamente cupones de descuento para su próxima compra. Aumenta conversiones, fideliza clientes y genera leads cualificados con diseño atractivo y responsive.',
     stack: ['React', 'Tailwind CSS', 'Supabase'],
   },
   {
@@ -117,7 +117,7 @@ export const projects = [
     start: '2026-05-05',
     end: '2026-09-16',
     tagline: 'Reserva de eventos VIP en tiempo real',
-    desc: 'Plataforma web boutique para reserva y gestión de cupos en tiempo real con diseño premium, animaciones fluidas y sincronización instantánea.',
+    desc: 'Plataforma web boutique para reserva y gestión de cupos en tiempo real de degustaciones gastronómicas VIP. Incluye diseño premium, animaciones fluidas y sincronización en tiempo real con React, TypeScript, GSAP, Tailwind CSS y Supabase.',
     stack: ['React', 'TypeScript', 'GSAP', 'Tailwind CSS', 'Supabase'],
   },
   {
@@ -128,7 +128,7 @@ export const projects = [
     start: '2026-05-26',
     end: '2026-06-01',
     tagline: 'Colaboración y experiencia digital',
-    desc: 'Micrositio promocional de la colaboración con estética premium, animaciones fluidas y registro exclusivo.',
+    desc: 'Landing page promocional para Mi Gusto, enfocada en el lanzamiento de la nueva empanada “La Sagrada”. Diseño atractivo, moderno y orientado a destacar el producto, generar impacto visual y comunicar la campaña de forma clara y efectiva.',
     stack: ['React', 'Vite', 'Tailwind CSS', 'GSAP', 'Supabase'],
   },
   {
@@ -139,7 +139,7 @@ export const projects = [
     start: '2026-07-10',
     end: '2026-07-16',
     tagline: 'Gamificación y captación de clientes',
-    desc: 'Aplicación web interactiva para capturar datos de clientes en inauguraciones y ofrecer una ruleta de premios con animaciones dinámicas.',
+    desc: 'MG-Roulette es una aplicación web interactiva desarrollada para capturar datos de clientes de "Mi Gusto" y ofrecerles una experiencia gamificada mediante una ruleta de premios premium. Construida con React, Vite, Tailwind CSS, GSAP para animaciones fluidas y Supabase para almacenamiento.',
     stack: ['React', 'Vite', 'Tailwind CSS', 'GSAP', 'Supabase'],
   },
 
@@ -152,7 +152,7 @@ export const projects = [
     start: '2026-02-18',
     end: '2026-03-10',
     tagline: 'Llamador de pedidos para sucursales',
-    desc: 'Sistema de llamado de pedidos local que automatiza la gestión de órdenes del staff, organizando y notificando pedidos en tiempo real.',
+    desc: 'Llamador de pedidos local desarrollado para Lollapalooza que automatiza la gestión de órdenes del staff. Permite registrar, organizar y notificar pedidos en tiempo real, eliminando la necesidad de despacharlos de forma manual y mejorando la eficiencia operativa durante el evento.',
     stack: ['React', 'Supabase', 'WebSockets'],
   },
   {
@@ -163,7 +163,7 @@ export const projects = [
     start: '2026-03-12',
     end: '2026-09-14',
     tagline: 'Sistema offline para eventos masivos',
-    desc: 'Sistema offline para puntos de venta en Lollapalooza: interfaz táctil para armado de pedidos y pantalla vertical para retiro de clientes sin conexión.',
+    desc: 'Sistema offline de gestión y llamado de pedidos diseñado para puntos de venta de Mi Gusto en Lollapalooza. Incluye interfaz táctil para contador (armado de pedidos) y pantalla vertical optimizada para TV (retiro de clientes), sincronizados en tiempo real sin requerir conexión a internet.',
     stack: ['React', 'Supabase', 'Offline Sync', 'Local Storage'],
   },
   {
@@ -174,7 +174,7 @@ export const projects = [
     start: '2026-03-23',
     end: '2026-05-18',
     tagline: 'Manufacturing Execution System',
-    desc: 'Digitalización de producción en planta: monitoreo en tiempo real de máquinas, seguimiento de órdenes, conversor de datos y reportes analíticos.',
+    desc: 'MES System MG es un sistema para digitalizar procesos de producción en fábrica. Incluye dashboard centralizado, conversor de datos, monitoreo en tiempo real de máquinas, seguimiento de órdenes y reportes analíticos. Optimiza eficiencia, reduce tiempos muertos y facilita la toma de decisiones en entornos industriales.',
     stack: ['React', 'Supabase', 'Recharts', 'Tailwind CSS'],
   },
   {
@@ -185,7 +185,7 @@ export const projects = [
     start: '2026-03-26',
     end: '2026-09-07',
     tagline: 'Digitalización industrial y logística',
-    desc: 'Ecosistema para planta: control en tiempo real de logística y camiones por GPS, stock de materias primas, reportes de calidad y auditorías.',
+    desc: 'Ecosistema de gestión y digitalización industrial para la planta Mi Gusto. Control en tiempo real de logística y camiones por GPS, seguimiento de stock de materias primas, reportes de calidad, mantenimiento y auditorías con arquitectura reactiva en tiempo real y diseño Dark Minimalist.',
     stack: ['React', 'Supabase', 'Leaflet', 'Chart.js'],
   },
   {
@@ -196,7 +196,7 @@ export const projects = [
     start: '2026-06-04',
     end: '2026-09-17',
     tagline: 'Gamificación de inocuidad alimentaria',
-    desc: 'Juego interactivo de trivia por fases, animaciones, ranking y pergamino de compromiso para promover buenas prácticas y trabajo en equipo.',
+    desc: 'Juego interactivo en React con temática de Copa Mundial de la Inocuidad Alimentaria. Trivia por fases, animaciones, ranking y pergamino de compromiso para promover buenas prácticas, responsabilidad y trabajo en equipo en un entorno educativo y dinámico.',
     stack: ['React', 'Tailwind CSS', 'Supabase', 'Canvas Confetti'],
   },
   {
@@ -207,7 +207,7 @@ export const projects = [
     start: '2026-06-16',
     end: '2026-10-01',
     tagline: 'Capacitaciones de fábrica & BPM',
-    desc: 'Plataforma web interna para capacitaciones de fábrica con cursos interactivos y temas operativos, diseñada para desktop y mobile.',
+    desc: 'Plataforma web interna de Mi Gusto para capacitaciones de fábrica, con cursos interactivos y otros temas operativos. Diseñada para desktop y mobile, con una experiencia clara, intuitiva y escalable para múltiples formaciones.',
     stack: ['React', 'TypeScript', 'Supabase', 'Tailwind CSS'],
   },
 
@@ -220,7 +220,7 @@ export const projects = [
     start: '2025-08-05',
     end: '2025-08-05',
     tagline: 'Respuesta automática & monitoreo',
-    desc: 'Aplicación de escritorio con GUI moderna para respuesta automática y monitoreo continuo de correos con prevención de duplicados.',
+    desc: 'Aplicación de escritorio con interfaz gráfica moderna para la respuesta automática y monitoreo continuo de correos electrónicos. Permite procesar mensajes no leídos, prevenir duplicados con historial inteligente y operar en segundo plano de forma eficiente.',
     stack: ['Python', 'IMAP/SMTP', 'Threading', 'GUI'],
   },
   {
@@ -231,7 +231,7 @@ export const projects = [
     start: '2025-09-15',
     end: '2026-02-13',
     tagline: 'Traductor simultáneo con voz y audio',
-    desc: 'App web de traducción simultánea que captura voz por Web Speech API, traduce en tiempo real con fallback inteligente y sintetiza en audio natural.',
+    desc: 'Aplicación web de traducción simultánea en tiempo real. Captura voz mediante Web Speech API, traduce de forma automática entre múltiples idiomas con fallback inteligente sin necesidad de API keys y sintetiza el resultado en audio con pronunciación natural. Gratuita, rápida y moderna.',
     stack: ['React', 'Web Speech API', 'Speech Synthesis', 'Tailwind CSS'],
   },
   {
@@ -242,7 +242,7 @@ export const projects = [
     start: '2025-09-24',
     end: '2025-10-07',
     tagline: 'Envíos personalizados multi-servidor',
-    desc: 'App de escritorio moderna y liviana para envíos masivos con gestión de listas, editor enriquecido, firmas y soporte multi-SMTP (Ferozo, Gmail, Outlook).',
+    desc: 'Aplicación de escritorio moderna y liviana para el envío masivo y personalizado de correos electrónicos. Incluye gestión de listas de distribución, editor de texto enriquecido con formato HTML, firma automática y soporte para múltiples servidores SMTP (Ferozo Webmail, Gmail, Outlook).',
     stack: ['Python', 'Tkinter GUI', 'SMTP', 'HTML Editor'],
   },
   {
@@ -253,7 +253,7 @@ export const projects = [
     start: '2025-10-08',
     end: '2025-10-08',
     tagline: 'Desktop app para envíos masivos',
-    desc: 'Aplicación de escritorio en Python con editor visual HTML, imágenes inline, plantillas e importación desde Excel, CSV, PDF y Sheets.',
+    desc: 'Aplicación de escritorio profesional en Python para envíos masivos de correos electrónicos. Incluye editor visual de HTML, incrustación de imágenes inline, plantillas prediseñadas y soporte para importar destinatarios desde Excel, CSV, PDF y Google Sheets con monitoreo en tiempo real.',
     stack: ['Python', 'CustomTkinter', 'SMTP', 'Pandas'],
   },
   {
@@ -264,7 +264,7 @@ export const projects = [
     start: '2025-11-25',
     end: '2026-02-27',
     tagline: 'Recordatorios colaborativos por salas',
-    desc: 'Aplicación colaborativa con vistas de Tarjetas, Calendario y Gantt, analíticas, notificaciones y sincronización en tiempo real.',
+    desc: 'Aplicación web colaborativa para gestionar recordatorios compartidos por salas (rooms). Ofrece vistas de Tarjetas, Calendario y Gantt, analíticas, notificaciones y sincronización en tiempo real con Supabase. Desarrollada con React 18, TypeScript, Vite y Tailwind CSS.',
     stack: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Supabase'],
   },
   {
@@ -275,7 +275,7 @@ export const projects = [
     start: '2026-02-26',
     end: '2026-08-18',
     tagline: 'Generador web de códigos QR',
-    desc: 'Generador de códigos QR de alta calidad con personalización avanzada, duración ilimitada y gestión centralizada de historial.',
+    desc: 'Generador web de códigos QR de alta calidad con personalización avanzada, duración ilimitada y gestión de historial. Construido con React, TypeScript y Tailwind.',
     stack: ['React', 'TypeScript', 'Tailwind CSS'],
   },
   {
@@ -286,7 +286,7 @@ export const projects = [
     start: '2026-05-11',
     end: '2026-10-08',
     tagline: 'Gestión de activos IT y compras',
-    desc: 'Plataforma integral para gestión, auditoría y control centralizado de activos IT, impresoras, cartelería digital, guardias y pedidos de compras.',
+    desc: 'TechControl es una plataforma web integral y moderna para la gestión, auditoría y control centralizado de activos de infraestructura IT, impresoras, cartelería digital, guardias y pedidos de compras. Diseñada con React 19, TypeScript y Tailwind CSS para ofrecer máxima eficiencia operativa.',
     stack: ['React', 'TypeScript', 'Tailwind CSS', 'Supabase'],
   },
   {
@@ -297,7 +297,7 @@ export const projects = [
     start: '2026-07-27',
     end: '2026-09-16',
     tagline: 'Editor de video local en navegador',
-    desc: 'Editor de video interactivo 100% en el navegador: recorte de tramos con línea de tiempo y miniaturas, rotación, velocidad y conversión a Video Wall.',
+    desc: 'Screen Flow es un editor de video interactivo y moderno que se ejecuta 100% en el navegador de manera local. Permite recortar tramos de video con precisión mediante una línea de tiempo con miniaturas, rotar, espejar, controlar volumen y velocidad, y convertir clips en formatos tipo Video Wall.',
     stack: ['React', 'Vite', 'Canvas', 'Web Audio API'],
   },
 ];

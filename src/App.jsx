@@ -3,13 +3,62 @@ import { sorted, categories, images } from './projects';
 import './App.css';
 
 const MONTHS = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-const fmt = (ym) => { const [y, m] = ym.split('-'); return `${MONTHS[+m - 1]} ${y}`; };
-const toIdx = (ym) => { const [y, m] = ym.split('-'); return +y * 12 + (+m - 1); };
+const MONTHS_FULL = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-const minI = Math.min(...sorted.map((p) => toIdx(p.start)));
-const maxI = Math.max(...sorted.map((p) => toIdx(p.end))) + 1;
-const span = maxI - minI;
-const ticks = Array.from({ length: span }, (_, i) => minI + i);
+// Formatea YYYY-MM-DD a "Ddd Mmm AAAA" (ej: "27 May 2025")
+const fmtDate = (dStr) => {
+  if (!dStr) return '';
+  const [y, m, d] = dStr.split('-');
+  return `${+d} ${MONTHS[+m - 1]} ${y}`;
+};
+
+// Formatea el mes inicial para la portada
+const fmtMonthYear = (dStr) => {
+  if (!dStr) return '';
+  const [y, m] = dStr.split('-');
+  return `${MONTHS_FULL[+m - 1]} ${y}`;
+};
+
+// Calcula la duración en días/semanas/meses
+const calcDuration = (startStr, endStr) => {
+  if (!startStr || !endStr) return '';
+  if (startStr === endStr) return '1 día';
+  const start = new Date(startStr + 'T00:00:00');
+  const end = new Date(endStr + 'T23:59:59');
+  const diffDays = Math.max(1, Math.round((end - start) / (1000 * 60 * 60 * 24)));
+  if (diffDays <= 7) return `${diffDays} día${diffDays > 1 ? 's' : ''}`;
+  const diffWeeks = Math.round(diffDays / 7);
+  if (diffDays < 30) return `${diffWeeks} semana${diffWeeks > 1 ? 's' : ''}`;
+  const diffMonths = Math.round(diffDays / 30.44);
+  return `${diffMonths} mes${diffMonths > 1 ? 'es' : ''} (${diffDays} días)`;
+};
+
+// Rango temporal global del timeline (desde 1 de Mayo 2025 hasta 31 de Octubre 2026)
+const timelineStart = new Date('2025-05-01T00:00:00').getTime();
+const timelineEnd = new Date('2026-10-31T23:59:59').getTime();
+const totalTimelineSpan = timelineEnd - timelineStart;
+
+// Generador de meses para la cabecera del timeline
+const timelineMonths = [
+  { year: '2025', m: 'May', isYear: true },
+  { year: '2025', m: 'Jun' },
+  { year: '2025', m: 'Jul' },
+  { year: '2025', m: 'Ago' },
+  { year: '2025', m: 'Sep' },
+  { year: '2025', m: 'Oct' },
+  { year: '2025', m: 'Nov' },
+  { year: '2025', m: 'Dic' },
+  { year: '2026', m: 'Ene', isYear: true },
+  { year: '2026', m: 'Feb' },
+  { year: '2026', m: 'Mar' },
+  { year: '2026', m: 'Abr' },
+  { year: '2026', m: 'May' },
+  { year: '2026', m: 'Jun' },
+  { year: '2026', m: 'Jul' },
+  { year: '2026', m: 'Ago' },
+  { year: '2026', m: 'Sep' },
+  { year: '2026', m: 'Oct' },
+];
 
 // slides: 0 = portada, 1 = timeline, 2..n+1 = proyectos, n+2 = cierre
 const TOTAL = sorted.length + 3;
@@ -31,7 +80,7 @@ function Cover() {
       <div className="cover-content">
         <p className="eyebrow">Mi Gusto · Desarrollo Digital</p>
         <h1>{sorted.length} proyectos.<br /><span>Un mismo sabor.</span></h1>
-        <p className="lead">Recorrido por todo lo que construimos de {fmt(sorted[0].start)} hasta el día de hoy.</p>
+        <p className="lead">Recorrido por todo lo que construimos de {fmtMonthYear(sorted[0].start)} hasta el día de hoy.</p>
         <div className="stats">
           {counts.map((cat) => (
             <div key={cat.key} className="stat" style={{ '--c': cat.color }}>
@@ -64,21 +113,23 @@ function Cover() {
 function Timeline({ go, active }) {
   return (
     <section className="slide timeline">
-      <h2>Línea de tiempo</h2>
+      <h2>Línea de tiempo (2025 - 2026)</h2>
       <div className="gantt">
         <div className="months">
-          {ticks.map((t) => (
-            <span key={t} style={{ width: `${100 / span}%` }}>
-              {t % 12 === 0 ? <b>{Math.floor(t / 12)}</b> : MONTHS[t % 12]}
+          {timelineMonths.map((tm, idx) => (
+            <span key={idx} style={{ width: `${100 / timelineMonths.length}%` }}>
+              {tm.isYear ? <b>{tm.m} {tm.year}</b> : tm.m}
             </span>
           ))}
         </div>
         {sorted.map((p, i) => {
-          const left = ((toIdx(p.start) - minI) / span) * 100;
-          const width = ((toIdx(p.end) - toIdx(p.start) + 1) / span) * 100;
+          const pStart = new Date(p.start + 'T00:00:00').getTime();
+          const pEnd = new Date(p.end + 'T23:59:59').getTime();
+          const left = Math.max(0, Math.min(99, ((pStart - timelineStart) / totalTimelineSpan) * 100));
+          const width = Math.max(2.2, Math.min(100 - left, ((pEnd - pStart) / totalTimelineSpan) * 100));
           return (
             <button key={p.id} className={`row ${active === i ? 'on' : ''}`} onClick={() => go(i + 2)}
-              style={{ animationDelay: `${i * 40}ms` }}>
+              style={{ animationDelay: `${i * 30}ms` }} title={`${p.name} (${fmtDate(p.start)} → ${fmtDate(p.end)})`}>
               <span className="bar" style={{ left: `${left}%`, width: `${width}%`, '--c': categories[p.cat].color }}>
                 <em>{p.emoji} {p.name}</em>
               </span>
@@ -107,7 +158,10 @@ function ProjectSlide({ p, i }) {
           <p className="tagline">{p.tagline}</p>
           <p className="desc">{p.desc}</p>
           <div className="chips">{p.stack.map((s) => <span key={s}>{s}</span>)}</div>
-          <p className="dates">📅 {fmt(p.start)}{p.end !== p.start && ` → ${fmt(p.end)}`}</p>
+          <p className="dates">
+            📅 {fmtDate(p.start)}{p.end !== p.start ? ` → ${fmtDate(p.end)}` : ''}
+            <span className="duration-pill"> · ({calcDuration(p.start, p.end)})</span>
+          </p>
         </div>
         <div className="visual">
           {shots[0] ? <img className="hero-shot" src={shots[0]} alt={p.name} onClick={() => setZoom(shots[0])} />
@@ -190,7 +244,7 @@ export default function App() {
           <div className="grid">
             {sorted.map((p, i) => (
               <button key={p.id} style={{ '--c': categories[p.cat].color }} onClick={() => go(i + 2)}>
-                <span>{p.emoji}</span>{p.name}<small>{fmt(p.start)}</small>
+                <span>{p.emoji}</span>{p.name}<small>{fmtDate(p.start)}</small>
               </button>
             ))}
           </div>

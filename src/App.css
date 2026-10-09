@@ -37,16 +37,20 @@ h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -
 .stat-pct { color: #aaa; font-size: 0.7rem; font-weight: 600; font-variant-numeric: tabular-nums; }
 
 /* Timeline */
-.timeline { justify-content: flex-start; padding-top: 5vh; }
-.gantt { position: relative; flex: 1; display: flex; flex-direction: column; gap: 4px; overflow: auto; }
-.months { display: flex; border-bottom: 1px solid #ffffff22; padding-bottom: 6px; margin-bottom: 6px; position: sticky; top: 0; background: #0d0b0ccc; z-index: 1; }
-.months span { font-size: .72rem; color: #777; text-align: left; border-left: 1px solid #ffffff10; padding-left: 3px; }
-.months b { color: #ffb020; }
-.row { position: relative; height: 26px; background: none; border: 0; cursor: pointer; padding: 0; animation: enter .5s both; }
-.bar { position: absolute; top: 0; bottom: 0; border-radius: 8px; background: linear-gradient(90deg, var(--c), color-mix(in srgb, var(--c) 50%, transparent)); display: flex; align-items: center; transition: transform .2s, box-shadow .2s; }
-.bar em { font-style: normal; font-size: .8rem; font-weight: 600; white-space: nowrap; padding-left: 8px; color: #fff; text-shadow: 0 1px 3px #0009; }
-.row:hover .bar { transform: scaleY(1.2); box-shadow: 0 0 20px var(--c); z-index: 2; }
-.legend { display: flex; gap: 1.5rem; margin-top: 1rem; }
+.timeline { justify-content: flex-start; padding-top: 4vh; padding-bottom: 12vh; }
+.timeline h2 { font-size: clamp(1.8rem, 3.5vw, 2.8rem); margin-bottom: 0.8rem; }
+.gantt { position: relative; flex: 1; display: flex; flex-direction: column; gap: 3px; overflow-y: auto; overflow-x: hidden; padding-right: 6px; }
+.gantt::-webkit-scrollbar { width: 6px; }
+.gantt::-webkit-scrollbar-thumb { background: #ffffff22; border-radius: 6px; }
+.months { display: flex; border-bottom: 1px solid #ffffff22; padding-bottom: 6px; margin-bottom: 8px; position: sticky; top: 0; background: #0d0b0cf0; backdrop-filter: blur(8px); z-index: 3; }
+.months span { font-size: .75rem; color: #777; text-align: left; border-left: 1px solid #ffffff14; padding-left: 4px; }
+.months b { color: #ffb020; font-weight: 700; }
+.row { position: relative; height: 23px; min-height: 23px; background: none; border: 0; cursor: pointer; padding: 0; animation: enter .4s both; }
+.bar { position: absolute; top: 0; bottom: 0; border-radius: 6px; background: linear-gradient(90deg, var(--c), color-mix(in srgb, var(--c) 45%, transparent)); display: flex; align-items: center; transition: transform .2s, box-shadow .2s; }
+.bar em { font-style: normal; font-size: .75rem; font-weight: 600; white-space: nowrap; padding-left: 6px; color: #fff; text-shadow: 0 1px 3px #000c; }
+.row:hover .bar { transform: scaleY(1.25); box-shadow: 0 0 18px var(--c); z-index: 2; }
+.legend { display: flex; gap: 1.5rem; margin-top: 0.8rem; flex-wrap: wrap; }
+.legend span { font-size: 0.85rem; color: #ccc; display: flex; align-items: center; }
 .legend span::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--c); margin-right: 6px; }
 
 /* Project */
@@ -57,7 +61,8 @@ h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -
 .desc { font-size: 1.3rem; line-height: 1.6; color: #ccc; max-width: 40ch; }
 .chips { display: flex; gap: .6rem; flex-wrap: wrap; margin: 1.8rem 0; }
 .chips span { padding: .4rem .9rem; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--c) 60%, transparent); background: color-mix(in srgb, var(--c) 12%, transparent); font-size: .9rem; }
-.dates { color: #999; }
+.dates { color: #bbb; font-size: 1.05rem; display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.5rem; }
+.duration-pill { color: var(--c); font-weight: 600; background: color-mix(in srgb, var(--c) 14%, transparent); padding: 0.2rem 0.65rem; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--c) 30%, transparent); font-size: 0.85rem; }
 .visual { flex: 1; display: grid; place-items: center; }
 .orb { width: min(30vw, 380px); aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; font-size: min(12vw, 150px);
   background: radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--c) 45%, transparent), #ffffff05 70%);

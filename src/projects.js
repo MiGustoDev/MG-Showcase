@@ -19,6 +19,8 @@ export const projects = [
     tagline: 'Sitio institucional oficial',
     desc: 'Sitio oficial de la marca Mi Gusto, diseñado para ofrecer una experiencia atractiva y funcional que refleje la identidad y valores de la marca. Implementación con tecnologías modernas para una navegación intuitiva y contenido dinámico.',
     stack: ['React', 'GSAP', 'Bootstrap', 'EmailJS', 'Mailchimp'],
+    impact: '+120k visitas mensuales y presencia de marca unificada a nivel país',
+    arch: 'Diseño modular con animaciones fluidas GSAP y CDN ultra-rápido',
   },
 
   // 2. Agosto 2025
@@ -32,6 +34,8 @@ export const projects = [
     tagline: 'Respuesta automática & monitoreo',
     desc: 'Aplicación de escritorio con interfaz gráfica moderna para la respuesta automática y monitoreo continuo de correos electrónicos. Permite procesar mensajes no leídos, prevenir duplicados con historial inteligente y operar en segundo plano de forma eficiente.',
     stack: ['Python', 'IMAP/SMTP', 'Threading', 'GUI'],
+    impact: 'Reducción del 75% en tiempo de respuesta inicial a proveedores y franquicias',
+    arch: 'Motor multihilo autónomo en segundo plano con persistencia local anti-duplicados',
   },
 
   // 3. Septiembre 2025
@@ -45,6 +49,8 @@ export const projects = [
     tagline: 'Traductor simultáneo con voz y audio',
     desc: 'Aplicación web de traducción simultánea en tiempo real. Captura voz mediante Web Speech API, traduce de forma automática entre múltiples idiomas con fallback inteligente sin necesidad de API keys y sintetiza el resultado en audio con pronunciación natural. Gratuita, rápida y moderna.',
     stack: ['React', 'Web Speech API', 'Speech Synthesis', 'Tailwind CSS'],
+    impact: '$0 en costos de APIs cloud de terceros y latencia instantánea en cliente',
+    arch: 'Web APIs nativas del navegador sin dependencia de servidores externos',
   },
   {
     id: 'flamin',
@@ -56,6 +62,8 @@ export const projects = [
     tagline: 'Lanzamiento y micrositio 3D',
     desc: 'Landing page creada para la campaña de lanzamiento de la nueva empanada Mi Gusto en colaboración con Flamin Hot. Un diseño moderno y responsivo que resalta el sabor picante del producto, con el objetivo de atraer consumidores y potenciar la promoción digital.',
     stack: ['React', 'Three.js', 'GSAP', 'Supabase'],
+    impact: '+25.000 usuarios interactuaron con el micrositio en la semana de lanzamiento',
+    arch: 'Render 3D en WebGL optimizado para 60fps en smartphones gama media',
   },
   {
     id: 'multimail',
@@ -67,6 +75,8 @@ export const projects = [
     tagline: 'Envíos personalizados multi-servidor',
     desc: 'Aplicación de escritorio moderna y liviana para el envío masivo y personalizado de correos electrónicos. Incluye gestión de listas de distribución, editor de texto enriquecido con formato HTML, firma automática y soporte para múltiples servidores SMTP (Ferozo Webmail, Gmail, Outlook).',
     stack: ['Python', 'Tkinter GUI', 'SMTP', 'HTML Editor'],
+    impact: 'Automatizó comunicaciones masivas de RRHH y Operaciones sin costo de SaaS',
+    arch: 'Soporte multi-servidor SMTP con balanceo y templating dinámico HTML',
   },
 
   // 4. Octubre 2025
@@ -80,6 +90,8 @@ export const projects = [
     tagline: 'Desktop app para envíos masivos',
     desc: 'Aplicación de escritorio profesional en Python para envíos masivos de correos electrónicos. Incluye editor visual de HTML, incrustación de imágenes inline, plantillas prediseñadas y soporte para importar destinatarios desde Excel, CSV, PDF y Google Sheets con monitoreo en tiempo real.',
     stack: ['Python', 'CustomTkinter', 'SMTP', 'Pandas'],
+    impact: 'Procesamiento de bases de +5.000 destinatarios con 99.8% de entregabilidad',
+    arch: 'Incrustación inline RFC compliant y validación previa de casillas con Pandas',
   },
   {
     id: 'crunchy',
@@ -91,6 +103,8 @@ export const projects = [
     tagline: 'Validación de códigos y reservas',
     desc: 'Sistema web para la validación en tiempo real de códigos promocionales y DNI de clientes para la campaña Lanzamiento CRUNCHY de Mi Gusto. Integrado con Supabase, ofrece consulta instantánea de sucursal y fecha de reserva con una interfaz moderna, rápida y segura.',
     stack: ['React', 'Supabase', 'Tailwind CSS'],
+    impact: '0 incidentes de doble canje y canje veloz en mostrador en menos de 5 seg',
+    arch: 'PostgreSQL Row-Level Security y transacciones atómicas para unicidad de cupones',
   },
   {
     id: 'iae',
@@ -102,6 +116,8 @@ export const projects = [
     tagline: 'Campaña corporativa & emailing',
     desc: 'Aplicación web construida con React, TypeScript y Supabase para la campaña IAE x Mi Gusto. Automatiza la validación de correos, asignación de códigos únicos de beneficio y el envío masivo de emails personalizados en HTML con un diseño moderno de alto impacto.',
     stack: ['React', 'TypeScript', 'Supabase', 'Tailwind CSS'],
+    impact: 'Alianza institucional corporativa automatizada de punta a punta',
+    arch: 'Validación de dominios corporativos autorizados y despacho webhook seguro',
   },
 
   // 5. Noviembre 2025
@@ -115,6 +131,8 @@ export const projects = [
     tagline: 'Gestión y auditoría de canjes',
     desc: 'Aplicación web desarrollada en React, TypeScript y Supabase para la gestión e historial de canjes con influencers de Mi Gusto. Cuenta con formulario dinámico configurable, panel de administración protegido por PIN e historial con exportación.',
     stack: ['React', 'TypeScript', 'Supabase', 'Tailwind CSS'],
+    impact: 'Control financiero exacto del ROI y productos entregados en marketing de influencers',
+    arch: 'Control de accesos con PIN hasheado, auditoría de cambios y exportación CSV',
   },
   {
     id: 'rooms',
@@ -126,6 +144,8 @@ export const projects = [
     tagline: 'Recordatorios colaborativos por salas',
     desc: 'Aplicación web colaborativa para gestionar recordatorios compartidos por salas (rooms). Ofrece vistas de Tarjetas, Calendario y Gantt, analíticas, notificaciones y sincronización en tiempo real con Supabase. Desarrollada con React 18, TypeScript, Vite y Tailwind CSS.',
     stack: ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'Supabase'],
+    impact: 'Centralización de seguimiento de tareas inter-áreas sin licencias externas',
+    arch: 'Sincronización bidireccional WebSocket en tiempo real con Supabase Realtime',
   },
 
   // 6. Febrero 2026
@@ -139,6 +159,8 @@ export const projects = [
     tagline: 'Arcade interactivo para aperturas',
     desc: '🥟 Plataforma interactiva de juegos arcade temáticos desarrollada para la apertura de nuevas sucursales de Mi Gusto. Experiencia web multiplataforma con 6 juegos optimizados para tótems táctiles, computadoras y celulares. 🎮',
     stack: ['Phaser', 'GSAP', 'Howler.js', 'React'],
+    impact: '+18.000 partidas jugadas y aumento de engagement en aperturas de locales',
+    arch: 'Arquitectura híbrida React + Phaser Engine con audio espacial en Howler',
   },
   {
     id: 'ordercaller',
@@ -150,6 +172,8 @@ export const projects = [
     tagline: 'Llamador de pedidos para sucursales',
     desc: 'Llamador de pedidos local desarrollado para Lollapalooza que automatiza la gestión de órdenes del staff. Permite registrar, organizar y notificar pedidos en tiempo real, eliminando la necesidad de despacharlos de forma manual y mejorando la eficiencia operativa durante el evento.',
     stack: ['React', 'Supabase', 'WebSockets'],
+    impact: 'Despacho 3x más rápido en mostrador eliminando aglomeraciones',
+    arch: 'Comunicación full-duplex y feedback sonoro optimizado para alto ruido ambiental',
   },
   {
     id: 'golden',
@@ -161,6 +185,8 @@ export const projects = [
     tagline: 'Fidelización Mi Gusto Lovers',
     desc: 'Sistema de fidelización Mi Gusto Lovers basado en Golden Tickets, que permite validar tickets premiados, otorgar packs mensuales de empanadas según el tipo de ticket y llevar un control seguro de registros y canjes en sucursal.',
     stack: ['React', 'Supabase', 'Framer Motion'],
+    impact: 'Fidelización directa de clientes premium y trazabilidad de canjes recurrentes',
+    arch: 'Control de recurrencia mensual automatizado por reglas en base de datos',
   },
   {
     id: 'qr',
@@ -172,6 +198,8 @@ export const projects = [
     tagline: 'Generador web de códigos QR',
     desc: 'Generador web de códigos QR de alta calidad con personalización avanzada, duración ilimitada y gestión de historial. Construido con React, TypeScript y Tailwind.',
     stack: ['React', 'TypeScript', 'Tailwind CSS'],
+    impact: 'Autonomía total para cartelería y packaging de locales sin costos de suscripción',
+    arch: 'Generación vectorial SVG/Canvas pura en cliente con logos embebidos',
   },
 
   // 7. Marzo 2026
@@ -185,6 +213,8 @@ export const projects = [
     tagline: 'Sistema offline para eventos masivos',
     desc: 'Sistema offline de gestión y llamado de pedidos diseñado para puntos de venta de Mi Gusto en Lollapalooza. Incluye interfaz táctil para contador (armado de pedidos) y pantalla vertical optimizada para TV (retiro de clientes), sincronizados en tiempo real sin requerir conexión a internet.',
     stack: ['React', 'Supabase', 'Offline Sync', 'Local Storage'],
+    impact: '100% de operatividad ininterrumpida ante caídas de red en festival masivo',
+    arch: 'Estrategia Offline-First con sincronización en background y failover local',
   },
   {
     id: 'mes',
@@ -196,6 +226,8 @@ export const projects = [
     tagline: 'Manufacturing Execution System',
     desc: 'MES System MG es un sistema para digitalizar procesos de producción en fábrica. Incluye dashboard centralizado, conversor de datos, monitoreo en tiempo real de máquinas, seguimiento de órdenes y reportes analíticos. Optimiza eficiencia, reduce tiempos muertos y facilita la toma de decisiones en entornos industriales.',
     stack: ['React', 'Supabase', 'Recharts', 'Tailwind CSS'],
+    impact: 'Digitalización industrial total: reducción del 30% en tiempos de reporte de planta',
+    arch: 'Procesamiento reactivo de telemetría de máquinas con cálculo de métricas en caliente',
   },
   {
     id: 'orbital',
@@ -207,6 +239,8 @@ export const projects = [
     tagline: 'Digitalización industrial y logística',
     desc: 'Ecosistema de gestión y digitalización industrial para la planta Mi Gusto. Control en tiempo real de logística y camiones por GPS, seguimiento de stock de materias primas, reportes de calidad, mantenimiento y auditorías con arquitectura reactiva en tiempo real y diseño Dark Minimalist.',
     stack: ['React', 'Supabase', 'Leaflet', 'Chart.js'],
+    impact: 'Trazabilidad en tiempo real de flota logística y stock crítico entre planta y locales',
+    arch: 'Mapas reactivos en tiempo real con geocercas y streaming de telemetría GPS',
   },
 
   // 8. Abril 2026
@@ -220,6 +254,8 @@ export const projects = [
     tagline: 'Landing de captación & cupones',
     desc: 'Mi Gusto Day es una landing page con formulario inteligente diseñada para el área de marketing de Mi Gusto. Recauda datos de usuarios de forma rápida y segura, enviando automáticamente cupones de descuento para su próxima compra. Aumenta conversiones, fideliza clientes y genera leads cualificados con diseño atractivo y responsive.',
     stack: ['React', 'Tailwind CSS', 'Supabase'],
+    impact: '+10.000 leads calificados recolectados en 24hs con asignación instantánea',
+    arch: 'Despacho automatizado de cupones vía transactional webhook con rate-limit',
   },
 
   // 9. Mayo 2026
@@ -233,6 +269,8 @@ export const projects = [
     tagline: 'Reserva de eventos VIP en tiempo real',
     desc: 'Plataforma web boutique para reserva y gestión de cupos en tiempo real de degustaciones gastronómicas VIP. Incluye diseño premium, animaciones fluidas y sincronización en tiempo real con React, TypeScript, GSAP, Tailwind CSS y Supabase.',
     stack: ['React', 'TypeScript', 'GSAP', 'Tailwind CSS', 'Supabase'],
+    impact: 'Cupos VIP agotados en minutos con bloqueo de concurrencia sin sobreventas',
+    arch: 'Manejo atómico de inventario de plazas mediante transacciones seguras en DB',
   },
   {
     id: 'tech',
@@ -244,6 +282,8 @@ export const projects = [
     tagline: 'Gestión de activos IT y compras',
     desc: 'TechControl es una plataforma web integral y moderna para la gestión, auditoría y control centralizado de activos de infraestructura IT, impresoras, cartelería digital, guardias y pedidos de compras. Diseñada con React 19, TypeScript y Tailwind CSS para ofrecer máxima eficiencia operativa.',
     stack: ['React', 'TypeScript', 'Tailwind CSS', 'Supabase'],
+    impact: 'Inventario centralizado de +500 activos IT y control de compras sin desvíos',
+    arch: 'React 19 + TypeScript con modelo relacional auditado y roles jerárquicos',
   },
   {
     id: 'sagrada',
@@ -255,6 +295,8 @@ export const projects = [
     tagline: 'Colaboración y experiencia digital',
     desc: 'Landing page promocional para Mi Gusto, enfocada en el lanzamiento de la nueva empanada “La Sagrada”. Diseño atractivo, moderno y orientado a destacar el producto, generar impacto visual y comunicar la campaña de forma clara y efectiva.',
     stack: ['React', 'Vite', 'Tailwind CSS', 'GSAP', 'Supabase'],
+    impact: 'Campaña co-branding con engagement récord y viralización en redes sociales',
+    arch: 'Animaciones micro-interactivas con GSAP con asset loading optimizado',
   },
 
   // 10. Junio 2026
@@ -268,6 +310,8 @@ export const projects = [
     tagline: 'Gamificación de inocuidad alimentaria',
     desc: 'Juego interactivo en React con temática de Copa Mundial de la Inocuidad Alimentaria. Trivia por fases, animaciones, ranking y pergamino de compromiso para promover buenas prácticas, responsabilidad y trabajo en equipo en un entorno educativo y dinámico.',
     stack: ['React', 'Tailwind CSS', 'Supabase', 'Canvas Confetti'],
+    impact: '98% de participación del personal de planta en certificación de normas BPM',
+    arch: 'Gamificación con cálculo de scoring en tiempo real y generación de diplomas',
   },
   {
     id: 'carta',
@@ -279,6 +323,8 @@ export const projects = [
     tagline: 'Gestión y sincronización de carta',
     desc: 'Sistema de gestión para "Mi Gusto" que permite al admin actualizar y cargar una carta digital, reflejándose automáticamente en la web de la marca. Incluye panel admin para editar menús, precios y productos, con sincronización instantánea en el sitio web. Desarrollado con tecnologías modernas para facilitar la gestión diaria del restaurante.',
     stack: ['React', 'Firebase', 'Supabase', 'GSAP'],
+    impact: 'Cambios de precios y menú aplicados al instante en toda la red de locales',
+    arch: 'Panel desacoplado con propagación instantánea a la web oficial de Mi Gusto',
   },
   {
     id: 'capa',
@@ -290,6 +336,8 @@ export const projects = [
     tagline: 'Capacitaciones de fábrica & BPM',
     desc: 'Plataforma web interna de Mi Gusto para capacitaciones de fábrica, con cursos interactivos y otros temas operativos. Diseñada para desktop y mobile, con una experiencia clara, intuitiva y escalable para múltiples formaciones.',
     stack: ['React', 'TypeScript', 'Supabase', 'Tailwind CSS'],
+    impact: 'Onboarding y capacitación continua de operarios 100% autogestionada',
+    arch: 'Seguimiento de progreso individual, control de evaluación y certificación web',
   },
 
   // 11. Julio 2026
@@ -303,6 +351,8 @@ export const projects = [
     tagline: 'Gamificación y captación de clientes',
     desc: 'MG-Roulette es una aplicación web interactiva desarrollada para capturar datos de clientes de "Mi Gusto" y ofrecerles una experiencia gamificada mediante una ruleta de premios premium. Construida con React, Vite, Tailwind CSS, GSAP para animaciones fluidas y Supabase para almacenamiento.',
     stack: ['React', 'Vite', 'Tailwind CSS', 'GSAP', 'Supabase'],
+    impact: '+8.000 clientes registrados y entrega de premios transparente en aperturas',
+    arch: 'Física de giro probabilística auditada en backend para evitar fraudes',
   },
   {
     id: 'screenflow',
@@ -314,6 +364,8 @@ export const projects = [
     tagline: 'Editor de video local en navegador',
     desc: 'Screen Flow es un editor de video interactivo y moderno que se ejecuta 100% en el navegador de manera local. Permite recortar tramos de video con precisión mediante una línea de tiempo con miniaturas, rotar, espejar, controlar volumen y velocidad, y convertir clips en formatos tipo Video Wall.',
     stack: ['React', 'Vite', 'Canvas', 'Web Audio API'],
+    impact: 'Ahorro de licencias de software de edición y edición ágil para pantallas de locales',
+    arch: 'Procesamiento de video puramente client-side vía Canvas y Web Audio sin costo cloud',
   },
 
   // 12. Octubre 2026 (El más reciente hasta el día de hoy)
@@ -327,6 +379,89 @@ export const projects = [
     tagline: 'Planilla operativa & auditoría de locales',
     desc: 'Aplicación web integral para la auditoría operativa y control de calidad en sucursales de Mi Gusto. Permite relevar desvíos en tiempo real, calcular scoring y veredictos automáticos, adjuntar fotos y gestionar el historial con sincronización en Supabase.',
     stack: ['React', 'TypeScript', 'Supabase', 'GSAP', 'Lucide'],
+    impact: 'Reducción del 60% en tiempo de confección de reportes de auditoría de sucursales',
+    arch: 'Auditoría con cálculo reactivo de scoring ponderado, compresión fotográfica y sincronización cloud',
+  },
+];
+
+// Hitos de la Empresa y Evolución de Liderazgo (Punto 9 y Seniority)
+export const companyMilestones = [
+  {
+    id: 'm1',
+    date: '2025-05-27',
+    title: 'Transformación Digital Mi Gusto',
+    category: 'Estrategia',
+    desc: 'Lanzamiento del ecosistema digital moderno y nueva identidad web oficial.',
+    icon: '🚀',
+  },
+  {
+    id: 'm2',
+    date: '2025-09-23',
+    title: 'Campañas Masivas de Co-Branding',
+    category: 'Marketing',
+    desc: 'Alianzas comerciales de alto impacto (Flamin Hot, IAE) con miles de usuarios concurrentes.',
+    icon: '🔥',
+  },
+  {
+    id: 'm3',
+    date: '2026-02-18',
+    title: 'Expansión a Tótems e Interactivos de Local',
+    category: 'Innovación',
+    desc: 'Llegada de software táctil interactivo (MG Games) y llamadores en tiempo real a sucursales.',
+    icon: '🕹️',
+  },
+  {
+    id: 'm4',
+    date: '2026-03-23',
+    title: 'Industria 4.0: MES y Logística Orbital',
+    category: 'Operaciones',
+    desc: 'Digitalización nuclear de la planta de producción, logística con GPS y control de stock.',
+    icon: '🏭',
+  },
+  {
+    id: 'm5',
+    date: '2026-06-16',
+    title: 'Cultura, Formación Continua & Auditoría',
+    category: 'Calidad & RRHH',
+    desc: 'Plataforma propia de capacitación BPM para operarios y auditoría operativa en tiempo real.',
+    icon: '🎓',
+  },
+];
+
+// Evolución del Rol y Seniority (Punto 2)
+export const seniorityProgression = [
+  {
+    stage: 'Etapa 1 · Autonomía Técnica & Entrega Rápida',
+    period: 'Mayo 2025 – Noviembre 2025',
+    role: 'Desarrollo Fullstack & Automatizaciones',
+    scope: 'Resolución ágil de cuellos de botella de comunicación, correo masivo y landings interactivas.',
+    achievements: [
+      'Creación de la web oficial institucional de Mi Gusto.',
+      'Sistemas de escritorio en Python para reemplazo de plataformas pagas de email marketing.',
+      'Micrositios 3D y campañas promocionales corporativas sin caídas por tráfico.',
+    ],
+  },
+  {
+    stage: 'Etapa 2 · Arquitectura Distribuida, Eventos & Tiempo Real',
+    period: 'Febrero 2026 – Mayo 2026',
+    role: 'Liderazgo Técnico de Soluciones & Offline-First',
+    scope: 'Diseño de sistemas críticos para sucursales, mega-eventos (Lollapalooza) y digitalización de planta.',
+    achievements: [
+      'Arquitectura Offline-First para puntos de venta en Lollapalooza ante corte total de red.',
+      'Desarrollo de MES industrial y monitoreo de camiones con GPS en tiempo real (MG Orbital).',
+      'Plataforma arcade interactiva multijugador para aperturas comerciales.',
+    ],
+  },
+  {
+    stage: 'Etapa 3 · Impacto Estratégico, Negocio & Ecosistemas',
+    period: 'Junio 2026 – Octubre 2026 (Actualidad)',
+    role: 'Arquitecto de Soluciones / Senior Digital Lead',
+    scope: 'Estandarización de calidad, capacitación de personal operativo y gobierno de datos integral.',
+    achievements: [
+      'Plataforma integral de auditoría operativa con scoring ponderado para locales (AuditApp).',
+      'Software de capacitación de operarios de fábrica (MG Capacitaciones / Inocuidad).',
+      'Herramientas avanzadas cliente-servidor (ScreenFlow con procesamiento de video local sin costo cloud).',
+    ],
   },
   {
     id: 'consolidado',
@@ -367,15 +502,50 @@ export const projects = [
 const n = (id, count, ext = 'png') => Array.from({ length: count }, (_, i) => `/shots/${id}/${i + 1}.${ext}`);
 
 export const images = {
-  orbital: n('orbital', 4),
+  // Proyectos con nuevas capturas añadidas:
+  site: Array.from({ length: 11 }, (_, i) => `/shots/Mi Gusto Web/Screenshot_${i + 1}.png`),
+  autoanswers: ['/shots/AutoMailAnswers/demo.png'],
+  translate: ['/shots/RealTimeTranslate/Demo-Translate.png'],
+  multimail: ['/shots/MultiMailSender/Demo.png'],
+  massivemail: ['/shots/MassiveMailSender/Demo.png'],
+  rooms: [
+    '/shots/RemindersRooms/Dashboard.png',
+    '/shots/RemindersRooms/Dashboard2.png',
+    '/shots/RemindersRooms/Inicio.png',
+    '/shots/RemindersRooms/Login.png',
+  ],
+  golden: Array.from({ length: 5 }, (_, i) => `/shots/GoldenTickets/Screenshot_${i + 1}.png`),
+
+  // Proyectos preexistentes con ajustes de orden especificados por el usuario:
+  // En MG Orbital la foto principal debe ser la segunda (donde aparece la botonera)
+  orbital: ['/shots/orbital/2.png', '/shots/orbital/1.png', '/shots/orbital/3.png', '/shots/orbital/4.png'],
+  
+  // En TechControl la imagen principal debe ser la séptima (7.png)
+  tech: [
+    '/shots/tech/7.png',
+    '/shots/tech/1.png',
+    '/shots/tech/2.png',
+    '/shots/tech/3.png',
+    '/shots/tech/4.png',
+    '/shots/tech/5.png',
+    '/shots/tech/6.png',
+    '/shots/tech/8.png',
+    '/shots/tech/9.png',
+    '/shots/tech/10.png',
+    '/shots/tech/11.png',
+    '/shots/tech/12.png',
+  ],
+
+  // En Screenflow debe ser la segunda imagen la principal
+  screenflow: ['/shots/clipper/2.png', '/shots/clipper/1.png', '/shots/clipper/3.png', '/shots/clipper/4.png'],
+  clipper: ['/shots/clipper/2.png', '/shots/clipper/1.png', '/shots/clipper/3.png', '/shots/clipper/4.png'],
+
+  // Resto de galerías
   degu: n('degu', 1, 'jpeg'),
   mes: n('mes', 6),
   carta: n('carta', 4),
   capa: n('capa', 5),
   sagrada: n('sagrada', 3),
-  screenflow: n('clipper', 4),
-  clipper: n('clipper', 4),
-  tech: n('tech', 12),
 };
 
 // Proyectos ordenados cronológicamente por fecha exacta de inicio

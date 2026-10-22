@@ -246,6 +246,65 @@ const THANKS_INDEX = CLOSING_INDEX + 1; // 36
 const TOTAL = THANKS_INDEX + 1; // 37
 const PROJECT_OFFSET = FIRST_2025_INDEX; // 3
 
+// 4 Casos Estrella para el Pitch Ejecutivo (Fase 3):
+export const FLAGSHIP_PROJECTS = [
+  {
+    id: 'site',
+    num: '01',
+    name: 'Mi Gusto Web',
+    emoji: '🌐',
+    color: '#ff4d4d',
+    pillar: 'Marca & Presencia Digital',
+    tagline: 'Web institucional oficial',
+    highlight: '+120k Visitas / Mes · Identidad Unificada',
+  },
+  {
+    id: 'lolla',
+    num: '02',
+    name: 'Lollapalooza Order Caller',
+    emoji: '📣',
+    color: '#3dd6a5',
+    pillar: 'Operaciones & Resiliencia',
+    tagline: 'Offline-First masivo sin caídas',
+    highlight: '100% Operatividad Offline · Zero Caídas',
+  },
+  {
+    id: 'mes',
+    num: '03',
+    name: 'MES System MG',
+    emoji: '🏭',
+    color: '#ffb020',
+    pillar: 'Industria 4.0 & Fábrica',
+    tagline: 'Manufacturing Execution System',
+    highlight: '-30% Tiempos de Reporte · Telemetría en Planta',
+  },
+  {
+    id: 'audit',
+    num: '04',
+    name: 'MG AuditApp',
+    emoji: '📋',
+    color: '#5aa9ff',
+    pillar: 'Gobierno Operativo & Calidad',
+    tagline: 'Planilla operativa & auditoría de sucursales',
+    highlight: '-60% Tiempo de Auditoría · Scoring en Vivo',
+  },
+];
+
+export const FLAGSHIP_IDS = new Set(FLAGSHIP_PROJECTS.map((f) => f.id));
+export const FLAGSHIP_SLIDES = FLAGSHIP_PROJECTS.map((f) => FIRST_2025_INDEX + (indexById[f.id] ?? 0));
+
+// Secuencia curada para el Pitch Ejecutivo (11 slides de alto impacto)
+export const EXEC_SLIDES = [
+  0, // Portada
+  1, // Línea de tiempo interactiva
+  2, // Hitos Clave de la Empresa
+  ...FLAGSHIP_SLIDES, // 4 Casos Estrella
+  ROI_INDEX, // Retorno de Inversión (ROI) & Ahorro
+  SENIORITY_INDEX, // Seniority & Liderazgo
+  CLOSING_INDEX, // Resumen de Capacidades & Stack
+  THANKS_INDEX, // Agradecimiento & Cierre
+];
+
 function Cover({ go }) {
   const totalProjects = sorted.length;
   const counts = Object.keys(categories).map((k) => {
@@ -712,79 +771,235 @@ function RoiSlide({ go }) {
 
 // Slide: Evolución del Rol & Seniority (Semi Senior Technical Lead)
 function SenioritySlide({ go }) {
+  const [tab, setTab] = useState('phases');
+
   return (
     <section className="slide seniority-slide">
       <div className="seniority-header">
-        <div className="brand-badge">
-          <span className="brand-dot-pulse">
-            <span className="brand-dot-core" />
-            <span className="brand-dot-ring" />
-          </span>
-          <span className="brand-badge-company">Mi Gusto</span>
-          <span className="brand-badge-divider">·</span>
-          <span className="brand-badge-label">Evolución de Competencias & Seniority</span>
+        <div className="seniority-header-left">
+          <div className="brand-badge">
+            <span className="brand-dot-pulse">
+              <span className="brand-dot-core" style={{ background: '#b070ff', boxShadow: '0 0 8px #b070ff' }} />
+              <span className="brand-dot-ring" style={{ background: 'rgba(176, 112, 255, 0.45)' }} />
+            </span>
+            <span className="brand-badge-company">Mi Gusto</span>
+            <span className="brand-badge-divider">·</span>
+            <span className="brand-badge-label">Desarrollo Profesional & Estructura de Roles</span>
+          </div>
+          <h1>
+            Progresión hacia <span>Semi Senior Technical Lead</span>
+          </h1>
+          <p className="seniority-subtitle">
+            {tab === 'phases'
+              ? 'Trayectoria documentada de responsabilidades, autonomía técnica y aporte directo a los objetivos del negocio.'
+              : 'Estructura operativa del equipo de dos: complementariedad técnica, autonomía plena y criterios de liderazgo de RR.HH.'}
+          </p>
         </div>
-        <h1>
-          Progresión hacia <span>Semi Senior Technical Lead</span>
-        </h1>
-        <p className="seniority-subtitle">
-          Trayectoria documentada de responsabilidades, autonomía técnica y aporte directo a los objetivos del negocio.
-        </p>
-      </div>
 
-      <div className="seniority-grid">
-        {seniorityProgression.map((item, idx) => (
-          <motion.article
-            key={idx}
-            className="seniority-card"
-            style={{ '--c': item.color }}
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.12 + idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
-            onMouseEnter={() => playSfx('hover')}
+        <div className="seniority-view-switcher">
+          <button
+            className={`seniority-view-btn ${tab === 'phases' ? 'active' : ''}`}
+            onClick={() => { playSfx('click'); setTab('phases'); }}
           >
-            <div className="seniority-card-header">
-              <div className="seniority-phase-row">
-                <div className="seniority-phase-badge">
-                  <span className="phase-num">FASE {item.phase || `0${idx + 1}`}</span>
-                  <span className="phase-year">{item.period}</span>
-                </div>
-                <div className="seniority-icon-wrap">{item.icon || '⭐'}</div>
-              </div>
-              <h3 className="seniority-role">{item.role}</h3>
-              <div className="seniority-tag-pill">{item.tag || item.stage}</div>
-            </div>
-
-            <div className="seniority-card-body">
-              <div className="seniority-scope-box">
-                <span className="scope-label">FOCO & ALCANCE</span>
-                <p>{item.scope}</p>
-              </div>
-
-              <div className="seniority-achievements-title">Aportes Clave:</div>
-              <ul className="seniority-achievements-list">
-                {item.achievements?.map((ach, ai) => (
-                  <li key={ai}>
-                    <span className="achievement-check">✓</span>
-                    <span>{ach}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.article>
-        ))}
+            <span>📈</span> 1. Fases de Crecimiento
+          </button>
+          <button
+            className={`seniority-view-btn ${tab === 'team' ? 'active' : ''}`}
+            onClick={() => { playSfx('click'); setTab('team'); }}
+          >
+            <span>👥</span> 2. El Equipo & Criterios RR.HH.
+          </button>
+        </div>
       </div>
 
+      {tab === 'phases' ? (
+        <div className="seniority-grid">
+          {seniorityProgression.map((item, idx) => (
+            <motion.article
+              key={idx}
+              className="seniority-card"
+              style={{ '--c': item.color }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.08 + idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+              onMouseEnter={() => playSfx('hover')}
+            >
+              <div className="seniority-card-header">
+                <div className="seniority-phase-row">
+                  <div className="seniority-phase-badge">
+                    <span className="phase-num">FASE {item.phase || `0${idx + 1}`}</span>
+                    <span className="phase-year">{item.period}</span>
+                  </div>
+                  <div className="seniority-icon-wrap">{item.icon || '⭐'}</div>
+                </div>
+                <h3 className="seniority-role">{item.role}</h3>
+                <div className="seniority-tag-pill">{item.tag || item.stage}</div>
+              </div>
+
+              <div className="seniority-card-body">
+                <div className="seniority-scope-box">
+                  <span className="scope-label">FOCO & ALCANCE</span>
+                  <p>{item.scope}</p>
+                </div>
+
+                <div className="seniority-achievements-title">Aportes Clave:</div>
+                <ul className="seniority-achievements-list">
+                  {item.achievements?.map((ach, ai) => (
+                    <li key={ai}>
+                      <span className="achievement-check">✓</span>
+                      <span>{ach}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.article>
+          ))}
+        </div>
+      ) : (
+        <div className="seniority-team-wrapper">
+          {/* El Dúo Técnico de Alto Rendimiento */}
+          <div className="team-duo-grid">
+            <motion.div
+              className="team-profile-card profile-backend"
+              initial={{ opacity: 0, x: -16 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, delay: 0.08 }}
+            >
+              <div>
+                <div className="profile-top">
+                  <span className="profile-badge">PILAR TÉCNICO 01</span>
+                  <div className="profile-avatar-icon">⚙️</div>
+                </div>
+                <h3 className="profile-name">Arquitectura, Backend & Procesos de Planta</h3>
+                <div className="profile-specialty-pill">Sistemas Críticos & Escalabilidad</div>
+                <div className="profile-stack-chips">
+                  <span>Supabase</span>
+                  <span>PostgreSQL</span>
+                  <span>Python</span>
+                  <span>APIs REST</span>
+                  <span>Offline Sync</span>
+                </div>
+                <ul className="profile-duties-list">
+                  <li><strong>Bases de Datos & Soberanía:</strong> Modelo relacional unificado para locales, franquicias y fábrica.</li>
+                  <li><strong>Industria 4.0 & Procesos:</strong> MES de planta, balanzas y protocolos de calidad bromatológica (INF-D003).</li>
+                  <li><strong>Automatización B2B:</strong> Facturación electrónica desasistida (IAE) y ahorro de cientos de horas de gestión.</li>
+                </ul>
+              </div>
+              <div className="profile-footer-tag">
+                <span>✓</span> Cobertura de Infraestructura & Datos Centrales
+              </div>
+            </motion.div>
+
+            <motion.div
+              className="team-profile-card profile-frontend"
+              initial={{ opacity: 0, x: 16 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, delay: 0.14 }}
+            >
+              <div>
+                <div className="profile-top">
+                  <span className="profile-badge">PILAR TÉCNICO 02</span>
+                  <div className="profile-avatar-icon">💻</div>
+                </div>
+                <h3 className="profile-name">Frontend Avanzado, UX & Hardware en Tiendas</h3>
+                <div className="profile-specialty-pill">Experiencia de Usuario & Omnicanalidad</div>
+                <div className="profile-stack-chips">
+                  <span>React</span>
+                  <span>TypeScript</span>
+                  <span>Tailwind CSS</span>
+                  <span>GSAP / Motion</span>
+                  <span>Hardware Táctil</span>
+                </div>
+                <ul className="profile-duties-list">
+                  <li><strong>Ecosistema Web Oficial:</strong> Plataforma institucional (+120k visitas/mes) y campañas de alta concurrencia.</li>
+                  <li><strong>Hardware en Tienda:</strong> Cartelería digital local (ScreenFlow) y tótems interactivos táctiles (MG Games).</li>
+                  <li><strong>Portales de Gestión:</strong> AuditApp con scoring en sucursales y tableros operativos de fácil adopción.</li>
+                </ul>
+              </div>
+              <div className="profile-footer-tag">
+                <span>✓</span> Cobertura de Cliente, Local & Marca
+              </div>
+            </motion.div>
+          </div>
+
+          {/* 4 Criterios y Competencias Clave de RR.HH. */}
+          <div className="hr-competencies-grid">
+            <motion.div
+              className="hr-competency-card"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: 0.2 }}
+            >
+              <div className="hr-icon-badge" style={{ color: '#3dd6a5' }}>🎯</div>
+              <div>
+                <h4>Autonomía Plena (Ownership)</h4>
+                <p>Cero supervisión técnica: detección de necesidades del negocio y entrega de punta a punta.</p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              className="hr-competency-card"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: 0.25 }}
+            >
+              <div className="hr-icon-badge" style={{ color: '#38bdf8' }}>🔄</div>
+              <div>
+                <h4>Cobertura Cruzada (Cero Cuello de Botella)</h4>
+                <p>Ambos dominan la base completa; cualquier urgencia en fábrica o sucursal se atiende de inmediato.</p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              className="hr-competency-card"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: 0.3 }}
+            >
+              <div className="hr-icon-badge" style={{ color: '#ffb020' }}>🛡️</div>
+              <div>
+                <h4>Resolución de Contingencias en Vivo</h4>
+                <p>Soporte presencial y remoto en momentos críticos: Lollapalooza, caídas de red y aperturas comerciales.</p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              className="hr-competency-card"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: 0.35 }}
+            >
+              <div className="hr-icon-badge" style={{ color: '#ff4d4d' }}>📈</div>
+              <div>
+                <h4>Visión Estratégica de Negocio</h4>
+                <p>Software alineado a la rentabilidad, ahorro en licencias externas y eficiencia de los franquiciados.</p>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      )}
+
+      {/* Footer Banner */}
       <div className="seniority-banner-modern">
         <div className="banner-badge-terminal">
-          <span className="terminal-dot" />
-          <span>CRECIMIENTO & ROI</span>
+          <span className="terminal-dot" style={{ background: '#b070ff', boxShadow: '0 0 8px #b070ff' }} />
+          <span style={{ color: '#b070ff' }}>
+            {tab === 'phases' ? 'CRECIMIENTO & ROI' : 'JUSTIFICACIÓN FORMAL DE CATEGORÍA'}
+          </span>
         </div>
         <p className="banner-statement">
-          Evolución sostenida de <strong>ejecutor fullstack a referente técnico</strong>: capacidad probada para transformar requerimientos de negocio en software productivo robusto sin dependencias externas.
+          {tab === 'phases' ? (
+            <>
+              Evolución sostenida de <strong>ejecutor fullstack a referente técnico</strong>: capacidad probada para transformar requerimientos de negocio en software productivo robusto sin dependencias externas.
+            </>
+          ) : (
+            <>
+              El equipo ya no opera como ejecutores juniors que reciben tareas: <strong>diseña la arquitectura, toma decisiones de negocio, resuelve contingencias y lidera el ecosistema digital propio de Mi Gusto</strong>.
+            </>
+          )}
         </p>
-        <div className="banner-kpi-chip">
-          <span>AUTONOMÍA INTEGRAL COMPROBADA</span>
+        <div className="banner-kpi-chip" style={{ background: 'rgba(176, 112, 255, 0.1)', borderColor: 'rgba(176, 112, 255, 0.3)', color: '#b070ff' }}>
+          <span>{tab === 'phases' ? 'AUTONOMÍA INTEGRAL COMPROBADA' : 'PROPUESTA: SEMI SENIOR TECHNICAL LEAD'}</span>
         </div>
       </div>
     </section>
@@ -1053,12 +1268,14 @@ function MiniProgressBar({ value, color = '#3dd6a5' }) {
 }
 
 // Slide de cada proyecto (Ficha interactiva en pantalla completa con scroll reveal)
-function ProjectSlide({ p, i }) {
+function ProjectSlide({ p, i, go }) {
   const c = categories[p.cat];
   const shots = images[p.id] || [];
   const [zoom, setZoom] = useState(null);
   const year = p.start.slice(0, 4);
   const kpi = projectKpis[p.id];
+  const isFlagship = FLAGSHIP_IDS.has(p.id);
+  const flagshipData = FLAGSHIP_PROJECTS.find((f) => f.id === p.id);
 
   return (
     <div className="scroller" style={{ '--c': c.color }}>
@@ -1076,7 +1293,58 @@ function ProjectSlide({ p, i }) {
               <span>{c.label}</span>
             </div>
             <span className="project-year-pill">{year}</span>
+            {isFlagship && (
+              <div className="flagship-badge-glow" title="Proyecto Estratégico Seleccionado para el Pitch Ejecutivo">
+                <span className="flagship-star">⭐</span>
+                <span className="flagship-label">CASO ESTRELLA</span>
+                <span className="flagship-sep">·</span>
+                <span className="flagship-pillar-text">{flagshipData.pillar}</span>
+              </div>
+            )}
           </div>
+
+          {/* Selector Rápido de Casos Estrella (Fase 3) */}
+          {isFlagship ? (
+            <div className="flagship-switcher-bar">
+              <div className="flagship-switcher-label">
+                <span className="star-icon">⭐</span>
+                <span>PITCH EJECUTIVO ({flagshipData.num}/04):</span>
+              </div>
+              <div className="flagship-pills-row">
+                {FLAGSHIP_PROJECTS.map((f) => {
+                  const slideTarget = FIRST_2025_INDEX + (indexById[f.id] ?? 0);
+                  const isCurrent = f.id === p.id;
+                  return (
+                    <button
+                      key={f.id}
+                      type="button"
+                      className={`flagship-nav-pill ${isCurrent ? 'active' : ''}`}
+                      style={{ '--pill-c': f.color }}
+                      onClick={() => { playSfx('click'); go(slideTarget); }}
+                      title={`Ir al caso: ${f.name} (${f.pillar})`}
+                    >
+                      <span className="pill-badge-num">{f.num}</span>
+                      <span className="pill-emoji">{f.emoji}</span>
+                      <span className="pill-name">{f.name}</span>
+                      {isCurrent && <span className="pill-active-dot" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            <div className="non-flagship-hint-row">
+              <button
+                type="button"
+                className="btn-jump-flagships"
+                onClick={() => { playSfx('click'); go(FLAGSHIP_SLIDES[0]); }}
+                title="Saltar directamente a los 4 Casos Estrella para el pitch ejecutivo"
+              >
+                <span>⭐</span> Ver los 4 Casos Estrella (Pitch Ejecutivo)
+              </button>
+            </div>
+          )}
+
           <h2>{p.name}</h2>
           <p className="tagline">{p.tagline}</p>
           <p className="desc">{p.desc}</p>
@@ -1401,6 +1669,7 @@ export default function App() {
   const [idx, setIdx] = useState(0);
   const [grid, setGrid] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [execMode, setExecMode] = useState(false);
 
   const go = useCallback((n) => {
     setIdx(Math.max(0, Math.min(TOTAL - 1, n)));
@@ -1408,10 +1677,42 @@ export default function App() {
     playSfx('slide');
   }, []);
 
+  const goNext = useCallback(() => {
+    if (execMode) {
+      const currPos = EXEC_SLIDES.indexOf(idx);
+      if (currPos !== -1 && currPos < EXEC_SLIDES.length - 1) {
+        go(EXEC_SLIDES[currPos + 1]);
+      } else if (currPos === -1) {
+        const nextSlide = EXEC_SLIDES.find((s) => s > idx);
+        go(nextSlide !== undefined ? nextSlide : EXEC_SLIDES[EXEC_SLIDES.length - 1]);
+      } else {
+        go(EXEC_SLIDES[0]);
+      }
+    } else {
+      go(idx + 1);
+    }
+  }, [execMode, idx, go]);
+
+  const goPrev = useCallback(() => {
+    if (execMode) {
+      const currPos = EXEC_SLIDES.indexOf(idx);
+      if (currPos > 0) {
+        go(EXEC_SLIDES[currPos - 1]);
+      } else if (currPos === -1) {
+        const prevSlide = [...EXEC_SLIDES].reverse().find((s) => s < idx);
+        go(prevSlide !== undefined ? prevSlide : EXEC_SLIDES[0]);
+      } else {
+        go(EXEC_SLIDES[0]);
+      }
+    } else {
+      go(idx - 1);
+    }
+  }, [execMode, idx, go]);
+
   useEffect(() => {
     const onKey = (e) => {
-      if (['ArrowRight', ' '].includes(e.key)) { e.preventDefault(); go(idx + 1); }
-      else if (e.key === 'ArrowLeft') go(idx - 1);
+      if (['ArrowRight', ' '].includes(e.key)) { e.preventDefault(); goNext(); }
+      else if (e.key === 'ArrowLeft') goPrev();
       else if (['ArrowDown', 'ArrowUp'].includes(e.key)) {
         e.preventDefault();
         document.querySelector('.scroller')?.scrollBy({ top: (e.key === 'ArrowDown' ? 1 : -1) * window.innerHeight * 0.8, behavior: 'smooth' });
@@ -1422,6 +1723,21 @@ export default function App() {
       else if (e.key.toLowerCase() === 'h') go(2);
       else if (e.key === '1') go(FIRST_2025_INDEX);
       else if (e.key === '2') go(FIRST_2026_INDEX);
+      else if (e.key.toLowerCase() === 'c') {
+        if (!FLAGSHIP_SLIDES.includes(idx)) {
+          go(FLAGSHIP_SLIDES[0]);
+        } else {
+          const curF = FLAGSHIP_SLIDES.indexOf(idx);
+          go(FLAGSHIP_SLIDES[(curF + 1) % FLAGSHIP_SLIDES.length]);
+        }
+      }
+      else if (e.key.toLowerCase() === 'e') {
+        setExecMode((prev) => {
+          const next = !prev;
+          playSfx('click');
+          return next;
+        });
+      }
       else if (e.key.toLowerCase() === 'r') go(ROI_INDEX);
       else if (e.key.toLowerCase() === 's') go(SENIORITY_INDEX);
       else if (e.key.toLowerCase() === 'g' || e.key === 'Escape') setGrid((g) => !g);
@@ -1435,7 +1751,7 @@ export default function App() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [idx, go]);
+  }, [idx, go, goNext, goPrev]);
 
   let content;
   if (idx === 0) content = <Cover go={go} />;
@@ -1443,7 +1759,7 @@ export default function App() {
   else if (idx === 2) content = <MilestonesSlide go={go} />;
   else if (idx >= FIRST_2025_INDEX && idx < ROI_INDEX) {
     const pIdx = idx - FIRST_2025_INDEX;
-    content = <ProjectSlide p={sorted[pIdx]} i={pIdx} />;
+    content = <ProjectSlide p={sorted[pIdx]} i={pIdx} go={go} />;
   }
   else if (idx === ROI_INDEX) content = <RoiSlide go={go} />;
   else if (idx === SENIORITY_INDEX) content = <SenioritySlide go={go} />;
@@ -1454,6 +1770,26 @@ export default function App() {
   return (
     <main className="deck">
       <div className="bg" />
+
+      {/* Floating Executive Mode Switch (Fase 3) */}
+      <div className="exec-mode-switch-container">
+        <button
+          type="button"
+          className={`exec-toggle-button ${execMode ? 'is-active' : ''}`}
+          onClick={() => {
+            playSfx('click');
+            setExecMode((v) => !v);
+          }}
+          title="Alternar entre Pitch Ejecutivo (10 min) y Catálogo Completo. Atajo de teclado: [E]"
+        >
+          <span className="toggle-indicator-dot" />
+          <span className="toggle-text">
+            {execMode ? '⚡ Modo Ejecutivo Activo (10 min)' : '⚡ Modo Ejecutivo (10 min)'}
+          </span>
+          <span className="toggle-shortcut-badge">E</span>
+        </button>
+      </div>
+
       <div className="stage">
         <AnimatePresence mode="wait">
           <motion.div
@@ -1499,6 +1835,48 @@ export default function App() {
             <button className="grid-special-btn highlight" onClick={() => go(THANKS_INDEX)}>
               <span>🤝</span>Agradecimiento & Cierre
             </button>
+
+            {/* VIP Flagships Section in Grid */}
+            <div className="grid-vip-header">
+              <div className="grid-vip-title">
+                <span>⭐</span>
+                <strong>4 CASOS ESTRELLA · PITCH EJECUTIVO</strong>
+              </div>
+              <button
+                className={`grid-vip-exec-toggle ${execMode ? 'active' : ''}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  playSfx('click');
+                  setExecMode((v) => !v);
+                }}
+              >
+                {execMode ? '✓ Modo Ejecutivo Activado (11 slides)' : '⚡ Activar Modo Ejecutivo'}
+              </button>
+            </div>
+            {FLAGSHIP_PROJECTS.map((f) => {
+              const slideIdx = FIRST_2025_INDEX + (indexById[f.id] ?? 0);
+              return (
+                <button
+                  key={`flagship-${f.id}`}
+                  className="grid-flagship-vip-card"
+                  style={{ '--c': f.color }}
+                  onClick={() => go(slideIdx)}
+                >
+                  <div className="vip-badge-row">
+                    <span className="vip-pill">⭐ CASO {f.num}</span>
+                    <span className="vip-cat">{f.pillar}</span>
+                  </div>
+                  <span className="vip-emoji">{f.emoji}</span>
+                  <strong>{f.name}</strong>
+                  <small>{f.highlight}</small>
+                </button>
+              );
+            })}
+
+            <div className="grid-all-divider">
+              <span>CATÁLOGO COMPLETO DE DESARROLLOS ({sorted.length})</span>
+            </div>
+
             {sorted.map((p, i) => (
               <button key={p.id} style={{ '--c': categories[p.cat].color }} onClick={() => go(i + FIRST_2025_INDEX)}>
                 <span>{p.emoji}</span>{p.name}<small>{fmtDate(p.start)}</small>
@@ -1509,19 +1887,44 @@ export default function App() {
       )}
 
       <nav className="controls">
-        <button id="prev" className="btn-nav" onClick={() => go(idx - 1)} aria-label="Anterior">←</button>
+        <button id="prev" className="btn-nav" onClick={goPrev} aria-label="Anterior">←</button>
         <button id="timeline" className={idx === 1 ? 'active' : ''} onClick={() => go(1)}><span>📊</span> Timeline</button>
         <button id="milestones" className={idx === 2 ? 'active' : ''} onClick={() => go(2)}><span>🎯</span> Hitos</button>
-        <button id="btn-2025" className={idx >= FIRST_2025_INDEX && idx < FIRST_2026_INDEX ? 'active' : ''} onClick={() => go(FIRST_2025_INDEX)}><span>📅</span> 2025</button>
-        <button id="btn-2026" className={idx >= FIRST_2026_INDEX && idx < ROI_INDEX ? 'active' : ''} onClick={() => go(FIRST_2026_INDEX)}><span>🚀</span> 2026</button>
+        <button
+          id="btn-flagships"
+          className={FLAGSHIP_SLIDES.includes(idx) ? 'active flagship-active' : ''}
+          onClick={() => {
+            playSfx('click');
+            if (!FLAGSHIP_SLIDES.includes(idx)) {
+              go(FLAGSHIP_SLIDES[0]);
+            } else {
+              const curF = FLAGSHIP_SLIDES.indexOf(idx);
+              go(FLAGSHIP_SLIDES[(curF + 1) % FLAGSHIP_SLIDES.length]);
+            }
+          }}
+          title="Ver los 4 Casos Estrella de Alto Impacto (Atajo: C)"
+        >
+          <span>⭐</span> Casos Estrella (4)
+        </button>
+        <button id="btn-2025" className={idx >= FIRST_2025_INDEX && idx < FIRST_2026_INDEX && !FLAGSHIP_SLIDES.includes(idx) ? 'active' : ''} onClick={() => go(FIRST_2025_INDEX)}><span>📅</span> 2025</button>
+        <button id="btn-2026" className={idx >= FIRST_2026_INDEX && idx < ROI_INDEX && !FLAGSHIP_SLIDES.includes(idx) ? 'active' : ''} onClick={() => go(FIRST_2026_INDEX)}><span>🚀</span> 2026</button>
         <button id="btn-roi" className={idx === ROI_INDEX ? 'active' : ''} onClick={() => go(ROI_INDEX)}><span>💰</span> Retorno & Ahorro</button>
         <button id="seniority" className={idx === SENIORITY_INDEX ? 'active' : ''} onClick={() => go(SENIORITY_INDEX)}><span>⭐</span> Seniority</button>
-        <span className="counter">
-          <strong className="counter-current">{idx + 1}</strong>
-          <span className="counter-sep">/</span>
-          <span className="counter-total">{TOTAL}</span>
-        </span>
-        <button id="next" className="btn-nav" onClick={() => go(idx + 1)} aria-label="Siguiente">→</button>
+        {execMode ? (
+          <span className="counter exec-counter" title="Modo Ejecutivo Activo (11 slides)">
+            <strong className="counter-current">{Math.max(1, EXEC_SLIDES.indexOf(idx) + 1)}</strong>
+            <span className="counter-sep">/</span>
+            <span className="counter-total">{EXEC_SLIDES.length}</span>
+            <span className="counter-exec-badge">⚡ EXEC</span>
+          </span>
+        ) : (
+          <span className="counter">
+            <strong className="counter-current">{idx + 1}</strong>
+            <span className="counter-sep">/</span>
+            <span className="counter-total">{TOTAL}</span>
+          </span>
+        )}
+        <button id="next" className="btn-nav" onClick={goNext} aria-label="Siguiente">→</button>
       </nav>
       <motion.div
         className="progress"

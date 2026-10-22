@@ -175,8 +175,13 @@ function Cover({ go }) {
     <section className="slide cover">
       <div className="cover-content">
         <div className="brand-badge">
-          <span className="brand-dot" />
-          <span>Mi Gusto · Desarrollo Digital & Tecnología</span>
+          <span className="brand-dot-pulse">
+            <span className="brand-dot-core" />
+            <span className="brand-dot-ring" />
+          </span>
+          <span className="brand-badge-company">Mi Gusto</span>
+          <span className="brand-badge-divider">·</span>
+          <span className="brand-badge-label">Desarrollos digitales & de infraestructura</span>
         </div>
         <h1>{sorted.length} proyectos.<br /><span>Ecosistema & Resultados.</span></h1>
         <p className="lead">De soluciones puntuales a la digitalización integral de planta, marketing y sucursales ({fmtMonthYear(sorted[0].start)} → Actualidad).</p>
@@ -185,11 +190,11 @@ function Cover({ go }) {
           <button className="btn-brand" onClick={() => { playSfx('click'); go(2); }}>
             ⭐ Ver Evolución de Seniority
           </button>
-          <button className="btn-secondary" onClick={() => { playSfx('click'); go(3); }}>
-            🎯 Hitos de la Empresa
-          </button>
           <button className="btn-secondary" onClick={() => { playSfx('click'); go(1); }}>
-            📅 Timeline Interactivo
+            📅 Desarrollos 2025
+          </button>
+          <button className="btn-secondary" onClick={() => { playSfx('click'); go(3); }}>
+            🚀 Desarrollos 2026
           </button>
         </div>
 
@@ -220,7 +225,6 @@ function Cover({ go }) {
           <div className="glow-sphere" />
         </div>
       </div>
-      <p className="hint">Usá ← → o espacio · S Seniority · H Hitos · T Timeline · F Pantalla completa</p>
     </section>
   );
 }
@@ -409,7 +413,7 @@ function SenioritySlide({ go }) {
               <b>Alcance y foco:</b> {item.scope}
             </div>
             <ul className="card-achievements">
-              {item.achievements.map((ach, ai) => (
+              {item.achievements?.map((ach, ai) => (
                 <li key={ai}>
                   <span className="check-icon">✓</span>
                   <span>{ach}</span>
@@ -466,6 +470,126 @@ function MilestonesSlide({ go }) {
         <button className="btn-brand" onClick={() => { playSfx('click'); go(1); }}>
           Ver en el Timeline →
         </button>
+      </div>
+    </section>
+  );
+}
+
+// Slide: Catálogo de Desarrollos por Año (2025 / 2026)
+function YearProjectsSlide({ year, go }) {
+  const [filter, setFilter] = useState('all');
+
+  const yearProjects = sorted.filter((p) => p.start.startsWith(String(year)));
+  const visible = filter === 'all' ? yearProjects : yearProjects.filter((p) => p.cat === filter);
+
+  const countsByCat = Object.fromEntries(
+    Object.keys(categories).map((k) => [k, yearProjects.filter((p) => p.cat === k).length])
+  );
+
+  return (
+    <section className="slide year-slide">
+      <header className="year-header">
+        <div className="year-title-block">
+          <div className="year-eyebrow-row">
+            <span className="year-badge">PORTAFOLIO ANUAL · MI GUSTO SISTEMAS</span>
+            <button className="year-back-btn" onClick={() => { playSfx('click'); go(0); }}>
+              ← Volver a Portada
+            </button>
+          </div>
+          <h2>Desarrollos <span>{year}</span></h2>
+          <p className="year-subtitle">
+            {year === 2025
+              ? '10 desarrollos · Fundación digital, herramientas internas de automatización y primeras campañas masivas (Mayo — Noviembre 2025).'
+              : '20 desarrollos · Transformación industrial (MES, Planta), sucursales en vivo, eventos masivos y consolidación operativa (Febrero — Actualidad).'}
+          </p>
+        </div>
+
+        <div className="year-switcher">
+          <button
+            className={`year-switch-btn ${year === 2025 ? 'active' : ''}`}
+            onClick={() => { playSfx('click'); go(1); }}
+          >
+            📅 Desarrollos 2025 <b>10</b>
+          </button>
+          <button
+            className={`year-switch-btn ${year === 2026 ? 'active' : ''}`}
+            onClick={() => { playSfx('click'); go(3); }}
+          >
+            🚀 Desarrollos 2026 <b>20</b>
+          </button>
+        </div>
+      </header>
+
+      <div className="year-filters">
+        <button
+          className={`year-chip ${filter === 'all' ? 'on' : ''}`}
+          onClick={() => { playSfx('click'); setFilter('all'); }}
+        >
+          ✨ Todos <b>{yearProjects.length}</b>
+        </button>
+        {Object.entries(categories).map(([k, c]) => {
+          const count = countsByCat[k] || 0;
+          if (count === 0) return null;
+          return (
+            <button
+              key={k}
+              className={`year-chip ${filter === k ? 'on' : ''}`}
+              style={{ '--c': c.color }}
+              onClick={() => { playSfx('click'); setFilter(k); }}
+            >
+              {c.icon} {c.label} <b>{count}</b>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="year-grid-container">
+        <div className="year-grid">
+          {visible.map((p) => {
+            const cat = categories[p.cat];
+            const projectIdx = indexById[p.id];
+            return (
+              <div
+                key={p.id}
+                className="year-card"
+                style={{ '--c': cat.color }}
+                onClick={() => { playSfx('click'); go(projectIdx + PROJECT_OFFSET); }}
+                onMouseEnter={() => playSfx('hover')}
+              >
+                <div className="year-card-top">
+                  <div className="year-card-header">
+                    <span className="year-card-emoji">{p.emoji}</span>
+                    <div className="year-card-names">
+                      <h4>{p.name}</h4>
+                      <span className="year-card-cat" style={{ color: cat.color }}>
+                        {cat.icon} {cat.label}
+                      </span>
+                    </div>
+                  </div>
+                  <span className="year-card-duration">{calcDuration(p.start, p.end)}</span>
+                </div>
+
+                <p className="year-card-tagline">{p.tagline}</p>
+
+                {p.impact && (
+                  <div className="year-card-impact">
+                    <b>📈</b> <span>{p.impact}</span>
+                  </div>
+                )}
+
+                <div className="year-card-footer">
+                  <div className="year-card-stack">
+                    {p.stack.slice(0, 3).map((st) => (
+                      <span key={st}>{st}</span>
+                    ))}
+                    {p.stack.length > 3 && <span className="more">+{p.stack.length - 3}</span>}
+                  </div>
+                  <span className="year-card-cta">Ver ficha →</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
@@ -645,9 +769,9 @@ export default function App() {
 
   let content;
   if (idx === 0) content = <Cover go={go} />;
-  else if (idx === 1) content = <Timeline go={go} />;
+  else if (idx === 1) content = <YearProjectsSlide year={2025} go={go} />;
   else if (idx === 2) content = <SenioritySlide go={go} />;
-  else if (idx === 3) content = <MilestonesSlide go={go} />;
+  else if (idx === 3) content = <YearProjectsSlide year={2026} go={go} />;
   else if (idx === TOTAL - 1) content = <Closing go={go} />;
   else content = <ProjectSlide p={sorted[idx - PROJECT_OFFSET]} i={idx - PROJECT_OFFSET} />;
 
@@ -662,14 +786,14 @@ export default function App() {
             <button className="grid-special-btn" onClick={() => go(0)}>
               <span>🏠</span>Portada
             </button>
-            <button className="grid-special-btn" onClick={() => go(1)}>
-              <span>📅</span>Línea de Tiempo
+            <button className="grid-special-btn highlight" onClick={() => go(1)}>
+              <span>📅</span>Desarrollos 2025
             </button>
             <button className="grid-special-btn highlight" onClick={() => go(2)}>
               <span>⭐</span>Seniority & Liderazgo
             </button>
             <button className="grid-special-btn highlight" onClick={() => go(3)}>
-              <span>🎯</span>Hitos de la Empresa
+              <span>🚀</span>Desarrollos 2026
             </button>
             {sorted.map((p, i) => (
               <button key={p.id} style={{ '--c': categories[p.cat].color }} onClick={() => go(i + PROJECT_OFFSET)}>
@@ -681,13 +805,16 @@ export default function App() {
       )}
 
       <nav className="controls">
-        <button id="prev" onClick={() => go(idx - 1)} aria-label="Anterior">←</button>
-        <button id="timeline" onClick={() => go(1)}>Timeline</button>
-        <button id="seniority" className={idx === 2 ? 'active' : ''} onClick={() => go(2)}>⭐ Seniority</button>
-        <button id="milestones" className={idx === 3 ? 'active' : ''} onClick={() => go(3)}>🎯 Hitos</button>
-        <button id="grid" onClick={() => setGrid(!grid)}>Índice</button>
-        <span className="counter">{idx + 1} / {TOTAL}</span>
-        <button id="next" onClick={() => go(idx + 1)} aria-label="Siguiente">→</button>
+        <button id="prev" className="btn-nav" onClick={() => go(idx - 1)} aria-label="Anterior">←</button>
+        <button id="btn-2025" className={idx === 1 ? 'active' : ''} onClick={() => go(1)}><span>📅</span> 2025</button>
+        <button id="seniority" className={idx === 2 ? 'active' : ''} onClick={() => go(2)}><span>⭐</span> Seniority</button>
+        <button id="btn-2026" className={idx === 3 ? 'active' : ''} onClick={() => go(3)}><span>🚀</span> 2026</button>
+        <span className="counter">
+          <strong className="counter-current">{idx + 1}</strong>
+          <span className="counter-sep">/</span>
+          <span className="counter-total">{TOTAL}</span>
+        </span>
+        <button id="next" className="btn-nav" onClick={() => go(idx + 1)} aria-label="Siguiente">→</button>
       </nav>
       <div className="progress" style={{ width: `${((idx + 1) / TOTAL) * 100}%` }} />
     </main>

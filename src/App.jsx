@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { sorted, categories, images, companyMilestones, seniorityProgression } from './projects';
 import './App.css';
 
@@ -95,6 +96,46 @@ const calcDuration = (startStr, endStr) => {
 
   return `${totalMonths} mes${totalMonths > 1 ? 'es' : ''}`;
 };
+
+// Contador numérico animado suave y visible estilo GSAP / Motion con delay y curva natural
+function AnimatedNumber({ value, duration = 0.95, delay = 0.1, prefix = '', suffix = '' }) {
+  const [displayValue, setDisplayValue] = useState(0);
+  const targetNum = typeof value === 'number' 
+    ? value 
+    : parseFloat(String(value).replace(/[^0-9.-]/g, '')) || 0;
+
+  useEffect(() => {
+    // Si se pasa en ms (> 10) se utiliza directo, si no en segundos
+    const durMs = duration > 10 ? Math.min(duration, 1300) : Math.max(350, duration * 1000);
+    const delMs = delay > 10 ? Math.min(delay, 300) : Math.max(0, delay * 1000);
+
+    let startTime = null;
+    let animationFrame = null;
+    const timeout = setTimeout(() => {
+      const step = (timestamp) => {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / durMs, 1);
+        // easeOutCubic natural: velocidad visible y fluida, frena suave en el valor final
+        const ease = 1 - Math.pow(1 - progress, 3);
+        const current = targetNum % 1 !== 0 
+          ? (targetNum * ease).toFixed(1) 
+          : Math.round(targetNum * ease);
+        setDisplayValue(current);
+        if (progress < 1) {
+          animationFrame = requestAnimationFrame(step);
+        }
+      };
+      animationFrame = requestAnimationFrame(step);
+    }, delMs);
+
+    return () => {
+      clearTimeout(timeout);
+      if (animationFrame) cancelAnimationFrame(animationFrame);
+    };
+  }, [targetNum, duration, delay]);
+
+  return <>{prefix}{displayValue}{suffix}</>;
+}
 
 // Rango temporal global del timeline (desde 1 de Mayo 2025 hasta 31 de Octubre 2026)
 const timelineStart = new Date('2025-05-01T00:00:00').getTime();
@@ -214,7 +255,12 @@ function Cover({ go }) {
   });
   return (
     <section className="slide cover">
-      <div className="cover-content">
+      <motion.div
+        className="cover-content"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      >
         <div className="brand-badge">
           <span className="brand-dot-pulse">
             <span className="brand-dot-core" />
@@ -224,7 +270,10 @@ function Cover({ go }) {
           <span className="brand-badge-divider">·</span>
           <span className="brand-badge-label">Desarrollos digitales & de infraestructura</span>
         </div>
-        <h1>{sorted.length} proyectos.<br /><span>Ecosistema & Resultados.</span></h1>
+        <h1>
+          <AnimatedNumber value={sorted.length} delay={0.15} /> proyectos.<br />
+          <span>Ecosistema & Resultados.</span>
+        </h1>
         <p className="lead">De soluciones puntuales a la digitalización integral de planta, marketing y sucursales ({fmtMonthYear(sorted[0].start)} → Actualidad).</p>
         
         <div className="cover-quick-actions">
@@ -240,10 +289,18 @@ function Cover({ go }) {
         </div>
 
         <div className="stats">
-          {counts.map((cat) => (
-            <div key={cat.key} className="stat" style={{ '--c': cat.color }} onMouseEnter={() => playSfx('hover')}>
+          {counts.map((cat, idx) => (
+            <motion.div
+              key={cat.key}
+              className="stat"
+              style={{ '--c': cat.color }}
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.28 + idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+              onMouseEnter={() => playSfx('hover')}
+            >
               <div className="stat-top">
-                <strong>{cat.count}</strong>
+                <strong><AnimatedNumber value={cat.count} delay={0.35 + idx * 0.08} /></strong>
                 <span className="stat-icon">{cat.icon}</span>
               </div>
               <div className="stat-info">
@@ -252,20 +309,33 @@ function Cover({ go }) {
               </div>
               <div className="stat-bar-wrap">
                 <div className="stat-bar-bg">
-                  <div className="stat-bar-fill" style={{ width: `${cat.pct}%` }} />
+                  <motion.div
+                    className="stat-bar-fill"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${cat.pct}%` }}
+                    transition={{ duration: 1.1, delay: 0.45 + idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                    style={{ background: cat.color }}
+                  />
                 </div>
-                <span className="stat-pct">{cat.pct}%</span>
+                <span className="stat-pct">
+                  <AnimatedNumber value={cat.pct} suffix="%" delay={0.35 + idx * 0.08} />
+                </span>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </div>
-      <div className="cover-visual">
+      </motion.div>
+      <motion.div
+        className="cover-visual"
+        initial={{ opacity: 0, scale: 0.94 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.65, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+      >
         <div className="cover-logo-wrapper">
           <img src="/logo.png" alt="Mi Gusto Logo" className="cover-logo" />
           <div className="glow-sphere" />
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
@@ -282,7 +352,7 @@ function TlItem({ it, go, onHover, onLeave, active }) {
         left: `${it.left}%`,
         width: `${barW}%`,
         '--c': categories[p.cat].color,
-        animationDelay: `${idx * 22}ms`,
+        animationDelay: `${Math.min(idx * 12, 180)}ms`,
       }}
       onMouseEnter={(e) => { playSfx('hover'); onHover(p, e); }}
       onMouseMove={(e) => onHover(p, e)}
@@ -457,10 +527,13 @@ function SenioritySlide({ go }) {
 
       <div className="seniority-grid">
         {seniorityProgression.map((item, idx) => (
-          <article
+          <motion.article
             key={idx}
             className="seniority-card"
             style={{ '--c': item.color }}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.12 + idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
             onMouseEnter={() => playSfx('hover')}
           >
             <div className="seniority-card-header">
@@ -491,7 +564,7 @@ function SenioritySlide({ go }) {
                 ))}
               </ul>
             </div>
-          </article>
+          </motion.article>
         ))}
       </div>
 
@@ -603,10 +676,13 @@ function MilestonesSlide() {
           {companyMilestones.map((m, idx) => {
             const meta = milestoneMeta[idx] || {};
             return (
-              <article
+              <motion.article
                 key={m.id}
                 className="milestone-card"
                 style={{ '--c': meta.color }}
+                initial={{ opacity: 0, y: 22 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.12 + idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
                 onMouseEnter={() => playSfx('hover')}
               >
                 <div className="milestone-card-body">
@@ -649,7 +725,7 @@ function MilestonesSlide() {
                   </div>
                   {meta.kpi && <span className="milestone-kpi">{meta.kpi}</span>}
                 </div>
-              </article>
+              </motion.article>
             );
           })}
         </div>
@@ -705,12 +781,12 @@ export const projectKpis = {
   sensorial: { value: 100, metric: '100%', label: 'Protocolo INF-D003', type: 'donut', sublabel: 'Catas Bromatología' },
 };
 
-// Mini Gráfico Donut (Torta circular con SVG puro, sin dependencias)
+// Mini Gráfico Donut (Torta circular animada con Motion)
 function MiniDonut({ value, color = '#3dd6a5', size = 46 }) {
   const strokeWidth = 5;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (Math.min(100, Math.max(0, value)) / 100) * circumference;
+  const targetOffset = circumference - (Math.min(100, Math.max(0, value)) / 100) * circumference;
 
   return (
     <div className="mini-donut-wrap" style={{ width: size, height: size }} title={`${value}% de meta alcanzada`}>
@@ -723,7 +799,7 @@ function MiniDonut({ value, color = '#3dd6a5', size = 46 }) {
           stroke="rgba(255, 255, 255, 0.1)"
           strokeWidth={strokeWidth}
         />
-        <circle
+        <motion.circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
@@ -731,35 +807,45 @@ function MiniDonut({ value, color = '#3dd6a5', size = 46 }) {
           stroke={color}
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
-          strokeDashoffset={strokeDashoffset}
+          initial={{ strokeDashoffset: circumference }}
+          animate={{ strokeDashoffset: targetOffset }}
+          transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.12 }}
           strokeLinecap="round"
           transform={`rotate(-90 ${size / 2} ${size / 2})`}
         />
       </svg>
-      <span className="mini-donut-text">{value}%</span>
+      <span className="mini-donut-text">
+        <AnimatedNumber value={value} suffix="%" delay={0.12} duration={0.95} />
+      </span>
     </div>
   );
 }
 
-// Mini Barra de Progreso con indicador porcentual y meta
+// Mini Barra de Progreso con animación de carga fluida
 function MiniProgressBar({ value, color = '#3dd6a5' }) {
+  const pct = Math.min(100, Math.max(0, value));
   return (
     <div className="mini-bar-wrap" title={`${value}% de eficiencia`}>
       <div className="mini-bar-labels">
-        <span className="mini-bar-pct">{value}%</span>
+        <span className="mini-bar-pct">
+          <AnimatedNumber value={value} suffix="%" delay={0.12} duration={0.95} />
+        </span>
         <span className="mini-bar-target">Meta alcanzada</span>
       </div>
       <div className="mini-bar-track">
-        <div
+        <motion.div
           className="mini-bar-fill"
-          style={{ width: `${Math.min(100, Math.max(0, value))}%`, background: color }}
+          initial={{ width: 0 }}
+          animate={{ width: `${pct}%` }}
+          transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.12 }}
+          style={{ background: color }}
         />
       </div>
     </div>
   );
 }
 
-// Slide de cada proyecto (Ficha interactiva en pantalla completa)
+// Slide de cada proyecto (Ficha interactiva en pantalla completa con scroll reveal)
 function ProjectSlide({ p, i }) {
   const c = categories[p.cat];
   const shots = images[p.id] || [];
@@ -771,7 +857,12 @@ function ProjectSlide({ p, i }) {
     <div className="scroller" style={{ '--c': c.color }}>
       <section className="slide project">
         <div className="num">{String(i + 1).padStart(2, '0')}</div>
-        <div className="info">
+        <motion.div
+          className="info"
+          initial={{ opacity: 0, x: -16 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+        >
           <div className="project-tags-row">
             <div className="project-category-tag">
               <span>{c.icon}</span>
@@ -841,9 +932,14 @@ function ProjectSlide({ p, i }) {
             📅 {fmtDate(p.start)}{p.end !== p.start ? ` → ${fmtDate(p.end)}` : ''}
             <span className="duration-pill">{calcDuration(p.start, p.end)}</span>
           </p>
-        </div>
+        </motion.div>
 
-        <div className="visual">
+        <motion.div
+          className="visual"
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.16 }}
+        >
           {shots[0] ? (
             <div className="hero-shot-container" onClick={() => { playSfx('click'); setZoom(shots[0]); }}>
               <img className="hero-shot" src={shots[0]} alt={p.name} />
@@ -852,16 +948,23 @@ function ProjectSlide({ p, i }) {
           ) : (
             <div className="orb" onMouseEnter={() => playSfx('hover')}>{p.emoji}</div>
           )}
-        </div>
+        </motion.div>
         {shots.length > 0 && <div className="scroll-hint">↓ Scrolleá para ver {shots.length} captura{shots.length > 1 ? 's' : ''}</div>}
       </section>
 
       {shots.length > 0 && (
         <section className="gallery">
           {shots.map((s, k) => (
-            <figure key={s} style={{ animationDelay: `${k * 60}ms` }} onClick={() => { playSfx('click'); setZoom(s); }}>
+            <motion.figure
+              key={s}
+              initial={{ opacity: 0, y: 35, scale: 0.96 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1], delay: (k % 4) * 0.08 }}
+              onClick={() => { playSfx('click'); setZoom(s); }}
+            >
               <img src={s} alt={`${p.name} captura ${k + 1}`} loading="lazy" />
-            </figure>
+            </motion.figure>
           ))}
         </section>
       )}
@@ -878,45 +981,80 @@ function Closing({ go }) {
 
   return (
     <section className="slide closing">
-      <div className="closing-content">
+      <motion.div
+        className="closing-content"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+      >
         <p className="eyebrow">Resumen de Capacidades & Stack</p>
         <h1>Construyendo el futuro de <span>Mi Gusto</span></h1>
         
         <div className="closing-kpis">
-          <div className="kpi-box">
-            <strong>{sorted.length}</strong>
+          <motion.div
+            className="kpi-box"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, delay: 0.05 }}
+          >
+            <strong><AnimatedNumber value={sorted.length} delay={0.05} duration={0.5} /></strong>
             <span>Proyectos Entregados</span>
-          </div>
-          <div className="kpi-box">
-            <strong>100%</strong>
+          </motion.div>
+          <motion.div
+            className="kpi-box"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, delay: 0.08 }}
+          >
+            <strong><AnimatedNumber value={100} suffix="%" delay={0.08} duration={0.5} /></strong>
             <span>Desarrollo In-House</span>
-          </div>
-          <div className="kpi-box">
-            <strong>4</strong>
+          </motion.div>
+          <motion.div
+            className="kpi-box"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, delay: 0.11 }}
+          >
+            <strong><AnimatedNumber value={4} delay={0.11} duration={0.4} /></strong>
             <span>Áreas Clave Impactadas</span>
-          </div>
-          <div className="kpi-box">
-            <strong>0$</strong>
+          </motion.div>
+          <motion.div
+            className="kpi-box"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, delay: 0.14 }}
+          >
+            <strong><AnimatedNumber value={0} prefix="$" delay={0.14} duration={0.3} /></strong>
             <span>Dependencia de Agencias</span>
-          </div>
+          </motion.div>
         </div>
 
         <div className="cloud-wrapper">
           <p className="cloud-title">Ecosistema Tecnológico Dominado</p>
           <div className="cloud">
-            {top.map(([s, n]) => {
+            {top.map(([s, n], idx) => {
               const color = techColors[s] || '#ffb020';
               return (
-                <span
+                <motion.span
                   key={s}
+                  initial={{ opacity: 0, scale: 0.85 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, delay: 0.05 + idx * 0.025 }}
                   style={{
                     fontSize: `${1 + n / 7}rem`,
                     '--tech-c': color,
                   }}
                   onMouseEnter={() => playSfx('hover')}
                 >
-                  {s}<sup>{n}</sup>
-                </span>
+                  {s}
+                  <motion.sup
+                    initial={{ opacity: 0, y: -4, scale: 0.6 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ duration: 0.35, delay: 0.08 + idx * 0.025 }}
+                  >
+                    <AnimatedNumber value={n} delay={0.08 + idx * 0.025} duration={0.45} />
+                  </motion.sup>
+                </motion.span>
               );
             })}
           </div>
@@ -933,7 +1071,7 @@ function Closing({ go }) {
             Volver al Inicio
           </button>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
@@ -942,7 +1080,12 @@ function Closing({ go }) {
 function ThankYouSlide({ go }) {
   return (
     <section className="slide thank-slide">
-      <div className="thank-content">
+      <motion.div
+        className="thank-content"
+        initial={{ opacity: 0, x: -16 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+      >
         <div className="brand-badge">
           <span className="brand-dot-pulse">
             <span className="brand-dot-core" />
@@ -961,26 +1104,52 @@ function ThankYouSlide({ go }) {
         </p>
 
         <div className="thank-cards-grid">
-          <div className="thank-card" style={{ '--c': '#ff4d4d' }} onMouseEnter={() => playSfx('hover')}>
+          <motion.div
+            className="thank-card"
+            style={{ '--c': '#ff4d4d' }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.2 }}
+            onMouseEnter={() => playSfx('hover')}
+          >
             <div className="thank-card-icon">🚀</div>
             <h3>Innovación Continua</h3>
             <p>Evolución tecnológica constante adaptada a la velocidad y crecimiento comercial.</p>
-          </div>
+          </motion.div>
 
-          <div className="thank-card" style={{ '--c': '#ffb020' }} onMouseEnter={() => playSfx('hover')}>
+          <motion.div
+            className="thank-card"
+            style={{ '--c': '#ffb020' }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.3 }}
+            onMouseEnter={() => playSfx('hover')}
+          >
             <div className="thank-card-icon">🛡️</div>
             <h3>Autonomía & Robustez</h3>
             <p>Sistemas 100% in-house, sin costos de licenciamiento externo y control total.</p>
-          </div>
+          </motion.div>
 
-          <div className="thank-card" style={{ '--c': '#3dd6a5' }} onMouseEnter={() => playSfx('hover')}>
+          <motion.div
+            className="thank-card"
+            style={{ '--c': '#3dd6a5' }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.4 }}
+            onMouseEnter={() => playSfx('hover')}
+          >
             <div className="thank-card-icon">🎯</div>
             <h3>Foco en el Negocio</h3>
             <p>Software alineado directamente con la eficiencia en planta, locales y ventas.</p>
-          </div>
+          </motion.div>
         </div>
 
-        <div className="thank-footer-banner">
+        <motion.div
+          className="thank-footer-banner"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.48 }}
+        >
           <div className="banner-badge-terminal">
             <span className="terminal-dot" />
             <span>DISPONIBILIDAD & COMPROMISO</span>
@@ -988,7 +1157,7 @@ function ThankYouSlide({ go }) {
           <p className="banner-statement">
             Espacio abierto para responder preguntas, profundizar en detalles técnicos de cualquier sistema o coordinar los próximos pasos.
           </p>
-        </div>
+        </motion.div>
 
         <div className="thank-actions">
           <button className="btn-brand" onClick={() => { playSfx('click'); go(0); }}>
@@ -1004,14 +1173,19 @@ function ThankYouSlide({ go }) {
             📈 Resumen de Capacidades
           </button>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="thank-visual">
+      <motion.div
+        className="thank-visual"
+        initial={{ opacity: 0, scale: 0.94 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+      >
         <div className="cover-logo-wrapper">
           <img src="/logo.png" alt="Mi Gusto Logo" className="thank-logo" />
           <div className="glow-sphere" />
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
@@ -1071,7 +1245,20 @@ export default function App() {
   return (
     <main className="deck">
       <div className="bg" />
-      <div className="stage" key={idx}>{content}</div>
+      <div className="stage">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={idx}
+            className="stage-motion-wrap"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.16, ease: 'easeOut' }}
+          >
+            {content}
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
       {grid && (
         <div className="grid-overlay" onClick={() => setGrid(false)}>
@@ -1123,7 +1310,12 @@ export default function App() {
         </span>
         <button id="next" className="btn-nav" onClick={() => go(idx + 1)} aria-label="Siguiente">→</button>
       </nav>
-      <div className="progress" style={{ width: `${((idx + 1) / TOTAL) * 100}%` }} />
+      <motion.div
+        className="progress"
+        initial={false}
+        animate={{ width: `${((idx + 1) / TOTAL) * 100}%` }}
+        transition={{ duration: 0.35, ease: 'easeOut' }}
+      />
     </main>
   );
 }

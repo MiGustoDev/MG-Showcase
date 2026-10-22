@@ -151,13 +151,15 @@ const laneRows = Object.fromEntries(Object.keys(categories).map((k) => [k, pack(
 
 // SLIDES INDEX:
 // 0: Portada
-// 1: Línea de tiempo (con filtro opcional de hitos)
-// 2: Seniority & Evolución de Liderazgo (Punto 2 para RRHH)
-// 3: Hitos Estratégicos de la Compañía (Punto 9 aparte)
-// 4 .. 4 + sorted.length - 1: Fichas de Proyectos (con Impacto & Arquitectura)
-// 4 + sorted.length: Cierre & Métricas Globales
-const PROJECT_OFFSET = 4;
-const TOTAL = sorted.length + 5;
+// 1: Línea de tiempo interactiva
+// 2: Hitos Estratégicos de la Empresa
+// 3: Desarrollos 2025
+// 4: Desarrollos 2026
+// 5: Seniority & Evolución de Liderazgo
+// 6 .. 6 + sorted.length - 1: Fichas de Proyectos
+// 6 + sorted.length: Cierre & Métricas Globales
+const PROJECT_OFFSET = 6;
+const TOTAL = sorted.length + 7;
 
 function Cover({ go }) {
   const totalProjects = sorted.length;
@@ -187,13 +189,13 @@ function Cover({ go }) {
         <p className="lead">De soluciones puntuales a la digitalización integral de planta, marketing y sucursales ({fmtMonthYear(sorted[0].start)} → Actualidad).</p>
         
         <div className="cover-quick-actions">
-          <button className="btn-brand" onClick={() => { playSfx('click'); go(2); }}>
+          <button className="btn-brand" onClick={() => { playSfx('click'); go(5); }}>
             ⭐ Ver Evolución de Seniority
           </button>
-          <button className="btn-secondary" onClick={() => { playSfx('click'); go(1); }}>
+          <button className="btn-secondary" onClick={() => { playSfx('click'); go(3); }}>
             📅 Desarrollos 2025
           </button>
-          <button className="btn-secondary" onClick={() => { playSfx('click'); go(3); }}>
+          <button className="btn-secondary" onClick={() => { playSfx('click'); go(4); }}>
             🚀 Desarrollos 2026
           </button>
         </div>
@@ -362,7 +364,7 @@ function Timeline({ go }) {
                   className="tl-milestone-marker"
                   style={{ left: `${pos}%` }}
                   title={`${m.title} (${fmtDate(m.date)})`}
-                  onClick={() => { playSfx('click'); go(3); }}
+                  onClick={() => { playSfx('click'); go(2); }}
                 >
                   <span className="marker-dot">{m.icon}</span>
                   <span className="marker-name">{m.title}</span>
@@ -507,13 +509,13 @@ function YearProjectsSlide({ year, go }) {
         <div className="year-switcher">
           <button
             className={`year-switch-btn ${year === 2025 ? 'active' : ''}`}
-            onClick={() => { playSfx('click'); go(1); }}
+            onClick={() => { playSfx('click'); go(3); }}
           >
             📅 Desarrollos 2025 <b>10</b>
           </button>
           <button
             className={`year-switch-btn ${year === 2026 ? 'active' : ''}`}
-            onClick={() => { playSfx('click'); go(3); }}
+            onClick={() => { playSfx('click'); go(4); }}
           >
             🚀 Desarrollos 2026 <b>20</b>
           </button>
@@ -718,7 +720,7 @@ function Closing({ go }) {
         </div>
 
         <div className="closing-cta">
-          <button className="btn-brand" onClick={() => { playSfx('click'); go(2); }}>
+          <button className="btn-brand" onClick={() => { playSfx('click'); go(5); }}>
             Revisar Evolución de Seniority
           </button>
           <button className="btn-secondary" onClick={() => { playSfx('click'); go(0); }}>
@@ -752,8 +754,10 @@ export default function App() {
       else if (e.key === 'Home') go(0);
       else if (e.key === 'End') go(TOTAL - 1);
       else if (e.key.toLowerCase() === 't') go(1);
-      else if (e.key.toLowerCase() === 's') go(2);
-      else if (e.key.toLowerCase() === 'h') go(3);
+      else if (e.key.toLowerCase() === 'h') go(2);
+      else if (e.key === '1') go(3);
+      else if (e.key === '2') go(4);
+      else if (e.key.toLowerCase() === 's') go(5);
       else if (e.key.toLowerCase() === 'g' || e.key === 'Escape') setGrid((g) => !g);
       else if (e.key.toLowerCase() === 'f') {
         if (document.fullscreenElement) {
@@ -769,9 +773,11 @@ export default function App() {
 
   let content;
   if (idx === 0) content = <Cover go={go} />;
-  else if (idx === 1) content = <YearProjectsSlide year={2025} go={go} />;
-  else if (idx === 2) content = <SenioritySlide go={go} />;
-  else if (idx === 3) content = <YearProjectsSlide year={2026} go={go} />;
+  else if (idx === 1) content = <Timeline go={go} />;
+  else if (idx === 2) content = <MilestonesSlide go={go} />;
+  else if (idx === 3) content = <YearProjectsSlide year={2025} go={go} />;
+  else if (idx === 4) content = <YearProjectsSlide year={2026} go={go} />;
+  else if (idx === 5) content = <SenioritySlide go={go} />;
   else if (idx === TOTAL - 1) content = <Closing go={go} />;
   else content = <ProjectSlide p={sorted[idx - PROJECT_OFFSET]} i={idx - PROJECT_OFFSET} />;
 
@@ -787,13 +793,19 @@ export default function App() {
               <span>🏠</span>Portada
             </button>
             <button className="grid-special-btn highlight" onClick={() => go(1)}>
-              <span>📅</span>Desarrollos 2025
+              <span>📊</span>Línea de Tiempo
             </button>
             <button className="grid-special-btn highlight" onClick={() => go(2)}>
-              <span>⭐</span>Seniority & Liderazgo
+              <span>🎯</span>Hitos de la Empresa
             </button>
             <button className="grid-special-btn highlight" onClick={() => go(3)}>
+              <span>📅</span>Desarrollos 2025
+            </button>
+            <button className="grid-special-btn highlight" onClick={() => go(4)}>
               <span>🚀</span>Desarrollos 2026
+            </button>
+            <button className="grid-special-btn highlight" onClick={() => go(5)}>
+              <span>⭐</span>Seniority & Liderazgo
             </button>
             {sorted.map((p, i) => (
               <button key={p.id} style={{ '--c': categories[p.cat].color }} onClick={() => go(i + PROJECT_OFFSET)}>
@@ -806,9 +818,11 @@ export default function App() {
 
       <nav className="controls">
         <button id="prev" className="btn-nav" onClick={() => go(idx - 1)} aria-label="Anterior">←</button>
-        <button id="btn-2025" className={idx === 1 ? 'active' : ''} onClick={() => go(1)}><span>📅</span> 2025</button>
-        <button id="seniority" className={idx === 2 ? 'active' : ''} onClick={() => go(2)}><span>⭐</span> Seniority</button>
-        <button id="btn-2026" className={idx === 3 ? 'active' : ''} onClick={() => go(3)}><span>🚀</span> 2026</button>
+        <button id="timeline" className={idx === 1 ? 'active' : ''} onClick={() => go(1)}><span>📊</span> Timeline</button>
+        <button id="milestones" className={idx === 2 ? 'active' : ''} onClick={() => go(2)}><span>🎯</span> Hitos</button>
+        <button id="btn-2025" className={idx === 3 ? 'active' : ''} onClick={() => go(3)}><span>📅</span> 2025</button>
+        <button id="btn-2026" className={idx === 4 ? 'active' : ''} onClick={() => go(4)}><span>🚀</span> 2026</button>
+        <button id="seniority" className={idx === 5 ? 'active' : ''} onClick={() => go(5)}><span>⭐</span> Seniority</button>
         <span className="counter">
           <strong className="counter-current">{idx + 1}</strong>
           <span className="counter-sep">/</span>

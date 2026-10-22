@@ -1782,3 +1782,343 @@ h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -
 .lightbox { position: fixed; inset: 0; z-index: 10; background: #000e; display: grid; place-items: center; cursor: zoom-out; animation: enter .25s; }
 .lightbox img { max-width: 92vw; max-height: 92vh; border-radius: 12px; }
 
+/* ============================================================
+   ROI & Ahorro Económico Slide (Impacto Financiero Directo)
+   ============================================================ */
+.roi-slide {
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(20px, 3vh, 32px) clamp(24px, 5vw, 64px) clamp(80px, 11vh, 96px);
+  gap: clamp(0.7rem, 1.3vh, 1.25rem);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.roi-slide::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.roi-header {
+  margin-bottom: 0;
+}
+
+.roi-header h1 {
+  font-family: 'Plus Jakarta Sans', 'Outfit', system-ui, -apple-system, sans-serif;
+  font-size: clamp(2.2rem, 3.5vw, 3.8rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  font-weight: 800;
+  margin: 0.35rem 0 0;
+}
+
+.roi-header h1 span {
+  background: linear-gradient(90deg, #3dd6a5, #ffb020);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.roi-header .lead {
+  font-size: clamp(1rem, 1.15vw, 1.18rem);
+  color: #b8b8b8;
+  margin: 0.4rem 0 0;
+  max-width: 82ch;
+  line-height: 1.4;
+}
+
+/* 4 Main KPI Metric Cards */
+.roi-grid-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(0.6rem, 1vw, 1rem);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.roi-kpi-card {
+  --c: #3dd6a5;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(0.9rem, 1.4vh, 1.25rem) clamp(0.85rem, 1vw, 1.1rem);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 3px solid var(--c);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+              border-color 0.25s ease;
+  position: relative;
+  min-height: clamp(140px, 17vh, 175px);
+  box-sizing: border-box;
+}
+
+.roi-kpi-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 24px color-mix(in srgb, var(--c) 25%, transparent);
+  border-color: rgba(255, 255, 255, 0.25);
+  border-top-color: var(--c);
+}
+
+.roi-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.roi-category-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.roi-card-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--c) 14%, rgba(255, 255, 255, 0.04));
+  border: 1px solid color-mix(in srgb, var(--c) 35%, rgba(255, 255, 255, 0.1));
+  display: grid;
+  place-items: center;
+  font-size: 1.05rem;
+}
+
+.roi-metric-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 0.2rem;
+}
+
+.roi-big-metric {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: clamp(1.8rem, 2.3vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #fff;
+  line-height: 1;
+}
+
+.roi-equiv-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.66rem;
+  color: #aaa;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 2px 7px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+}
+
+.roi-card-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #f0f0f0;
+  margin: 0 0 0.25rem;
+}
+
+.roi-card-desc {
+  font-size: 0.74rem;
+  color: #999;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.roi-card-tag {
+  margin-top: 0.5rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.64rem;
+  font-weight: 600;
+  color: var(--c);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Strategic Comparison Grid (Tercerizado vs In-House) */
+.roi-comparison-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(0.75rem, 1.2vw, 1.2rem);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.roi-model-card {
+  padding: clamp(0.85rem, 1.3vh, 1.15rem) clamp(1rem, 1.3vw, 1.35rem);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.roi-model-card.external {
+  border-left: 3px solid #ff4d4d;
+}
+
+.roi-model-card.inhouse {
+  border-left: 3px solid #3dd6a5;
+  background: linear-gradient(180deg, rgba(61, 214, 165, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+}
+
+.model-card-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.model-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.model-badge.red {
+  background: rgba(255, 77, 77, 0.15);
+  border: 1px solid rgba(255, 77, 77, 0.35);
+  color: #ff7676;
+}
+
+.model-badge.green {
+  background: rgba(61, 214, 165, 0.15);
+  border: 1px solid rgba(61, 214, 165, 0.4);
+  color: #3dd6a5;
+}
+
+.model-card-header h4 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.model-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.model-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.77rem;
+  color: #c0c0c0;
+  line-height: 1.35;
+}
+
+.cross-icon {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: rgba(255, 77, 77, 0.15);
+  color: #ff6b6b;
+  display: grid;
+  place-items: center;
+  font-size: 0.68rem;
+  font-weight: 900;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.check-icon {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: rgba(61, 214, 165, 0.18);
+  color: #3dd6a5;
+  display: grid;
+  place-items: center;
+  font-size: 0.72rem;
+  font-weight: 900;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.model-list li strong {
+  color: #fff;
+}
+
+/* Bottom Terminal Statement Banner */
+.roi-banner-modern {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 1.4vw, 1.25rem);
+  padding: clamp(0.55rem, 1vh, 0.85rem) clamp(1rem, 1.4vw, 1.4rem);
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-left: 3px solid #3dd6a5;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.roi-banner-statement {
+  margin: 0;
+  font-size: clamp(0.78rem, 0.9vw, 0.86rem);
+  color: #d0d0d0;
+  line-height: 1.42;
+  flex: 1;
+}
+
+.roi-banner-statement strong {
+  color: #3dd6a5;
+  font-weight: 700;
+}
+
+.roi-quick-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+}
+
+.roi-quick-actions button {
+  font-size: 0.78rem;
+  padding: 0.45rem 1rem;
+}
+
+@media (max-width: 1100px) {
+  .roi-grid-kpis {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .roi-comparison-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+

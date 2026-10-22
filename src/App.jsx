@@ -117,10 +117,13 @@ function AnimatedNumber({ value, duration = 0.95, delay = 0.1, prefix = '', suff
         const progress = Math.min((timestamp - startTime) / durMs, 1);
         // easeOutCubic natural: velocidad visible y fluida, frena suave en el valor final
         const ease = 1 - Math.pow(1 - progress, 3);
-        const current = targetNum % 1 !== 0 
+        const rounded = targetNum % 1 !== 0 
           ? (targetNum * ease).toFixed(1) 
           : Math.round(targetNum * ease);
-        setDisplayValue(current);
+        const display = Math.abs(rounded) >= 1000 
+          ? Number(rounded).toLocaleString('es-AR') 
+          : rounded;
+        setDisplayValue(display);
         if (progress < 1) {
           animationFrame = requestAnimationFrame(step);
         }
@@ -230,15 +233,17 @@ export const techColors = {
 // 2: Hitos Clave de la Empresa
 // 3 .. 12: Desarrollos 2025 (Fichas individuales de proyectos 2025)
 // 13 .. 32: Desarrollos 2026 (Fichas individuales de proyectos 2026)
-// 33: Seniority & Evolución de Liderazgo (Semi Senior Technical Lead)
-// 34: Cierre & Métricas Globales (Resumen de Capacidades & Stack)
-// 35: Agradecimiento & Fin de la Presentación
+// 33: Retorno de Inversión (ROI) & Ahorro Operativo para Mi Gusto
+// 34: Seniority & Evolución de Liderazgo (Semi Senior Technical Lead)
+// 35: Cierre & Métricas Globales (Resumen de Capacidades & Stack)
+// 36: Agradecimiento & Fin de la Presentación
 const FIRST_2025_INDEX = 3;
 const FIRST_2026_INDEX = FIRST_2025_INDEX + sorted.filter((p) => p.start.startsWith('2025')).length; // 13
-const SENIORITY_INDEX = FIRST_2025_INDEX + sorted.length; // 33
-const CLOSING_INDEX = SENIORITY_INDEX + 1; // 34
-const THANKS_INDEX = CLOSING_INDEX + 1; // 35
-const TOTAL = THANKS_INDEX + 1; // 36
+const ROI_INDEX = FIRST_2025_INDEX + sorted.length; // 33
+const SENIORITY_INDEX = ROI_INDEX + 1; // 34
+const CLOSING_INDEX = SENIORITY_INDEX + 1; // 35
+const THANKS_INDEX = CLOSING_INDEX + 1; // 36
+const TOTAL = THANKS_INDEX + 1; // 37
 const PROJECT_OFFSET = FIRST_2025_INDEX; // 3
 
 function Cover({ go }) {
@@ -277,14 +282,14 @@ function Cover({ go }) {
         <p className="lead">De soluciones puntuales a la digitalización integral de planta, marketing y sucursales ({fmtMonthYear(sorted[0].start)} → Actualidad).</p>
         
         <div className="cover-quick-actions">
-          <button className="btn-brand" onClick={() => { playSfx('click'); go(SENIORITY_INDEX); }}>
-            ⭐ Ver Evolución de Seniority
+          <button className="btn-brand" onClick={() => { playSfx('click'); go(ROI_INDEX); }}>
+            💰 Retorno de Inversión (ROI)
+          </button>
+          <button className="btn-secondary" onClick={() => { playSfx('click'); go(SENIORITY_INDEX); }}>
+            ⭐ Ver Seniority
           </button>
           <button className="btn-secondary" onClick={() => { playSfx('click'); go(FIRST_2025_INDEX); }}>
-            📅 Desarrollos 2025
-          </button>
-          <button className="btn-secondary" onClick={() => { playSfx('click'); go(FIRST_2026_INDEX); }}>
-            🚀 Desarrollos 2026
+            📅 Desarrollos
           </button>
         </div>
 
@@ -499,6 +504,208 @@ function Timeline({ go }) {
       </div>
 
       {hover && <TlTooltip key={hover.p.id} hover={hover} />}
+    </section>
+  );
+}
+
+// Slide: Retorno de Inversión (ROI) & Ahorro Operativo para Mi Gusto
+function RoiSlide({ go }) {
+  const roiKpis = [
+    {
+      color: '#3dd6a5',
+      category: 'Desarrollo a Medida',
+      icon: '💼',
+      value: 55000,
+      prefix: '+$',
+      suffix: ' USD',
+      equiv: '≈ $65.000.000 ARS',
+      title: 'Ahorro en Fábricas de Software',
+      desc: 'Costo promedio de mercado para diseñar, programar e integrar 30 plataformas web, móviles y tótems.',
+      tag: '100% In-House sin Deuda',
+    },
+    {
+      color: '#ffb020',
+      category: 'Licencias & SaaS',
+      icon: '🛡️',
+      value: 5400,
+      prefix: '+$',
+      suffix: ' USD/año',
+      equiv: '≈ $450 USD mensuales',
+      title: 'Suscripciones SaaS Eliminadas',
+      desc: 'Cartelería local por local (ScreenFlow), envíos masivos (MultiMail) y protocolos de cata (INF-D003).',
+      tag: '$0 de Gasto Recurrente',
+    },
+    {
+      color: '#38bdf8',
+      category: 'Tiempo Operativo',
+      icon: '⚡',
+      value: 2400,
+      prefix: '+',
+      suffix: ' hs/año',
+      equiv: '≈ 200 hs de trabajo / mes',
+      title: 'Horas de Personal Optimizadas',
+      desc: 'Facturación B2B automática (IAE), respuesta inicial (AutoAnswers) y reportes de planta central.',
+      tag: 'Productividad Automatizada',
+    },
+    {
+      color: '#ff4d4d',
+      category: 'Time-to-Market',
+      icon: '🚀',
+      value: 3,
+      prefix: '',
+      suffix: 'x',
+      equiv: '1 a 3 semanas por entrega',
+      title: 'Agilidad de Despliegue en Vivo',
+      desc: 'Frente a 3 a 6 meses de licitaciones, burocracia de contratos y demoras de proveedores externos.',
+      tag: 'Soporte Directo Inmediato',
+    },
+  ];
+
+  return (
+    <section className="slide roi-slide">
+      <header className="roi-header">
+        <div className="brand-badge">
+          <span className="brand-dot-pulse">
+            <span className="brand-dot-core" style={{ background: '#3dd6a5', boxShadow: '0 0 8px #3dd6a5' }} />
+            <span className="brand-dot-ring" style={{ background: 'rgba(61, 214, 165, 0.45)' }} />
+          </span>
+          <span className="brand-badge-company">Mi Gusto</span>
+          <span className="brand-badge-divider">·</span>
+          <span className="brand-badge-label">Eficiencia Financiera & Retorno de Inversión</span>
+        </div>
+        <h1>
+          Retorno de Inversión (ROI) <span>& Ahorro Directo</span>
+        </h1>
+        <p className="lead">
+          Cómo el desarrollo 100% in-house transformó costos operativos externos en activos tecnológicos propios, alta rentabilidad y soberanía digital.
+        </p>
+      </header>
+
+      {/* 4 Métricas de Gran Impacto */}
+      <div className="roi-grid-kpis">
+        {roiKpis.map((kpi, idx) => (
+          <motion.article
+            key={idx}
+            className="roi-kpi-card"
+            style={{ '--c': kpi.color }}
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.08 + idx * 0.07, ease: [0.16, 1, 0.3, 1] }}
+            onMouseEnter={() => playSfx('hover')}
+          >
+            <div>
+              <div className="roi-card-top">
+                <span className="roi-category-badge">
+                  <span>●</span> {kpi.category}
+                </span>
+                <div className="roi-card-icon">{kpi.icon}</div>
+              </div>
+
+              <div className="roi-metric-row">
+                <span className="roi-big-metric">
+                  <AnimatedNumber value={kpi.value} prefix={kpi.prefix} suffix={kpi.suffix} delay={0.12 + idx * 0.07} duration={0.9} />
+                </span>
+                <span className="roi-equiv-pill">{kpi.equiv}</span>
+              </div>
+
+              <h3 className="roi-card-title">{kpi.title}</h3>
+              <p className="roi-card-desc">{kpi.desc}</p>
+            </div>
+
+            <div className="roi-card-tag">
+              <span>✓</span> {kpi.tag}
+            </div>
+          </motion.article>
+        ))}
+      </div>
+
+      {/* Comparativa Estratégica: Tercerizado vs In-House */}
+      <div className="roi-comparison-wrapper">
+        <motion.div
+          className="roi-model-card external"
+          initial={{ opacity: 0, x: -16 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.45, delay: 0.3 }}
+        >
+          <div className="model-card-header">
+            <span className="model-badge red">MODELO TERCERIZADO (AGENCIA)</span>
+            <h4>Software Factory Externa</h4>
+          </div>
+          <ul className="model-list">
+            <li>
+              <span className="cross-icon">✕</span>
+              <div>
+                <strong>Costos Variables en Dólares:</strong> Cobro por hora, adicionales por cada ajuste menor y fees de mantenimiento mensual obligado.
+              </div>
+            </li>
+            <li>
+              <span className="cross-icon">✕</span>
+              <div>
+                <strong>Burocracia & Espera:</strong> Semanas para cotizar, demoras en tickets y nula respuesta en fines de semana o eventos.
+              </div>
+            </li>
+            <li>
+              <span className="cross-icon">✕</span>
+              <div>
+                <strong>Código Cautivo:</strong> Dependencia técnica forzada, servidores ajenos y falta de conocimiento de la cultura Mi Gusto.
+              </div>
+            </li>
+          </ul>
+        </motion.div>
+
+        <motion.div
+          className="roi-model-card inhouse"
+          initial={{ opacity: 0, x: 16 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.45, delay: 0.35 }}
+        >
+          <div className="model-card-header">
+            <span className="model-badge green">MODELO PROPIO (EQUIPO IN-HOUSE)</span>
+            <h4>Desarrollo Interno Mi Gusto</h4>
+          </div>
+          <ul className="model-list">
+            <li>
+              <span className="check-icon">✓</span>
+              <div>
+                <strong>Inversión Fija y Predecible:</strong> Desarrollo ilimitado de 30 plataformas con amortización directa sobre el sueldo interno.
+              </div>
+            </li>
+            <li>
+              <span className="check-icon">✓</span>
+              <div>
+                <strong>Velocidad & Respuesta Viva:</strong> Despliegues en 1 a 3 semanas, soporte inmediato en planta, aperturas y eventos masivos (Lolla).
+              </div>
+            </li>
+            <li>
+              <span className="check-icon">✓</span>
+              <div>
+                <strong>Soberanía Tecnológica 100%:</strong> Todo el código fuente, datos y sistemas son propiedad exclusiva de Mi Gusto.
+              </div>
+            </li>
+          </ul>
+        </motion.div>
+      </div>
+
+      {/* Banner inferior de conclusión ejecutiva */}
+      <motion.div
+        className="roi-banner-modern"
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, delay: 0.42 }}
+      >
+        <div className="banner-badge-terminal">
+          <span className="terminal-dot" style={{ background: '#3dd6a5', boxShadow: '0 0 8px #3dd6a5' }} />
+          <span style={{ color: '#3dd6a5' }}>BALANCE FINANCIERO POSITIVO</span>
+        </div>
+        <p className="roi-banner-statement">
+          El equipo no representa un costo operativo, sino una <strong>unidad de alto retorno</strong> que amortizó con creces la inversión salarial de la empresa, generando ahorro permanente y soberanía tecnológica.
+        </p>
+        <div className="roi-quick-actions">
+          <button className="btn-brand" onClick={() => { playSfx('click'); go(SENIORITY_INDEX); }}>
+            ⭐ Ver Seniority →
+          </button>
+        </div>
+      </motion.div>
     </section>
   );
 }
@@ -1215,6 +1422,7 @@ export default function App() {
       else if (e.key.toLowerCase() === 'h') go(2);
       else if (e.key === '1') go(FIRST_2025_INDEX);
       else if (e.key === '2') go(FIRST_2026_INDEX);
+      else if (e.key.toLowerCase() === 'r') go(ROI_INDEX);
       else if (e.key.toLowerCase() === 's') go(SENIORITY_INDEX);
       else if (e.key.toLowerCase() === 'g' || e.key === 'Escape') setGrid((g) => !g);
       else if (e.key.toLowerCase() === 'f') {
@@ -1233,10 +1441,11 @@ export default function App() {
   if (idx === 0) content = <Cover go={go} />;
   else if (idx === 1) content = <Timeline go={go} />;
   else if (idx === 2) content = <MilestonesSlide go={go} />;
-  else if (idx >= FIRST_2025_INDEX && idx < SENIORITY_INDEX) {
+  else if (idx >= FIRST_2025_INDEX && idx < ROI_INDEX) {
     const pIdx = idx - FIRST_2025_INDEX;
     content = <ProjectSlide p={sorted[pIdx]} i={pIdx} />;
   }
+  else if (idx === ROI_INDEX) content = <RoiSlide go={go} />;
   else if (idx === SENIORITY_INDEX) content = <SenioritySlide go={go} />;
   else if (idx === CLOSING_INDEX) content = <Closing go={go} />;
   else if (idx === THANKS_INDEX) content = <ThankYouSlide go={go} />;
@@ -1278,6 +1487,9 @@ export default function App() {
             <button className="grid-special-btn highlight" onClick={() => go(FIRST_2026_INDEX)}>
               <span>🚀</span>Desarrollos 2026 ({sorted.filter((p) => p.start.startsWith('2026')).length})
             </button>
+            <button className="grid-special-btn highlight" onClick={() => go(ROI_INDEX)}>
+              <span>💰</span>Retorno de Inversión (ROI) & Ahorro
+            </button>
             <button className="grid-special-btn highlight" onClick={() => go(SENIORITY_INDEX)}>
               <span>⭐</span>Seniority & Liderazgo
             </button>
@@ -1301,7 +1513,8 @@ export default function App() {
         <button id="timeline" className={idx === 1 ? 'active' : ''} onClick={() => go(1)}><span>📊</span> Timeline</button>
         <button id="milestones" className={idx === 2 ? 'active' : ''} onClick={() => go(2)}><span>🎯</span> Hitos</button>
         <button id="btn-2025" className={idx >= FIRST_2025_INDEX && idx < FIRST_2026_INDEX ? 'active' : ''} onClick={() => go(FIRST_2025_INDEX)}><span>📅</span> 2025</button>
-        <button id="btn-2026" className={idx >= FIRST_2026_INDEX && idx < SENIORITY_INDEX ? 'active' : ''} onClick={() => go(FIRST_2026_INDEX)}><span>🚀</span> 2026</button>
+        <button id="btn-2026" className={idx >= FIRST_2026_INDEX && idx < ROI_INDEX ? 'active' : ''} onClick={() => go(FIRST_2026_INDEX)}><span>🚀</span> 2026</button>
+        <button id="btn-roi" className={idx === ROI_INDEX ? 'active' : ''} onClick={() => go(ROI_INDEX)}><span>💰</span> Retorno & Ahorro</button>
         <button id="seniority" className={idx === SENIORITY_INDEX ? 'active' : ''} onClick={() => go(SENIORITY_INDEX)}><span>⭐</span> Seniority</button>
         <span className="counter">
           <strong className="counter-current">{idx + 1}</strong>

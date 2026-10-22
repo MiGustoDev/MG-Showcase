@@ -249,7 +249,39 @@ h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -
 @keyframes breathe { from { transform: scale(0.9); opacity: 0.6; } to { transform: scale(1.15); opacity: 0.9; } }
 
 /* Project callouts (Puntos 1 y 13) */
-.project-category-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; background: rgba(255,255,255,0.08); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--c); margin-bottom: 0.8rem; border-left: 2px solid var(--c); }
+.project-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0.8rem;
+}
+.project-category-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--c);
+  margin-bottom: 0;
+  border-left: 2px solid var(--c);
+}
+.project-year-pill {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
 .project-callout { margin: 1rem 0; padding: 0.85rem 1.15rem; border-radius: 14px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.09); font-size: 0.98rem; line-height: 1.45; backdrop-filter: blur(8px); transition: transform .2s, border-color .2s; }
 .project-callout:hover { transform: translateX(4px); }
 .callout-label { display: flex; align-items: center; gap: 8px; font-size: 0.84rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.35rem; }

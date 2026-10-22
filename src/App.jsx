@@ -438,40 +438,161 @@ function SenioritySlide({ go }) {
   );
 }
 
-// Slide 3: Hitos Estratégicos de la Empresa (Punto 9 aparte)
-function MilestonesSlide({ go }) {
+const milestoneMeta = [
+  {
+    year: '2025',
+    phase: '01',
+    color: '#ff4d4d',
+    tag: 'Web & Marca',
+    highlights: ['Sitio Web Oficial React', 'Identidad & CDN Global'],
+    scope: 'Fundación del ecosistema digital',
+    kpi: '+120k visitas/mes',
+  },
+  {
+    year: '2025',
+    phase: '02',
+    color: '#ffb020',
+    tag: 'Marketing Masivo',
+    highlights: ['Alianza Flamin Hot & IAE', 'Tráfico masivo concurrente'],
+    scope: 'Tráfico viral & co-branding',
+    kpi: 'Alta concurrencia',
+  },
+  {
+    year: '2026',
+    phase: '03',
+    color: '#b070ff',
+    tag: 'Innovación en Tiendas',
+    highlights: ['Tótems táctiles MG Games', 'Llamadores realtime cocina'],
+    scope: 'Hardware táctil & interactivos',
+    kpi: 'Hardware en local',
+  },
+  {
+    year: '2026',
+    phase: '04',
+    color: '#3dd6a5',
+    tag: 'Industria 4.0',
+    highlights: ['MES de planta industrial', 'Logística Orbital con GPS'],
+    scope: 'Producción nuclear & stock',
+    kpi: 'Industria & Logística',
+  },
+  {
+    year: '2026',
+    phase: '05',
+    color: '#38bdf8',
+    tag: 'Calidad & Personas',
+    highlights: ['MG Capacitaciones BPM', 'AuditApp scoring sucursales'],
+    scope: 'Auditoría en vivo y calidad',
+    kpi: 'Gobierno operativo',
+  },
+];
+
+// Slide 3: Hitos Estratégicos de la Empresa (2025 - 2026)
+function MilestonesSlide() {
   return (
     <section className="slide milestones-slide">
-      <div className="slide-header">
-        <p className="eyebrow">Alineación Estratégica · Impacto Organizacional</p>
-        <h2>Hitos Clave de Mi Gusto (2025 – 2026)</h2>
-        <p className="slide-subtitle">Cómo el desarrollo tecnológico acompañó y potenció cada meta comercial y operativa de la compañía.</p>
-      </div>
+      <header className="milestones-header">
+        <div className="brand-badge">
+          <span className="brand-dot-pulse">
+            <span className="brand-dot-core" />
+            <span className="brand-dot-ring" />
+          </span>
+          <span className="brand-badge-company">Mi Gusto</span>
+          <span className="brand-badge-divider">·</span>
+          <span className="brand-badge-label">Alineación Estratégica & Impacto Organizacional</span>
+        </div>
+        <h1>Hitos Clave de Mi Gusto <span>(2025 – 2026)</span></h1>
+        <p className="lead">
+          De soluciones puntuales a la digitalización integral: cómo el desarrollo in-house acompañó y potenció cada meta estratégica.
+        </p>
+      </header>
 
-      <div className="milestones-timeline">
-        {companyMilestones.map((m, idx) => (
-          <div key={m.id} className="milestone-node" onMouseEnter={() => playSfx('hover')}>
-            <div className="node-icon-wrapper">
-              <span className="node-icon">{m.icon}</span>
-              <span className="node-line" />
-            </div>
-            <div className="node-content">
-              <div className="node-meta">
-                <span className="node-category">{m.category}</span>
-                <span className="node-date">📅 {fmtDate(m.date)}</span>
-              </div>
-              <h3>{m.title}</h3>
-              <p>{m.desc}</p>
-            </div>
+      <div className="milestones-track-wrapper">
+        <div className="milestones-years-bar">
+          <div className="year-capsule y2025">
+            <span className="brand-dot-pulse">
+              <span className="brand-dot-core" style={{ background: '#ff4d4d', boxShadow: '0 0 8px #ff4d4d' }} />
+              <span className="brand-dot-ring" style={{ background: 'rgba(255, 77, 77, 0.45)' }} />
+            </span>
+            <span className="capsule-title"><strong>2025</strong> · Ecosistema Digital & Marketing Masivo</span>
+            <span className="capsule-count">2 Hitos</span>
           </div>
-        ))}
+          <div className="year-capsule y2026">
+            <span className="brand-dot-pulse">
+              <span className="brand-dot-core" style={{ background: '#3dd6a5', boxShadow: '0 0 8px #3dd6a5' }} />
+              <span className="brand-dot-ring" style={{ background: 'rgba(61, 214, 165, 0.45)' }} />
+            </span>
+            <span className="capsule-title"><strong>2026</strong> · Escalamiento, Industria 4.0 & Operaciones en Vivo</span>
+            <span className="capsule-count">3 Hitos</span>
+          </div>
+        </div>
+
+        <div className="milestones-grid">
+          {companyMilestones.map((m, idx) => {
+            const meta = milestoneMeta[idx] || {};
+            return (
+              <article
+                key={m.id}
+                className="milestone-card"
+                style={{ '--c': meta.color }}
+                onMouseEnter={() => playSfx('hover')}
+              >
+                <div className="milestone-card-body">
+                  <div className="milestone-top">
+                    <div className="milestone-phase">
+                      <span className="phase-num">{meta.phase}</span>
+                      <span className="phase-year">{meta.year}</span>
+                    </div>
+                    <div className="milestone-icon-wrap">
+                      <span className="milestone-icon">{m.icon}</span>
+                    </div>
+                  </div>
+
+                  <div className="milestone-meta">
+                    <span className="milestone-cat" style={{ color: meta.color }}>
+                      {m.category}
+                    </span>
+                    <span className="milestone-date">📅 {fmtDate(m.date)}</span>
+                  </div>
+
+                  <h3 className="milestone-title">{m.title}</h3>
+                  <p className="milestone-desc">{m.desc}</p>
+
+                  {meta.highlights && (
+                    <ul className="milestone-deliverables">
+                      {meta.highlights.map((h, hi) => (
+                        <li key={hi}>
+                          <span className="deliverable-bullet" style={{ color: meta.color }}>✓</span>
+                          <span>{h}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+                <div className="milestone-footer">
+                  <div className="milestone-scope">
+                    <span className="scope-dot" style={{ background: meta.color }} />
+                    <span>{meta.scope}</span>
+                  </div>
+                  {meta.kpi && <span className="milestone-kpi">{meta.kpi}</span>}
+                </div>
+              </article>
+            );
+          })}
+        </div>
       </div>
 
-      <div className="milestones-banner">
-        <span>💡 Cada hito se sostuvo en software propio, garantizando flexibilidad, velocidad de respuesta y control total de datos.</span>
-        <button className="btn-brand" onClick={() => { playSfx('click'); go(1); }}>
-          Ver en el Timeline →
-        </button>
+      <div className="milestones-banner-modern">
+        <div className="banner-badge-terminal">
+          <span className="terminal-dot" />
+          <span>MODELO OPERATIVO</span>
+        </div>
+        <p className="banner-statement">
+          Cada hito se sostuvo en software desarrollado <strong>100% in-house</strong>: autonomía arquitectónica, cero costo de licencias externas y adaptabilidad inmediata al ritmo de la empresa.
+        </p>
+        <div className="banner-kpi-chip">
+          <span>AGILIDAD & CONTROL TOTAL</span>
+        </div>
       </div>
     </section>
   );

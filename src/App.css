@@ -311,11 +311,19 @@ h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -
 .tl-milestone-marker .marker-name { position: absolute; top: 40px; left: -60px; width: 120px; text-align: center; font-size: 0.65rem; font-weight: 700; color: #ffb020; text-shadow: 0 1px 4px #000; opacity: 0; transition: opacity .2s; pointer-events: none; background: rgba(0,0,0,0.85); padding: 2px 4px; border-radius: 4px; }
 .tl-milestone-marker:hover .marker-name { opacity: 1; }
 
-/* Seniority Slide (Punto 2) */
+/* ============================================================
+   Seniority Slide (Semi Senior Technical Lead) - Modern Executive
+   ============================================================ */
 .seniority-slide {
-  justify-content: flex-start;
-  padding: 3.5vh 6vw 11vh;
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(18px, 2.6vh, 32px) clamp(24px, 5vw, 64px) clamp(80px, 11vh, 96px);
+  gap: clamp(0.7rem, 1.3vh, 1.25rem);
   overflow-y: auto;
+  overflow-x: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -324,29 +332,233 @@ h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -
   width: 0;
   height: 0;
 }
-.slide-header { margin-bottom: 2rem; }
-.seniority-slide .eyebrow { font-size: 0.95rem; letter-spacing: .28em; margin-bottom: 0.8rem; font-weight: 700; }
-.seniority-slide h2 { font-size: clamp(2.4rem, 4vw, 3.6rem); margin: 0 0 0.6rem; letter-spacing: -.025em; line-height: 1.1; }
-.slide-subtitle { color: #ccc; font-size: 1.25rem; margin-top: 0.4rem; max-width: 80ch; line-height: 1.45; }
-.seniority-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6rem; width: 100%; box-sizing: border-box; }
-.seniority-card { padding: 2rem 1.8rem; border-radius: 22px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.14); border-top: 5px solid #ff4d4d; backdrop-filter: blur(14px); display: flex; flex-direction: column; transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; position: relative; }
-.seniority-card:nth-child(2) { border-top-color: #ffb020; }
-.seniority-card:nth-child(3) { border-top-color: #3dd6a5; }
-.seniority-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6); border-color: rgba(255, 255, 255, 0.3); }
-.card-phase { font-size: 0.85rem; text-transform: uppercase; font-weight: 800; letter-spacing: 0.18em; color: #aaa; margin-bottom: 0.35rem; }
-.card-period { font-size: 0.98rem; color: #ffb020; font-weight: 700; margin-bottom: 1rem; }
-.seniority-card h3 { font-size: 1.45rem; margin: 0 0 0.6rem; color: #fff; line-height: 1.25; font-weight: 800; }
-.card-stage { font-size: 1.05rem; color: #ddd; margin-bottom: 1.2rem; font-weight: 600; line-height: 1.35; }
-.card-scope { font-size: 1.02rem; color: #f0f0f0; background: rgba(255, 255, 255, 0.07); padding: 0.95rem 1.15rem; border-radius: 12px; margin-bottom: 1.4rem; line-height: 1.5; border: 1px solid rgba(255, 255, 255, 0.08); }
-.card-scope b { color: #fff; font-weight: 700; }
-.card-achievements { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.95rem; }
-.card-achievements li { display: flex; align-items: flex-start; gap: 11px; font-size: 1.02rem; color: #e4e4e4; line-height: 1.48; }
-.check-icon { color: #3dd6a5; font-weight: 900; font-size: 1.15rem; line-height: 1.3; flex-shrink: 0; }
-.seniority-footer { display: flex; gap: 1.4rem; margin-top: 2rem; width: 100%; flex-wrap: wrap; }
-.seniority-badge { flex: 1; padding: 1.15rem 1.6rem; border-radius: 14px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.14); font-size: 1.08rem; color: #f0f0f0; line-height: 1.45; }
-.seniority-badge b { color: #fff; }
-.seniority-badge.highlight { border-color: rgba(61, 214, 165, 0.45); background: rgba(61, 214, 165, 0.1); color: #d8fbf0; }
-.seniority-badge.highlight b { color: #3dd6a5; }
+
+.seniority-header {
+  margin-bottom: 0;
+}
+
+.seniority-header h1 {
+  font-family: 'Plus Jakarta Sans', 'Outfit', system-ui, -apple-system, sans-serif;
+  font-size: clamp(2.3rem, 3.6vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  font-weight: 800;
+  margin: 0.35rem 0 0;
+}
+
+.seniority-header h1 span {
+  background: linear-gradient(90deg, #ff4d4d, #ffb020);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.seniority-subtitle {
+  color: #b8b8b8;
+  font-size: clamp(0.95rem, 1.15vw, 1.2rem);
+  margin-top: 0.45rem;
+  max-width: 78ch;
+  line-height: 1.45;
+}
+
+.seniority-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.85rem, 1.4vw, 1.5rem);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.seniority-card {
+  padding: clamp(1rem, 1.6vh, 1.4rem) clamp(1rem, 1.4vw, 1.5rem);
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 3px solid var(--c);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(0.6rem, 1vh, 0.85rem);
+  min-height: clamp(285px, 37vh, 345px);
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+              border-color 0.25s ease;
+  position: relative;
+}
+
+.seniority-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65), 0 0 28px color-mix(in srgb, var(--c) 25%, transparent);
+  border-color: rgba(255, 255, 255, 0.28);
+  border-top-color: var(--c);
+}
+
+.seniority-card-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.seniority-phase-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.seniority-phase-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.seniority-phase-badge .phase-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.86rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.seniority-phase-badge .phase-year {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #bbb;
+}
+
+.seniority-icon-wrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--c) 16%, rgba(255, 255, 255, 0.04));
+  border: 1px solid color-mix(in srgb, var(--c) 40%, rgba(255, 255, 255, 0.12));
+  display: grid;
+  place-items: center;
+  font-size: 1.25rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+
+.seniority-card:hover .seniority-icon-wrap {
+  transform: scale(1.14) rotate(4deg);
+}
+
+.seniority-role {
+  font-size: clamp(1.15rem, 1.35vw, 1.38rem);
+  font-weight: 800;
+  color: #fff;
+  margin: 0.25rem 0 0.35rem;
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+}
+
+.seniority-tag-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--c);
+  background: color-mix(in srgb, var(--c) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c) 28%, transparent);
+  padding: 2px 9px;
+  border-radius: 999px;
+  display: inline-flex;
+  width: fit-content;
+  letter-spacing: 0.02em;
+}
+
+.seniority-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.seniority-scope-box {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 2px solid var(--c);
+  border-radius: 10px;
+  padding: 0.5rem 0.75rem;
+}
+
+.seniority-scope-box .scope-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: var(--c);
+  letter-spacing: 0.08em;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.seniority-scope-box p {
+  margin: 0;
+  font-size: clamp(0.76rem, 0.84vw, 0.86rem);
+  color: #d2d2d2;
+  line-height: 1.38;
+  font-weight: 400;
+}
+
+.seniority-achievements-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #888;
+  margin-top: 0.1rem;
+}
+
+.seniority-achievements-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.32rem;
+}
+
+.seniority-achievements-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  font-size: clamp(0.74rem, 0.82vw, 0.84rem);
+  color: #dfdfdf;
+  line-height: 1.35;
+}
+
+.achievement-check {
+  color: #3dd6a5;
+  font-weight: 900;
+  font-size: 0.85rem;
+  line-height: 1.25;
+  flex-shrink: 0;
+}
+
+/* Modern Executive Footer Banner (Consistent with Hitos) */
+.seniority-banner-modern {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  padding: clamp(0.65rem, 1vh, 0.85rem) clamp(1rem, 1.3vw, 1.5rem);
+  border-radius: 16px;
+  background: linear-gradient(90deg, rgba(255, 77, 77, 0.09) 0%, rgba(255, 176, 32, 0.07) 50%, rgba(61, 214, 165, 0.09) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-top-color: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  margin: 0;
+}
 
 /* ============================================================
    Milestones Slide (Hitos Clave 2025 - 2026) - Ultra Clean & Modern
@@ -890,7 +1102,8 @@ h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -
   .orb { width: 40vw; }
   .seniority-grid { grid-template-columns: 1fr; }
   .closing-kpis { grid-template-columns: repeat(2, 1fr); }
-  .milestones-banner { flex-direction: column; align-items: flex-start; }
+  .milestones-banner,
+  .seniority-banner-modern { flex-direction: column; align-items: flex-start; }
 }
 
 /* Year Showcase Slides (Desarrollos 2025 / 2026) */

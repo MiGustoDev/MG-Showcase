@@ -397,44 +397,78 @@ function Timeline({ go }) {
   );
 }
 
-// Slide 2: Evolución del Rol & Seniority (Punto 2)
+// Slide: Evolución del Rol & Seniority (Semi Senior Technical Lead)
 function SenioritySlide({ go }) {
   return (
     <section className="slide seniority-slide">
-      <div className="slide-header">
-        <p className="eyebrow">Talento · Evolución de Competencias & Liderazgo</p>
-        <h2>Progresión hacia Senior Technical Lead</h2>
-        <p className="slide-subtitle">Trayectoria documentada de responsabilidades, autonomía arquitectónica y aporte directo al negocio.</p>
+      <div className="seniority-header">
+        <div className="brand-badge">
+          <span className="brand-dot-pulse">
+            <span className="brand-dot-core" />
+            <span className="brand-dot-ring" />
+          </span>
+          <span className="brand-badge-company">Mi Gusto</span>
+          <span className="brand-badge-divider">·</span>
+          <span className="brand-badge-label">Evolución de Competencias & Seniority</span>
+        </div>
+        <h1>
+          Progresión hacia <span>Semi Senior Technical Lead</span>
+        </h1>
+        <p className="seniority-subtitle">
+          Trayectoria documentada de responsabilidades, autonomía técnica y aporte directo a los objetivos del negocio.
+        </p>
       </div>
 
       <div className="seniority-grid">
         {seniorityProgression.map((item, idx) => (
-          <div key={idx} className="seniority-card" onMouseEnter={() => playSfx('hover')}>
-            <div className="card-phase">Fase 0{idx + 1}</div>
-            <div className="card-period">{item.period}</div>
-            <h3>{item.role}</h3>
-            <p className="card-stage">{item.stage}</p>
-            <div className="card-scope">
-              <b>Alcance y foco:</b> {item.scope}
+          <article
+            key={idx}
+            className="seniority-card"
+            style={{ '--c': item.color }}
+            onMouseEnter={() => playSfx('hover')}
+          >
+            <div className="seniority-card-header">
+              <div className="seniority-phase-row">
+                <div className="seniority-phase-badge">
+                  <span className="phase-num">FASE {item.phase || `0${idx + 1}`}</span>
+                  <span className="phase-year">{item.period}</span>
+                </div>
+                <div className="seniority-icon-wrap">{item.icon || '⭐'}</div>
+              </div>
+              <h3 className="seniority-role">{item.role}</h3>
+              <div className="seniority-tag-pill">{item.tag || item.stage}</div>
             </div>
-            <ul className="card-achievements">
-              {item.achievements?.map((ach, ai) => (
-                <li key={ai}>
-                  <span className="check-icon">✓</span>
-                  <span>{ach}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+
+            <div className="seniority-card-body">
+              <div className="seniority-scope-box">
+                <span className="scope-label">FOCO & ALCANCE</span>
+                <p>{item.scope}</p>
+              </div>
+
+              <div className="seniority-achievements-title">Aportes Clave:</div>
+              <ul className="seniority-achievements-list">
+                {item.achievements?.map((ach, ai) => (
+                  <li key={ai}>
+                    <span className="achievement-check">✓</span>
+                    <span>{ach}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
         ))}
       </div>
 
-      <div className="seniority-footer">
-        <div className="seniority-badge">
-          <b>Autonomía de Entrega:</b> Del requerimiento inicial al despliegue productivo y soporte en locales.
+      <div className="seniority-banner-modern">
+        <div className="banner-badge-terminal">
+          <span className="terminal-dot" />
+          <span>CRECIMIENTO & ROI</span>
         </div>
-        <div className="seniority-badge highlight">
-          <b>ROI para Mi Gusto:</b> Cero dependencia de agencias externas y software adaptado 100% al ADN de la empresa.
+        <p className="banner-statement">
+          Evolución sostenida de <strong>ejecutor fullstack a referente técnico</strong>: capacidad probada para transformar requerimientos de negocio en software productivo robusto sin dependencias externas.
+        </p>
+        <div className="banner-kpi-chip">
+          <span>AUTONOMÍA INTEGRAL COMPROBADA</span>
         </div>
       </div>
     </section>

@@ -671,12 +671,101 @@ function MilestonesSlide() {
   );
 }
 
+// Diccionario de métricas y gráficos para cada proyecto (Impacto de Negocio & Eficiencia)
+export const projectKpis = {
+  site: { value: 95, metric: '+120k', label: 'Visitas mensuales', type: 'donut', sublabel: 'Alcance Nacional' },
+  autoanswers: { value: 75, metric: '-75%', label: 'Tiempo de respuesta', type: 'bar', sublabel: 'Automatizado' },
+  translate: { value: 100, metric: '$0', label: 'Costo APIs cloud', type: 'donut', sublabel: 'Web Speech API' },
+  flamin: { value: 92, metric: '+25.000', label: 'Usuarios semana 1', type: 'bar', sublabel: 'Co-Branding 3D' },
+  multimail: { value: 100, metric: '100%', label: 'Ahorro en SaaS', type: 'donut', sublabel: 'Multi-SMTP' },
+  massivemail: { value: 99.8, metric: '99.8%', label: 'Entregabilidad', type: 'bar', sublabel: '+5.000 emails' },
+  crunchy: { value: 100, metric: '< 5s', label: 'Validación en caja', type: 'donut', sublabel: 'Zero Duplicados' },
+  iae: { value: 100, metric: '100%', label: 'Automatización B2B', type: 'bar', sublabel: 'End-to-End' },
+  influencers: { value: 95, metric: '100%', label: 'Trazabilidad canjes', type: 'donut', sublabel: 'Control PIN' },
+  rooms: { value: 90, metric: '100%', label: 'In-house colaborativo', type: 'bar', sublabel: 'Tiempo Real' },
+  games: { value: 96, metric: '+18.000', label: 'Partidas jugadas', type: 'bar', sublabel: 'Engagement Tótems' },
+  ordercaller: { value: 75, metric: '3x', label: 'Velocidad mostrador', type: 'donut', sublabel: 'Zero Demoras' },
+  golden: { value: 90, metric: '+90%', label: 'Retención Mi Gusto Lovers', type: 'bar', sublabel: 'Fidelización' },
+  qr: { value: 100, metric: '$0', label: 'Costo de suscripción', type: 'donut', sublabel: 'Vectorial SVG' },
+  lolla: { value: 100, metric: '100%', label: 'Operatividad Offline', type: 'donut', sublabel: 'Zero Downtime' },
+  mes: { value: 30, metric: '-30%', label: 'Tiempos de reporte', type: 'bar', sublabel: 'Industria 4.0' },
+  orbital: { value: 100, metric: '24/7', label: 'Trazabilidad GPS', type: 'donut', sublabel: 'Flota & Stock' },
+  day: { value: 95, metric: '+10.000', label: 'Leads en 24hs', type: 'bar', sublabel: 'Alta Demanda' },
+  degu: { value: 100, metric: '100%', label: 'Cupos cubiertos', type: 'donut', sublabel: 'Zero Sobreventa' },
+  tech: { value: 98, metric: '+500', label: 'Activos IT auditados', type: 'bar', sublabel: 'Control Central' },
+  sagrada: { value: 90, metric: '+85%', label: 'Engagement viral', type: 'bar', sublabel: 'Lanzamiento' },
+  copa: { value: 98, metric: '98%', label: 'Participación BPM', type: 'donut', sublabel: 'Certificación Planta' },
+  carta: { value: 100, metric: 'Instantáneo', label: 'Sincronización menú', type: 'donut', sublabel: 'Toda la Red' },
+  capa: { value: 95, metric: '100%', label: 'Autogestión operarios', type: 'bar', sublabel: 'Onboarding' },
+  roulette: { value: 92, metric: '+8.000', label: 'Clientes captados', type: 'bar', sublabel: 'Aperturas' },
+  screenflow: { value: 100, metric: '$0', label: 'Costo cloud & software', type: 'donut', sublabel: 'Edición Local' },
+  audit: { value: 60, metric: '-60%', label: 'Tiempo de auditoría', type: 'bar', sublabel: 'Calidad Sucursales' },
+  consolidado: { value: 100, metric: '100%', label: 'Consolidación diaria', type: 'bar', sublabel: 'Directorio' },
+  mgops: { value: 100, metric: '1 Hub', label: 'Portal unificado', type: 'donut', sublabel: 'Centralización' },
+  sensorial: { value: 100, metric: '100%', label: 'Protocolo INF-D003', type: 'donut', sublabel: 'Catas Bromatología' },
+};
+
+// Mini Gráfico Donut (Torta circular con SVG puro, sin dependencias)
+function MiniDonut({ value, color = '#3dd6a5', size = 46 }) {
+  const strokeWidth = 5;
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (Math.min(100, Math.max(0, value)) / 100) * circumference;
+
+  return (
+    <div className="mini-donut-wrap" style={{ width: size, height: size }} title={`${value}% de meta alcanzada`}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="rgba(255, 255, 255, 0.1)"
+          strokeWidth={strokeWidth}
+        />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke={color}
+          strokeWidth={strokeWidth}
+          strokeDasharray={circumference}
+          strokeDashoffset={strokeDashoffset}
+          strokeLinecap="round"
+          transform={`rotate(-90 ${size / 2} ${size / 2})`}
+        />
+      </svg>
+      <span className="mini-donut-text">{value}%</span>
+    </div>
+  );
+}
+
+// Mini Barra de Progreso con indicador porcentual y meta
+function MiniProgressBar({ value, color = '#3dd6a5' }) {
+  return (
+    <div className="mini-bar-wrap" title={`${value}% de eficiencia`}>
+      <div className="mini-bar-labels">
+        <span className="mini-bar-pct">{value}%</span>
+        <span className="mini-bar-target">Meta alcanzada</span>
+      </div>
+      <div className="mini-bar-track">
+        <div
+          className="mini-bar-fill"
+          style={{ width: `${Math.min(100, Math.max(0, value))}%`, background: color }}
+        />
+      </div>
+    </div>
+  );
+}
+
 // Slide de cada proyecto (Ficha interactiva en pantalla completa)
 function ProjectSlide({ p, i }) {
   const c = categories[p.cat];
   const shots = images[p.id] || [];
   const [zoom, setZoom] = useState(null);
   const year = p.start.slice(0, 4);
+  const kpi = projectKpis[p.id];
 
   return (
     <div className="scroller" style={{ '--c': c.color }}>
@@ -694,14 +783,40 @@ function ProjectSlide({ p, i }) {
           <p className="tagline">{p.tagline}</p>
           <p className="desc">{p.desc}</p>
 
-          {/* Punto 1: Impacto de Negocio y Métricas */}
+          {/* Punto 1: Impacto de Negocio y Métricas con Gráficos */}
           {p.impact && (
-            <div className="project-callout impact-callout">
-              <div className="callout-label">
-                <span>📈</span>
-                <strong>Impacto de Negocio & Eficiencia:</strong>
+            <div className="project-callout impact-callout modern-impact-card">
+              <div className="impact-card-top">
+                <div className="callout-label">
+                  <span className="impact-icon-badge">📈</span>
+                  <strong>Impacto de Negocio & Eficiencia:</strong>
+                </div>
+                {kpi?.sublabel && (
+                  <span className="impact-sublabel-pill">{kpi.sublabel}</span>
+                )}
               </div>
-              <p>{p.impact}</p>
+
+              <div className="impact-card-content">
+                {kpi && (
+                  <div className="impact-visual-container">
+                    {kpi.type === 'bar' ? (
+                      <MiniProgressBar value={kpi.value} color="#3dd6a5" />
+                    ) : (
+                      <MiniDonut value={kpi.value} color="#3dd6a5" size={46} />
+                    )}
+                  </div>
+                )}
+
+                <div className="impact-text-container">
+                  {kpi?.metric && (
+                    <div className="impact-metric-row">
+                      <span className="impact-metric-pill">{kpi.metric}</span>
+                      <span className="impact-metric-title">{kpi.label}</span>
+                    </div>
+                  )}
+                  <p className="impact-desc-text">{p.impact}</p>
+                </div>
+              </div>
             </div>
           )}
 

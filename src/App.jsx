@@ -149,19 +149,55 @@ function pack(items) {
 const tlItems = sorted.map(layoutItem);
 const laneRows = Object.fromEntries(Object.keys(categories).map((k) => [k, pack(tlItems.filter((it) => it.p.cat === k))]));
 
+// Paleta de colores oficiales por tecnología para hover interactivo
+export const techColors = {
+  'React': '#61DAFB',
+  'Supabase': '#3ECF8E',
+  'Tailwind CSS': '#38BDF8',
+  'TypeScript': '#3178C6',
+  'GSAP': '#88CE02',
+  'Vite': '#bd34fe',
+  'Python': '#4B8BBE',
+  'SMTP': '#5aa9ff',
+  'Framer Motion': '#FF0055',
+  'Lucide': '#F56565',
+  'Bootstrap': '#7952B3',
+  'Three.js': '#049EF4',
+  'EmailJS': '#FF7F00',
+  'Mailchimp': '#FFE01B',
+  'Web Speech API': '#FF4D4D',
+  'Speech Synthesis': '#FFB020',
+  'GUI': '#3dd6a5',
+  'Tkinter GUI': '#00A8E8',
+  'HTML Editor': '#E34F26',
+  'CustomTkinter': '#1F6AA5',
+  'Pandas': '#130754',
+  'Threading': '#A0AEC0',
+  'IMAP/SMTP': '#5aa9ff',
+  'Phaser': '#8E44AD',
+  'Howler.js': '#E67E22',
+  'WebSockets': '#FF6B6B',
+  'Offline Sync': '#3DD6A5',
+  'Recharts': '#22B5BF',
+  'Leaflet': '#199900',
+  'BPM': '#FFB020',
+};
+
 // SLIDES INDEX:
 // 0: Portada
 // 1: Línea de tiempo interactiva
 // 2: Hitos Clave de la Empresa
 // 3 .. 12: Desarrollos 2025 (Fichas individuales de proyectos 2025)
 // 13 .. 32: Desarrollos 2026 (Fichas individuales de proyectos 2026)
-// 33: Seniority & Evolución de Liderazgo
-// 34: Cierre & Métricas Globales
+// 33: Seniority & Evolución de Liderazgo (Semi Senior Technical Lead)
+// 34: Cierre & Métricas Globales (Resumen de Capacidades & Stack)
+// 35: Agradecimiento & Fin de la Presentación
 const FIRST_2025_INDEX = 3;
 const FIRST_2026_INDEX = FIRST_2025_INDEX + sorted.filter((p) => p.start.startsWith('2025')).length; // 13
 const SENIORITY_INDEX = FIRST_2025_INDEX + sorted.length; // 33
 const CLOSING_INDEX = SENIORITY_INDEX + 1; // 34
-const TOTAL = CLOSING_INDEX + 1; // 35
+const THANKS_INDEX = CLOSING_INDEX + 1; // 35
+const TOTAL = THANKS_INDEX + 1; // 36
 const PROJECT_OFFSET = FIRST_2025_INDEX; // 3
 
 function Cover({ go }) {
@@ -753,21 +789,112 @@ function Closing({ go }) {
         <div className="cloud-wrapper">
           <p className="cloud-title">Ecosistema Tecnológico Dominado</p>
           <div className="cloud">
-            {top.map(([s, n]) => (
-              <span key={s} style={{ fontSize: `${1 + n / 7}rem` }} onMouseEnter={() => playSfx('hover')}>
-                {s}<sup>{n}</sup>
-              </span>
-            ))}
+            {top.map(([s, n]) => {
+              const color = techColors[s] || '#ffb020';
+              return (
+                <span
+                  key={s}
+                  style={{
+                    fontSize: `${1 + n / 7}rem`,
+                    '--tech-c': color,
+                  }}
+                  onMouseEnter={() => playSfx('hover')}
+                >
+                  {s}<sup>{n}</sup>
+                </span>
+              );
+            })}
           </div>
         </div>
 
         <div className="closing-cta">
-          <button className="btn-brand" onClick={() => { playSfx('click'); go(SENIORITY_INDEX); }}>
-            Revisar Evolución de Seniority
+          <button className="btn-brand" onClick={() => { playSfx('click'); go(THANKS_INDEX); }}>
+            Agradecimiento & Cierre →
+          </button>
+          <button className="btn-secondary" onClick={() => { playSfx('click'); go(SENIORITY_INDEX); }}>
+            Revisar Seniority
           </button>
           <button className="btn-secondary" onClick={() => { playSfx('click'); go(0); }}>
             Volver al Inicio
           </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Slide Final: Agradecimiento por el espacio & Cierre de la Presentación
+function ThankYouSlide({ go }) {
+  return (
+    <section className="slide thank-slide">
+      <div className="thank-content">
+        <div className="brand-badge">
+          <span className="brand-dot-pulse">
+            <span className="brand-dot-core" />
+            <span className="brand-dot-ring" />
+          </span>
+          <span className="brand-badge-company">Mi Gusto</span>
+          <span className="brand-badge-divider">·</span>
+          <span className="brand-badge-label">Fin de la Presentación</span>
+        </div>
+
+        <h1>
+          ¡Muchas gracias por <span>el espacio!</span>
+        </h1>
+        <p className="thank-lead">
+          Comprometido con seguir impulsando la digitalización integral, la autonomía arquitectónica y soluciones ágiles de alto impacto para todo el ecosistema Mi Gusto.
+        </p>
+
+        <div className="thank-cards-grid">
+          <div className="thank-card" style={{ '--c': '#ff4d4d' }} onMouseEnter={() => playSfx('hover')}>
+            <div className="thank-card-icon">🚀</div>
+            <h3>Innovación Continua</h3>
+            <p>Evolución tecnológica constante adaptada a la velocidad y crecimiento comercial.</p>
+          </div>
+
+          <div className="thank-card" style={{ '--c': '#ffb020' }} onMouseEnter={() => playSfx('hover')}>
+            <div className="thank-card-icon">🛡️</div>
+            <h3>Autonomía & Robustez</h3>
+            <p>Sistemas 100% in-house, sin costos de licenciamiento externo y control total.</p>
+          </div>
+
+          <div className="thank-card" style={{ '--c': '#3dd6a5' }} onMouseEnter={() => playSfx('hover')}>
+            <div className="thank-card-icon">🎯</div>
+            <h3>Foco en el Negocio</h3>
+            <p>Software alineado directamente con la eficiencia en planta, locales y ventas.</p>
+          </div>
+        </div>
+
+        <div className="thank-footer-banner">
+          <div className="banner-badge-terminal">
+            <span className="terminal-dot" />
+            <span>DISPONIBILIDAD & COMPROMISO</span>
+          </div>
+          <p className="banner-statement">
+            Espacio abierto para responder preguntas, profundizar en detalles técnicos de cualquier sistema o coordinar los próximos pasos.
+          </p>
+        </div>
+
+        <div className="thank-actions">
+          <button className="btn-brand" onClick={() => { playSfx('click'); go(0); }}>
+            🏠 Volver a la Portada
+          </button>
+          <button className="btn-secondary" onClick={() => { playSfx('click'); go(1); }}>
+            📊 Ver Línea de Tiempo
+          </button>
+          <button className="btn-secondary" onClick={() => { playSfx('click'); go(SENIORITY_INDEX); }}>
+            ⭐ Repasar Seniority
+          </button>
+          <button className="btn-secondary" onClick={() => { playSfx('click'); go(CLOSING_INDEX); }}>
+            📈 Resumen de Capacidades
+          </button>
+        </div>
+      </div>
+
+      <div className="thank-visual">
+        <div className="cover-logo-wrapper">
+          <img src="/logo.png" alt="Mi Gusto Logo" className="thank-logo" />
+          <div className="glow-sphere" />
         </div>
       </div>
     </section>
@@ -823,6 +950,7 @@ export default function App() {
   }
   else if (idx === SENIORITY_INDEX) content = <SenioritySlide go={go} />;
   else if (idx === CLOSING_INDEX) content = <Closing go={go} />;
+  else if (idx === THANKS_INDEX) content = <ThankYouSlide go={go} />;
   else content = <Cover go={go} />;
 
   return (
@@ -850,6 +978,12 @@ export default function App() {
             </button>
             <button className="grid-special-btn highlight" onClick={() => go(SENIORITY_INDEX)}>
               <span>⭐</span>Seniority & Liderazgo
+            </button>
+            <button className="grid-special-btn highlight" onClick={() => go(CLOSING_INDEX)}>
+              <span>📈</span>Resumen de Capacidades
+            </button>
+            <button className="grid-special-btn highlight" onClick={() => go(THANKS_INDEX)}>
+              <span>🤝</span>Agradecimiento & Cierre
             </button>
             {sorted.map((p, i) => (
               <button key={p.id} style={{ '--c': categories[p.cat].color }} onClick={() => go(i + FIRST_2025_INDEX)}>

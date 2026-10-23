@@ -1286,13 +1286,16 @@ h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 0.45rem;
+  gap: 0.35rem;
   align-items: center;
-  padding: 0.38rem 0.5rem;
+  justify-content: center;
+  flex-wrap: nowrap;
+  max-width: 96vw;
+  padding: 0.35rem 0.55rem;
   border-radius: 999px;
-  background: rgba(18, 14, 16, 0.78);
+  background: rgba(18, 14, 16, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-top-color: rgba(255, 255, 255, 0.22);
+  border-top-color: rgba(255, 255, 255, 0.24);
   box-shadow:
     0 24px 50px rgba(0, 0, 0, 0.75),
     0 0 0 1px rgba(255, 255, 255, 0.05),
@@ -1317,12 +1320,14 @@ h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -
   color: #d6d6d6;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 999px;
-  padding: 0.45rem 1rem;
+  padding: 0.42rem 0.85rem;
   cursor: pointer;
   font: inherit;
-  font-size: 0.81rem;
+  font-size: 0.79rem;
   font-weight: 600;
   letter-spacing: 0.015em;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
   display: inline-flex;
   align-items: center;
@@ -1357,17 +1362,24 @@ h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -
   font-weight: 700;
 }
 
-/* Navigation Arrow Buttons */
+/* Navigation Arrow Buttons - STRICT CIRCULAR SHAPE */
 .controls button.btn-nav,
 .controls button#prev,
 .controls button#next {
-  width: 33px;
-  height: 33px;
-  padding: 0;
-  border-radius: 50%;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
+  aspect-ratio: 1 / 1 !important;
+  flex-shrink: 0 !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
   font-size: 0.95rem;
-  display: grid;
-  place-items: center;
+  line-height: 1 !important;
+  display: grid !important;
+  place-items: center !important;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #eee;
@@ -2400,69 +2412,84 @@ h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -
   pointer-events: auto;
 }
 
-.exec-toggle-button {
-  font-family: 'JetBrains Mono', monospace;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 14px 6px 10px;
-  border-radius: 999px;
-  background: rgba(18, 14, 16, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-top-color: rgba(255, 255, 255, 0.25);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  color: #d0d0d0;
-  font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+.exec-toggle-button.brand-badge {
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  margin-bottom: 0;
+  outline: none;
+  border-style: solid;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
 }
 
-.exec-toggle-button:hover {
-  background: rgba(30, 24, 26, 0.9);
-  border-color: rgba(255, 176, 32, 0.5);
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 176, 32, 0.25);
+/* Inactive state (default): Circulito de color rojo exactamente como la cápsula de marca */
+.exec-toggle-button .brand-dot-core.dot-inactive {
+  background: #ff4d4d !important;
+  box-shadow: 0 0 8px #ff4d4d !important;
 }
 
+.exec-toggle-button .brand-dot-ring.dot-inactive {
+  background: rgba(255, 77, 77, 0.45) !important;
+  animation: beaconRing 2.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite !important;
+}
+
+/* Active state: Circulito de color verde. No debe pintarse de color amarillo */
+.exec-toggle-button .brand-dot-core.dot-active {
+  background: #10b981 !important;
+  box-shadow: 0 0 10px #10b981, 0 0 16px rgba(16, 185, 129, 0.7) !important;
+}
+
+.exec-toggle-button .brand-dot-ring.dot-active {
+  background: rgba(16, 185, 129, 0.5) !important;
+  animation: beaconRing 2.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite !important;
+}
+
+/* Active capsule styling: Estilo oscuro de alta gama con sutil acento verde, sin amarillo */
 .exec-toggle-button.is-active {
-  background: linear-gradient(135deg, rgba(255, 176, 32, 0.22) 0%, rgba(227, 38, 38, 0.2) 100%);
-  border-color: #ffb020;
-  color: #ffda85;
-  box-shadow: 0 8px 24px rgba(255, 176, 32, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(16, 185, 129, 0.12) 100%) !important;
+  border-color: rgba(16, 185, 129, 0.45) !important;
+  border-top-color: rgba(255, 255, 255, 0.28) !important;
+  border-left-color: rgba(16, 185, 129, 0.65) !important;
+  box-shadow: 
+    0 10px 25px -5px rgba(0, 0, 0, 0.5),
+    0 0 20px -3px rgba(16, 185, 129, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
 }
 
-.toggle-indicator-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #777;
-  transition: all 0.25s ease;
+.exec-toggle-button.is-active:hover {
+  transform: translateY(-2px);
+  border-color: rgba(16, 185, 129, 0.65) !important;
+  box-shadow: 
+    0 14px 30px -4px rgba(0, 0, 0, 0.6),
+    0 0 30px 0 rgba(16, 185, 129, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
 }
 
-.exec-toggle-button.is-active .toggle-indicator-dot {
-  background: #ffb020;
-  box-shadow: 0 0 10px #ffb020, 0 0 16px #ffb020;
-  animation: beaconPulse 1.8s infinite;
+.exec-btn-title {
+  font-weight: 700;
+  color: #ffffff !important;
+  letter-spacing: -0.01em;
 }
 
-.toggle-shortcut-badge {
-  font-size: 0.65rem;
+.exec-shortcut-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.64rem;
   padding: 1px 6px;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.16);
   color: #bbb;
-  font-weight: 800;
+  font-weight: 700;
+  line-height: 1.3;
 }
 
-.exec-toggle-button.is-active .toggle-shortcut-badge {
-  background: rgba(255, 176, 32, 0.25);
-  border-color: rgba(255, 176, 32, 0.5);
+.exec-toggle-button:hover .exec-shortcut-badge {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #fff;
+}
+
+.exec-toggle-button.is-active .exec-shortcut-badge {
+  background: rgba(16, 185, 129, 0.18);
+  border-color: rgba(16, 185, 129, 0.4);
   color: #fff;
 }
 
@@ -2636,20 +2663,20 @@ h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -
 
 /* Executive Counter Pill */
 .counter.exec-counter {
-  background: rgba(255, 176, 32, 0.12);
-  border-color: rgba(255, 176, 32, 0.35);
-  box-shadow: 0 0 12px rgba(255, 176, 32, 0.15);
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.35);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.15);
 }
 
 .counter-exec-badge {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.62rem;
   font-weight: 800;
-  color: #ffb020;
+  color: #10b981;
   margin-left: 5px;
   padding: 1px 5px;
   border-radius: 4px;
-  background: rgba(255, 176, 32, 0.2);
+  background: rgba(16, 185, 129, 0.2);
   letter-spacing: 0.05em;
 }
 

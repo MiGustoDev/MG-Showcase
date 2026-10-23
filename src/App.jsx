@@ -6,46 +6,8 @@ import './App.css';
 const MONTHS = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
 const MONTHS_FULL = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-// Audio sintético sutil para micro-interacciones (Web Audio API - punto 14)
-let audioCtx = null;
-const playSfx = (type = 'click') => {
-  try {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    const now = audioCtx.currentTime;
-
-    if (type === 'slide') {
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(280, now);
-      osc.frequency.exponentialRampToValueAtTime(420, now + 0.08);
-      gain.gain.setValueAtTime(0.04, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-      osc.start(now);
-      osc.stop(now + 0.08);
-    } else if (type === 'hover') {
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(540, now);
-      gain.gain.setValueAtTime(0.015, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-      osc.start(now);
-      osc.stop(now + 0.04);
-    } else if (type === 'click') {
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(620, now);
-      osc.frequency.exponentialRampToValueAtTime(880, now + 0.06);
-      gain.gain.setValueAtTime(0.05, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
-      osc.start(now);
-      osc.stop(now + 0.06);
-    }
-  } catch {
-    // Si el navegador bloquea audio, continúa silenciosamente
-  }
-};
+// Audio deshabilitado
+const playSfx = () => {};
 
 // Formatea YYYY-MM-DD a "Ddd Mmm AAAA" (ej: "27 May 2025")
 const fmtDate = (dStr) => {
@@ -728,7 +690,7 @@ function RoiSlide({ go }) {
             <li>
               <span className="check-icon">✓</span>
               <div>
-                <strong>Inversión Fija y Predecible:</strong> Desarrollo ilimitado de 30 plataformas con amortización directa sobre el sueldo interno.
+                <strong>Inversión Fija y Predecible:</strong> Desarrollo ilimitado de 30 plataformas con amortización directa sobre la estructura interna.
               </div>
             </li>
             <li>
@@ -759,7 +721,7 @@ function RoiSlide({ go }) {
           <span style={{ color: '#3dd6a5' }}>BALANCE FINANCIERO POSITIVO</span>
         </div>
         <p className="roi-banner-statement">
-          El equipo no representa un costo operativo, sino una <strong>unidad de alto retorno</strong> que amortizó con creces la inversión salarial de la empresa, generando ahorro permanente y soberanía tecnológica.
+          El equipo no representa un costo operativo, sino una <strong>unidad de alto retorno</strong> que amortizó con creces la inversión operativa de la empresa, generando ahorro permanente y soberanía tecnológica.
         </p>
         <div className="roi-quick-actions">
           <button className="btn-brand" onClick={() => { playSfx('click'); go(SENIORITY_INDEX); }}>
@@ -1979,22 +1941,22 @@ export default function App() {
     <main className="deck">
       <div className="bg" />
 
-      {/* Floating Executive Mode Switch (Fase 3 & 4) */}
+      {/* Floating Executive Mode Switch (Top Right) */}
       <div className="exec-mode-switch-container">
         <button
           type="button"
-          className={`exec-toggle-button ${execMode ? 'is-active' : ''}`}
+          className={`brand-badge exec-toggle-button ${execMode ? 'is-active' : ''}`}
           onClick={() => {
-            playSfx('click');
             setExecMode((v) => !v);
           }}
-          title="Alternar entre Pitch Ejecutivo (10 min) y Catálogo Completo. Atajo de teclado: [E]"
+          title="Alternar Modo Ejecutivo. Atajo de teclado: [E]"
         >
-          <span className="toggle-indicator-dot" />
-          <span className="toggle-text">
-            {execMode ? '⚡ Modo Ejecutivo Activo (12 slides)' : '⚡ Modo Ejecutivo (10 min)'}
+          <span className="brand-dot-pulse">
+            <span className={`brand-dot-core ${execMode ? 'dot-active' : 'dot-inactive'}`} />
+            <span className={`brand-dot-ring ${execMode ? 'dot-active' : 'dot-inactive'}`} />
           </span>
-          <span className="toggle-shortcut-badge">E</span>
+          <span className="brand-badge-company exec-btn-title">Modo Ejecutivo</span>
+          <span className="exec-shortcut-badge">E</span>
         </button>
       </div>
 
@@ -2115,7 +2077,7 @@ export default function App() {
           }}
           title="Ver los 4 Casos Estrella de Alto Impacto (Atajo: C)"
         >
-          <span>⭐</span> Casos Estrella (4)
+          <span>⭐</span> Casos Estrella
         </button>
         <button id="btn-2025" className={idx >= FIRST_2025_INDEX && idx < FIRST_2026_INDEX && !FLAGSHIP_SLIDES.includes(idx) ? 'active' : ''} onClick={() => go(FIRST_2025_INDEX)}><span>📅</span> 2025</button>
         <button id="btn-2026" className={idx >= FIRST_2026_INDEX && idx < ROI_INDEX && !FLAGSHIP_SLIDES.includes(idx) ? 'active' : ''} onClick={() => go(FIRST_2026_INDEX)}><span>🚀</span> 2026</button>

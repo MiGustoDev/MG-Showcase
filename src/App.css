@@ -137,23 +137,50 @@ h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -
 .tl-tip-cta { margin-top: .75rem; font-size: .72rem; color: #777; }
 
 /* Project */
+/* Project - Executive Fullscreen View */
 .slide.project {
   box-sizing: border-box;
-  padding: clamp(24px, 3.8vh, 38px) clamp(28px, 6vw, 68px) clamp(75px, 10.5vh, 92px);
+  height: 100%;
+  padding: clamp(20px, 3vh, 32px) clamp(28px, 5.5vw, 64px) clamp(72px, 10vh, 88px);
   flex-direction: row;
   align-items: center;
   gap: clamp(2rem, 3.8vw, 4.2rem);
-  justify-content: center;
+  justify-content: space-between;
+  overflow: hidden;
 }
 .project .num { position: absolute; right: 5vw; top: 3vh; font-size: clamp(8rem, 13vw, 13.5rem); font-weight: 900; color: transparent; -webkit-text-stroke: 1px #ffffff12; pointer-events: none; z-index: 0; }
-.info { flex: 1.25; z-index: 1; display: flex; flex-direction: column; justify-content: center; }
-.project h2 { font-size: clamp(2rem, 3.2vw, 3.3rem); line-height: 1.08; margin: 0 0 0.2rem; }
-.tagline { font-size: clamp(1rem, 1.3vw, 1.35rem); color: var(--c); margin: 0 0 0.55rem; font-weight: 600; line-height: 1.2; }
-.desc { font-size: clamp(0.85rem, 0.98vw, 1.02rem); line-height: 1.44; color: #c4c4c4; max-width: 58ch; margin: 0 0 0.45rem; }
-.chips { display: flex; gap: 0.38rem; flex-wrap: wrap; margin: 0.65rem 0 0.35rem; }
-.chips span { padding: 0.25rem 0.72rem; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--c) 60%, transparent); background: color-mix(in srgb, var(--c) 12%, transparent); font-size: 0.78rem; }
-.dates { color: #bbb; font-size: 0.85rem; display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.35rem; }
-.duration-pill { color: var(--c); font-weight: 600; background: color-mix(in srgb, var(--c) 14%, transparent); padding: 0.15rem 0.55rem; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--c) 30%, transparent); font-size: 0.76rem; }
+.info {
+  flex: 1.15;
+  max-width: 50%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.project h2 {
+  font-family: 'Plus Jakarta Sans', 'Outfit', system-ui, -apple-system, sans-serif;
+  font-size: clamp(2.6rem, 3.8vw, 4.2rem);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  font-weight: 800;
+  margin: 0 0 0.35rem;
+  color: #fff;
+}
+.tagline {
+  font-size: clamp(1.1rem, 1.35vw, 1.4rem);
+  color: var(--c);
+  margin: 0 0 0.85rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+.desc {
+  font-size: clamp(0.98rem, 1.15vw, 1.18rem);
+  line-height: 1.55;
+  color: #b8b8b8;
+  max-width: 52ch;
+  margin: 0 0 1.25rem;
+}
 .visual { flex: 1; display: grid; place-items: center; }
 .orb { width: min(30vw, 380px); aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; font-size: min(12vw, 150px);
   background: radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--c) 45%, transparent), #ffffff05 70%);
@@ -278,36 +305,60 @@ h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -
 .project-tags-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 0.8rem;
+  gap: 12px;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
 }
 .project-category-tag {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 12px;
+  padding: 5px 14px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
   color: var(--c);
   margin-bottom: 0;
   border-left: 2px solid var(--c);
 }
 .project-year-pill {
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.74rem;
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.06em;
-  padding: 3px 10px;
+  padding: 4px 12px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: #f0f0f0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
+
+/* Executive Delivery Time Record - Clean Text (Sin cápsula) */
+.project-delivery-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #b8b8b8;
+  font-size: 0.86rem;
+  font-weight: 500;
+  margin-left: 6px;
+  user-select: none;
+}
+.project-delivery-text .delivery-icon {
+  font-size: 0.85rem;
+  color: #ffb020;
+  display: inline-flex;
+}
+.project-delivery-text strong {
+  color: #ffda85;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
 .project-callout { margin: 1rem 0; padding: 0.85rem 1.15rem; border-radius: 14px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.09); font-size: 0.98rem; line-height: 1.45; backdrop-filter: blur(8px); transition: transform .2s, border-color .2s; }
 .project-callout:hover { transform: translateX(4px); }
 .callout-label { display: flex; align-items: center; gap: 8px; font-size: 0.84rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.35rem; }
@@ -317,19 +368,26 @@ h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -
   border: 1px solid rgba(61, 214, 165, 0.22);
   border-left: 3px solid #3dd6a5;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  width: fit-content;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 .impact-callout .callout-label { color: #3dd6a5; }
 .impact-callout p { margin: 0; color: #e2f8f0; font-weight: 500; }
 
-/* Modern Impact Card with visual charts */
+/* Modern Impact Card with visual charts - Fits content text snuggly */
 .modern-impact-card {
-  padding: 0.75rem 1rem !important;
+  padding: 0.75rem 1.15rem !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 .impact-card-top {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 14px;
   margin-bottom: 0.45rem;
 }
 
@@ -1784,22 +1842,147 @@ h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -
   transform: translateX(3px);
 }
 
-/* Galería scrolleable */
-.scroller { height: 100%; overflow-y: auto; scroll-behavior: smooth; }
-.scroller::-webkit-scrollbar { width: 8px; }
-.scroller::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--c) 50%, transparent); border-radius: 8px; }
-.project { position: relative; min-height: 100%; }
-.hero-shot { max-width: 100%; max-height: 58vh; border-radius: 18px; cursor: zoom-in; object-fit: contain;
-  border: 1px solid color-mix(in srgb, var(--c) 40%, transparent); box-shadow: 0 30px 90px color-mix(in srgb, var(--c) 30%, transparent);
-  transform: perspective(1200px) rotateY(-6deg); transition: transform .4s; }
-.hero-shot:hover { transform: none; }
-.scroll-hint { position: absolute; bottom: 12vh; left: 50%; transform: translateX(-50%); color: var(--c); font-weight: 600; animation: bob 1.6s ease-in-out infinite; }
-@keyframes bob { 50% { transform: translate(-50%, 8px); } }
-.gallery { padding: 4vh 8vw 16vh; columns: 2 420px; column-gap: 1.5rem; }
-.gallery figure { margin: 0 0 1.5rem; break-inside: avoid; border-radius: 16px; overflow: hidden; cursor: zoom-in; border: 1px solid #ffffff14; background: #ffffff08; animation: enter .6s both; transition: transform .3s, box-shadow .3s; }
-.gallery figure:hover { transform: translateY(-6px); box-shadow: 0 20px 60px color-mix(in srgb, var(--c) 30%, transparent); }
-.gallery img { width: 100%; display: block; }
-.lightbox { position: fixed; inset: 0; z-index: 10; background: #000e; display: grid; place-items: center; cursor: zoom-out; animation: enter .25s; }
+/* Interactive Stacked Project Gallery (Fase 4 & Executive View) */
+.project-deck-visual {
+  flex: 1.15;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.project-stack-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 520px;
+}
+
+.project-stack-deck {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1200px;
+}
+
+/* Base card properties - ALL cards must be absolute in the deck container */
+.stack-card {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  will-change: transform, opacity;
+}
+
+/* Layer Top: Previous Shot (Above Center) */
+.stack-card.card-layer-top,
+.stack-card.card-layer-3 {
+  background: #110e10;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  z-index: 2;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.stack-card.card-layer-top:hover,
+.stack-card.card-layer-3:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.75);
+}
+
+.stack-card.card-layer-top img,
+.stack-card.card-layer-3 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.68) saturate(0.9);
+  pointer-events: none;
+}
+
+/* Layer Bottom: Next Shot (Below Center) */
+.stack-card.card-layer-bottom,
+.stack-card.card-layer-2 {
+  background: #141012;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65);
+  cursor: pointer;
+  z-index: 2;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.stack-card.card-layer-bottom:hover,
+.stack-card.card-layer-2:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.78);
+}
+
+.stack-card.card-layer-bottom img,
+.stack-card.card-layer-2 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.72) saturate(0.9);
+  pointer-events: none;
+}
+
+/* Subtle glass overlay sheen on stacked background cards */
+.card-layer-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(0, 0, 0, 0.38) 100%);
+  pointer-events: none;
+}
+
+/* Layer Center: Main Active Card (In the absolute middle, 100% opacity, crisp) */
+.stack-card.card-layer-center,
+.stack-card.card-layer-1 {
+  background: #120e10;
+  border: 1px solid color-mix(in srgb, var(--c) 45%, rgba(255, 255, 255, 0.24));
+  box-shadow:
+    0 28px 70px -10px rgba(0, 0, 0, 0.9),
+    0 0 60px -12px color-mix(in srgb, var(--c) 40%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  cursor: zoom-in;
+  z-index: 10;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stack-card.card-layer-center:hover,
+.stack-card.card-layer-1:hover {
+  border-color: color-mix(in srgb, var(--c) 75%, rgba(255, 255, 255, 0.45));
+  box-shadow:
+    0 34px 85px -10px rgba(0, 0, 0, 0.95),
+    0 0 75px -8px color-mix(in srgb, var(--c) 60%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.card-main-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+.hero-shot-stacked {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.lightbox { position: fixed; inset: 0; z-index: 100; background: #000e; display: grid; place-items: center; cursor: zoom-out; animation: enter .25s; }
 .lightbox img { max-width: 92vw; max-height: 92vh; border-radius: 12px; }
 
 /* ============================================================

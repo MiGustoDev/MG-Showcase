@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { sorted, categories, images, companyMilestones, seniorityProgression } from './projects';
 import './App.css';
@@ -1432,174 +1432,341 @@ function MiniProgressBar({ value, color = '#3dd6a5' }) {
   );
 }
 
-// Slide de cada proyecto (Ficha interactiva en pantalla completa con scroll reveal)
+
+// Slide de cada proyecto (Ficha ejecutiva interactiva en pantalla completa)
 function ProjectSlide({ p, i, go, execMode }) {
   const c = categories[p.cat];
   const shots = images[p.id] || [];
+  const [step, setStep] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const [isPaused, setIsPaused] = useState(false);
   const [zoom, setZoom] = useState(null);
+  const activeShot = shots.length > 0 ? ((step % shots.length) + shots.length) % shots.length : 0;
   const year = p.start.slice(0, 4);
   const kpi = projectKpis[p.id];
   const isFlagship = execMode && FLAGSHIP_IDS.has(p.id);
   const flagshipData = isFlagship ? FLAGSHIP_PROJECTS.find((f) => f.id === p.id) : null;
+  const lastWheelRef = useRef(0);
+
+  // Reiniciar el carrusel al cambiar de proyecto
+  useEffect(() => {
+    setStep(0);
+    setDirection(1);
+    setIsPaused(false);
+  }, [p.id]);
+
+  // Autoplay de rotación: el contenedor superior rota al medio y el del medio al inferior cada 3.8s
+  useEffect(() => {
+    if (shots.length <= 1 || isPaused) return;
+    const timer = setInterval(() => {
+      setDirection(1);
+      setStep((prev) => prev + 1);
+    }, 3800);
+    return () => clearInterval(timer);
+  }, [shots.length, isPaused]);
+
+  // Navegación fluida con rueda del mouse
+  const handleWheel = (e) => {
+    if (shots.length <= 1) return;
+    if (e.stopPropagation) e.stopPropagation();
+    const now = Date.now();
+    if (now - lastWheelRef.current < 200) return;
+    lastWheelRef.current = now;
+    if (e.deltaY > 0) {
+      setDirection(1);
+      setStep((s) => s + 1);
+    } else if (e.deltaY < 0) {
+      setDirection(-1);
+      setStep((s) => s - 1);
+    }
+  };
+
+  // Posiciones de los 3 slots en el arco circular con amplia separación vertical
+  const getSlotProps = (slot, paused) => {
+    switch (slot) {
+      case 'top':
+        return {
+          x: paused ? 32 : 24,
+          y: paused ? -270 : -250,
+          rotate: paused ? 5.5 : 4,
+          scale: paused ? 0.88 : 0.84,
+          opacity: paused ? 0.72 : 0.45,
+          zIndex: 2,
+        };
+      case 'center':
+        return {
+          x: 8,
+          y: 0,
+          rotate: 1,
+          scale: paused ? 1.02 : 1,
+          opacity: 1,
+          zIndex: 10,
+        };
+      case 'bottom':
+        return {
+          x: paused ? -8 : -4,
+          y: paused ? 270 : 250,
+          rotate: paused ? -3 : -2,
+          scale: paused ? 0.88 : 0.84,
+          opacity: paused ? 0.72 : 0.45,
+          zIndex: 2,
+        };
+      default:
+        return {};
+    }
+  };
+
+  // Lista de items visibles con IDs virtuales persistentes para que las tarjetas se trasladen físicamente de un slot a otro
+  const visibleItems = useMemo(() => {
+    if (shots.length === 0) return [];
+    if (shots.length === 1) {
+      return [
+        {
+          virtualIndex: step,
+          shotIndex: 0,
+          src: shots[0],
+          slot: 'center',
+        },
+      ];
+    }
+    if (shots.length === 2) {
+      const centerIdx = ((step % 2) + 2) % 2;
+      const topIdx = (((step + 1) % 2) + 2) % 2;
+      return [
+        {
+          virtualIndex: step + 1,
+          shotIndex: topIdx,
+          src: shots[topIdx],
+          slot: 'top',
+        },
+        {
+          virtualIndex: step,
+          shotIndex: centerIdx,
+          src: shots[centerIdx],
+          slot: 'center',
+        },
+      ];
+    }
+
+    const len = shots.length;
+    const topIdx = (((step + 1) % len) + len) % len;
+    const centerIdx = ((step % len) + len) % len;
+    const bottomIdx = (((step - 1) % len) + len) % len;
+
+    return [
+      {
+        virtualIndex: step + 1,
+        shotIndex: topIdx,
+        src: shots[topIdx],
+        slot: 'top',
+      },
+      {
+        virtualIndex: step,
+        shotIndex: centerIdx,
+        src: shots[centerIdx],
+        slot: 'center',
+      },
+      {
+        virtualIndex: step - 1,
+        shotIndex: bottomIdx,
+        src: shots[bottomIdx],
+        slot: 'bottom',
+      },
+    ];
+  }, [shots, step]);
 
   return (
-    <div className="scroller" style={{ '--c': c.color }}>
-      <section className="slide project">
-        <div className="num">{String(i + 1).padStart(2, '0')}</div>
-        <motion.div
-          className="info"
-          initial={{ opacity: 0, x: -16 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
-        >
-          <div className="project-tags-row">
-            <div className="project-category-tag">
-              <span>{c.icon}</span>
-              <span>{c.label}</span>
-            </div>
-            <span className="project-year-pill">{year}</span>
-            {isFlagship && flagshipData && (
-              <div className="flagship-badge-glow" title="Proyecto Estratégico Seleccionado para el Pitch Ejecutivo">
-                <span className="flagship-star">⭐</span>
-                <span className="flagship-label">CASO ESTRELLA</span>
-                <span className="flagship-sep">·</span>
-                <span className="flagship-pillar-text">{flagshipData.pillar}</span>
-              </div>
-            )}
-          </div>
+    <section className="slide project" style={{ '--c': c.color }}>
+      <div className="num">{String(i + 1).padStart(2, '0')}</div>
 
-          {/* Selector Rápido de Casos Estrella (Solo en Modo Ejecutivo) */}
+      <motion.div
+        className="info"
+        initial={{ opacity: 0, x: -16 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+      >
+        <div className="project-tags-row">
+          <div className="project-category-tag">
+            <span>{c.icon}</span>
+            <span>{c.label}</span>
+          </div>
+          <span className="project-year-pill">{year}</span>
+          {p.start && p.end && (
+            <span className="project-delivery-text" title={`Período: ${fmtDate(p.start)} → ${fmtDate(p.end)}`}>
+              <span className="delivery-icon">⚡</span>
+              <span>Tiempo récord de entrega: <strong>{calcDuration(p.start, p.end)}</strong></span>
+            </span>
+          )}
           {isFlagship && flagshipData && (
-            <div className="flagship-switcher-bar">
-              <div className="flagship-switcher-label">
-                <span className="star-icon">⭐</span>
-                <span>PITCH EJECUTIVO ({flagshipData.num}/04):</span>
-              </div>
-              <div className="flagship-pills-row">
-                {FLAGSHIP_PROJECTS.map((f) => {
-                  const slideTarget = FIRST_2025_INDEX + (indexById[f.id] ?? 0);
-                  const isCurrent = f.id === p.id;
-                  return (
-                    <button
-                      key={f.id}
-                      type="button"
-                      className={`flagship-nav-pill ${isCurrent ? 'active' : ''}`}
-                      style={{ '--pill-c': f.color }}
-                      onClick={() => { go(slideTarget); }}
-                      title={`Ir al caso: ${f.name} (${f.pillar})`}
-                    >
-                      <span className="pill-badge-num">{f.num}</span>
-                      <span className="pill-emoji">{f.emoji}</span>
-                      <span className="pill-name">{f.name}</span>
-                      {isCurrent && <span className="pill-active-dot" />}
-                    </button>
-                  );
-                })}
-              </div>
+            <div className="flagship-badge-glow" title="Proyecto Estratégico Seleccionado para el Pitch Ejecutivo">
+              <span className="flagship-star">⭐</span>
+              <span className="flagship-label">CASO ESTRELLA</span>
+              <span className="flagship-sep">·</span>
+              <span className="flagship-pillar-text">{flagshipData.pillar}</span>
             </div>
           )}
+        </div>
 
-          <h2>{p.name}</h2>
-          <p className="tagline">{p.tagline}</p>
-          <p className="desc">{p.desc}</p>
+        {/* Selector Rápido de Casos Estrella (Solo en Modo Ejecutivo) */}
+        {isFlagship && flagshipData && (
+          <div className="flagship-switcher-bar">
+            <div className="flagship-switcher-label">
+              <span className="star-icon">⭐</span>
+              <span>PITCH EJECUTIVO ({flagshipData.num}/04):</span>
+            </div>
+            <div className="flagship-pills-row">
+              {FLAGSHIP_PROJECTS.map((f) => {
+                const slideTarget = FIRST_2025_INDEX + (indexById[f.id] ?? 0);
+                const isCurrent = f.id === p.id;
+                return (
+                  <button
+                    key={f.id}
+                    type="button"
+                    className={`flagship-nav-pill ${isCurrent ? 'active' : ''}`}
+                    style={{ '--pill-c': f.color }}
+                    onClick={() => { go(slideTarget); }}
+                    title={`Ir al caso: ${f.name} (${f.pillar})`}
+                  >
+                    <span className="pill-badge-num">{f.num}</span>
+                    <span className="pill-emoji">{f.emoji}</span>
+                    <span className="pill-name">{f.name}</span>
+                    {isCurrent && <span className="pill-active-dot" />}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
-          {/* Punto 1: Impacto de Negocio y Métricas con Gráficos */}
-          {p.impact && (
-            <div className="project-callout impact-callout modern-impact-card">
-              <div className="impact-card-top">
-                <div className="callout-label">
-                  <span className="impact-icon-badge">📈</span>
-                  <strong>Impacto de Negocio & Eficiencia:</strong>
-                </div>
-                {kpi?.sublabel && (
-                  <span className="impact-sublabel-pill">{kpi.sublabel}</span>
-                )}
+        <h2>{p.name}</h2>
+        <p className="tagline">{p.tagline}</p>
+        <p className="desc">{p.desc}</p>
+
+        {/* Tarjeta Ejecutiva: Impacto de Negocio & Eficiencia */}
+        {p.impact && (
+          <div className="project-callout impact-callout modern-impact-card">
+            <div className="impact-card-top">
+              <div className="callout-label">
+                <span className="impact-icon-badge">📈</span>
+                <strong>Impacto de Negocio & Eficiencia:</strong>
               </div>
+              {kpi?.sublabel && (
+                <span className="impact-sublabel-pill">{kpi.sublabel}</span>
+              )}
+            </div>
 
-              <div className="impact-card-content">
-                {kpi && (
-                  <div className="impact-visual-container">
-                    {kpi.type === 'bar' ? (
-                      <MiniProgressBar value={kpi.value} color="#3dd6a5" />
-                    ) : (
-                      <MiniDonut value={kpi.value} color="#3dd6a5" size={46} />
-                    )}
+            <div className="impact-card-content">
+              {kpi && (
+                <div className="impact-visual-container">
+                  {kpi.type === 'bar' ? (
+                    <MiniProgressBar value={kpi.value} color="#3dd6a5" />
+                  ) : (
+                    <MiniDonut value={kpi.value} color="#3dd6a5" size={46} />
+                  )}
+                </div>
+              )}
+
+              <div className="impact-text-container">
+                {kpi?.metric && (
+                  <div className="impact-metric-row">
+                    <span className="impact-metric-pill">{kpi.metric}</span>
+                    <span className="impact-metric-title">{kpi.label}</span>
                   </div>
                 )}
-
-                <div className="impact-text-container">
-                  {kpi?.metric && (
-                    <div className="impact-metric-row">
-                      <span className="impact-metric-pill">{kpi.metric}</span>
-                      <span className="impact-metric-title">{kpi.label}</span>
-                    </div>
-                  )}
-                  <p className="impact-desc-text">{p.impact}</p>
-                </div>
+                <p className="impact-desc-text">{p.impact}</p>
               </div>
             </div>
-          )}
-
-          {/* Punto 13: Arquitectura & Robustez Técnica */}
-          {p.arch && (
-            <div className="project-callout arch-callout">
-              <div className="callout-label">
-                <span>🛡️</span>
-                <strong>Arquitectura & Robustez Técnica:</strong>
-              </div>
-              <p>{p.arch}</p>
-            </div>
-          )}
-
-          <div className="chips">
-            {p.stack.map((s) => (
-              <span key={s} onMouseEnter={() => playSfx('hover')}>{s}</span>
-            ))}
           </div>
+        )}
+      </motion.div>
 
-          <p className="dates">
-            📅 {fmtDate(p.start)}{p.end !== p.start ? ` → ${fmtDate(p.end)}` : ''}
-            <span className="duration-pill">{calcDuration(p.start, p.end)}</span>
-          </p>
-        </motion.div>
-
-        <motion.div
-          className="visual"
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.16 }}
-        >
-          {shots[0] ? (
-            <div className="hero-shot-container" onClick={() => { playSfx('click'); setZoom(shots[0]); }}>
-              <img className="hero-shot" src={shots[0]} alt={p.name} />
-              <div className="shot-zoom-hint">🔍 Clic para ampliar</div>
+      {/* Visual: Stack 3D Interactivo con Autoplay y Scroll */}
+      <motion.div
+        className="visual project-deck-visual"
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.16 }}
+      >
+        {shots.length > 0 ? (
+          <div
+            className="project-stack-wrapper"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            onWheel={handleWheel}
+          >
+            <div className="project-stack-deck">
+              <AnimatePresence initial={false}>
+                {visibleItems.map((item) => (
+                  <motion.div
+                    key={item.virtualIndex}
+                    className={`stack-card ${
+                      item.slot === 'center'
+                        ? 'card-layer-center'
+                        : item.slot === 'top'
+                        ? 'card-layer-top'
+                        : 'card-layer-bottom'
+                    }`}
+                    initial={
+                      direction > 0
+                        ? { x: 36, y: -380, rotate: 6, scale: 0.72, opacity: 0 }
+                        : { x: -14, y: 380, rotate: -4, scale: 0.72, opacity: 0 }
+                    }
+                    animate={getSlotProps(item.slot, isPaused)}
+                    exit={
+                      direction > 0
+                        ? { x: -14, y: 380, rotate: -4, scale: 0.72, opacity: 0 }
+                        : { x: 36, y: -380, rotate: 6, scale: 0.72, opacity: 0 }
+                    }
+                    whileHover={
+                      item.slot !== 'center'
+                        ? {
+                            scale: 0.88,
+                            opacity: 0.82,
+                            transition: { duration: 0.2 },
+                          }
+                        : undefined
+                    }
+                    transition={{ type: 'spring', stiffness: 220, damping: 24, mass: 0.8 }}
+                    onClick={() => {
+                      if (item.slot === 'top') {
+                        setDirection(1);
+                        setStep((s) => s + 1);
+                      } else if (item.slot === 'bottom') {
+                        setDirection(-1);
+                        setStep((s) => s - 1);
+                      } else {
+                        setZoom(item.src);
+                      }
+                    }}
+                    title={
+                      item.slot === 'center'
+                        ? 'Clic para pantalla completa'
+                        : 'Clic para rotar al centro'
+                    }
+                  >
+                    <img
+                      className="hero-shot-stacked"
+                      src={item.src}
+                      alt={`${p.name} - Captura ${item.shotIndex + 1}`}
+                      loading="lazy"
+                    />
+                    {item.slot !== 'center' && <div className="card-layer-sheen" />}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
-          ) : (
-            <div className="orb" onMouseEnter={() => playSfx('hover')}>{p.emoji}</div>
-          )}
-        </motion.div>
-        {shots.length > 0 && <div className="scroll-hint">↓ Scrolleá para ver {shots.length} captura{shots.length > 1 ? 's' : ''}</div>}
-      </section>
+          </div>
+        ) : (
+          <div className="orb">{p.emoji}</div>
+        )}
+      </motion.div>
 
-      {shots.length > 0 && (
-        <section className="gallery">
-          {shots.map((s, k) => (
-            <motion.figure
-              key={s}
-              initial={{ opacity: 0, y: 35, scale: 0.96 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1], delay: (k % 4) * 0.08 }}
-              onClick={() => { playSfx('click'); setZoom(s); }}
-            >
-              <img src={s} alt={`${p.name} captura ${k + 1}`} loading="lazy" />
-            </motion.figure>
-          ))}
-        </section>
+      {zoom && (
+        <div className="lightbox" onClick={() => setZoom(null)}>
+          <img src={zoom} alt={p.name} />
+        </div>
       )}
-
-      {zoom && <div className="lightbox" onClick={() => setZoom(null)}><img src={zoom} alt="" /></div>}
-    </div>
+    </section>
   );
 }
 

@@ -1433,14 +1433,14 @@ function MiniProgressBar({ value, color = '#3dd6a5' }) {
 }
 
 // Slide de cada proyecto (Ficha interactiva en pantalla completa con scroll reveal)
-function ProjectSlide({ p, i, go }) {
+function ProjectSlide({ p, i, go, execMode }) {
   const c = categories[p.cat];
   const shots = images[p.id] || [];
   const [zoom, setZoom] = useState(null);
   const year = p.start.slice(0, 4);
   const kpi = projectKpis[p.id];
-  const isFlagship = FLAGSHIP_IDS.has(p.id);
-  const flagshipData = FLAGSHIP_PROJECTS.find((f) => f.id === p.id);
+  const isFlagship = execMode && FLAGSHIP_IDS.has(p.id);
+  const flagshipData = isFlagship ? FLAGSHIP_PROJECTS.find((f) => f.id === p.id) : null;
 
   return (
     <div className="scroller" style={{ '--c': c.color }}>
@@ -1458,7 +1458,7 @@ function ProjectSlide({ p, i, go }) {
               <span>{c.label}</span>
             </div>
             <span className="project-year-pill">{year}</span>
-            {isFlagship && (
+            {isFlagship && flagshipData && (
               <div className="flagship-badge-glow" title="Proyecto Estratégico Seleccionado para el Pitch Ejecutivo">
                 <span className="flagship-star">⭐</span>
                 <span className="flagship-label">CASO ESTRELLA</span>
@@ -1468,8 +1468,8 @@ function ProjectSlide({ p, i, go }) {
             )}
           </div>
 
-          {/* Selector Rápido de Casos Estrella (Fase 3) */}
-          {isFlagship ? (
+          {/* Selector Rápido de Casos Estrella (Solo en Modo Ejecutivo) */}
+          {isFlagship && flagshipData && (
             <div className="flagship-switcher-bar">
               <div className="flagship-switcher-label">
                 <span className="star-icon">⭐</span>
@@ -1485,7 +1485,7 @@ function ProjectSlide({ p, i, go }) {
                       type="button"
                       className={`flagship-nav-pill ${isCurrent ? 'active' : ''}`}
                       style={{ '--pill-c': f.color }}
-                      onClick={() => { playSfx('click'); go(slideTarget); }}
+                      onClick={() => { go(slideTarget); }}
                       title={`Ir al caso: ${f.name} (${f.pillar})`}
                     >
                       <span className="pill-badge-num">{f.num}</span>
@@ -1496,17 +1496,6 @@ function ProjectSlide({ p, i, go }) {
                   );
                 })}
               </div>
-            </div>
-          ) : (
-            <div className="non-flagship-hint-row">
-              <button
-                type="button"
-                className="btn-jump-flagships"
-                onClick={() => { playSfx('click'); go(FLAGSHIP_SLIDES[0]); }}
-                title="Saltar directamente a los 4 Casos Estrella para el pitch ejecutivo"
-              >
-                <span>⭐</span> Ver los 4 Casos Estrella (Pitch Ejecutivo)
-              </button>
             </div>
           )}
 
@@ -1928,7 +1917,7 @@ export default function App() {
   else if (idx === 2) content = <MilestonesSlide go={go} />;
   else if (idx >= FIRST_2025_INDEX && idx < ROI_INDEX) {
     const pIdx = idx - FIRST_2025_INDEX;
-    content = <ProjectSlide p={sorted[pIdx]} i={pIdx} go={go} />;
+    content = <ProjectSlide p={sorted[pIdx]} i={pIdx} go={go} execMode={execMode} />;
   }
   else if (idx === ROI_INDEX) content = <RoiSlide go={go} />;
   else if (idx === SENIORITY_INDEX) content = <SenioritySlide go={go} />;
@@ -2103,14 +2092,14 @@ export default function App() {
             >
               <button
                 id="btn-2025"
-                className={idx >= FIRST_2025_INDEX && idx < FIRST_2026_INDEX && !FLAGSHIP_SLIDES.includes(idx) ? 'active' : ''}
+                className={idx >= FIRST_2025_INDEX && idx < FIRST_2026_INDEX ? 'active' : ''}
                 onClick={() => go(FIRST_2025_INDEX)}
               >
                 <span>📅</span> 2025
               </button>
               <button
                 id="btn-2026"
-                className={idx >= FIRST_2026_INDEX && idx < ROI_INDEX && !FLAGSHIP_SLIDES.includes(idx) ? 'active' : ''}
+                className={idx >= FIRST_2026_INDEX && idx < ROI_INDEX ? 'active' : ''}
                 onClick={() => go(FIRST_2026_INDEX)}
               >
                 <span>🚀</span> 2026

@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, LayoutGroup } from 'motion/react';
 import { sorted, categories, images, companyMilestones, seniorityProgression } from './projects';
 import './App.css';
 
@@ -1440,7 +1440,7 @@ function ProjectSlide({ p, i, go, execMode }) {
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(1);
   const [isPaused, setIsPaused] = useState(false);
-  const [zoom, setZoom] = useState(null);
+  const [zoomIndex, setZoomIndex] = useState(null);
   const activeShot = shots.length > 0 ? ((step % shots.length) + shots.length) % shots.length : 0;
   const year = p.start.slice(0, 4);
   const kpi = projectKpis[p.id];
@@ -1453,7 +1453,24 @@ function ProjectSlide({ p, i, go, execMode }) {
     setStep(0);
     setDirection(1);
     setIsPaused(false);
+    setZoomIndex(null);
   }, [p.id]);
+
+  // Atajos de teclado en el lightbox (Esc para salir, flechas para navegar fotos)
+  useEffect(() => {
+    if (zoomIndex === null) return;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setZoomIndex(null);
+      } else if (e.key === 'ArrowLeft') {
+        setZoomIndex((cur) => (cur === 0 ? shots.length - 1 : cur - 1));
+      } else if (e.key === 'ArrowRight') {
+        setZoomIndex((cur) => (cur === shots.length - 1 ? 0 : cur + 1));
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [zoomIndex, shots.length]);
 
   // Autoplay de rotación: el contenedor superior rota al medio y el del medio al inferior cada 3.8s
   useEffect(() => {
@@ -1735,7 +1752,7 @@ function ProjectSlide({ p, i, go, execMode }) {
                         setDirection(-1);
                         setStep((s) => s - 1);
                       } else {
-                        setZoom(item.src);
+                        setZoomIndex(item.shotIndex);
                       }
                     }}
                     title={
@@ -1761,11 +1778,92 @@ function ProjectSlide({ p, i, go, execMode }) {
         )}
       </motion.div>
 
-      {zoom && (
-        <div className="lightbox" onClick={() => setZoom(null)}>
-          <img src={zoom} alt={p.name} />
-        </div>
-      )}
+      {/* Lightbox / Pantalla Completa con Fondo Blur, Controles y Botón Cerrar (X) */}
+      <AnimatePresence>
+        {zoomIndex !== null && shots[zoomIndex] && (
+          <motion.div
+            className="lightbox-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.22 }}
+            onClick={() => setZoomIndex(null)}
+          >
+            {/* Botón de Cerrar (X) */}
+            <button
+              type="button"
+              className="lightbox-btn-close"
+              onClick={(e) => {
+                e.stopPropagation();
+                setZoomIndex(null);
+              }}
+              title="Cerrar pantalla completa (Esc)"
+              aria-label="Cerrar"
+            >
+              ✕
+            </button>
+
+            {/* Escenario central de la foto con flechas laterales */}
+            <div className="lightbox-stage" onClick={(e) => e.stopPropagation()}>
+              {shots.length > 1 && (
+                <button
+                  type="button"
+                  className="lightbox-arrow-btn prev"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setZoomIndex((cur) => (cur === 0 ? shots.length - 1 : cur - 1));
+                  }}
+                  title="Foto anterior (←)"
+                  aria-label="Foto anterior"
+                >
+                  ←
+                </button>
+              )}
+
+              <div className="lightbox-image-wrapper">
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={shots[zoomIndex]}
+                    src={shots[zoomIndex]}
+                    alt={`${p.name} - Foto ${zoomIndex + 1}`}
+                    initial={{ opacity: 0, scale: 0.96 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.98 }}
+                    transition={{ duration: 0.2, ease: 'easeOut' }}
+                    className="lightbox-active-img"
+                  />
+                </AnimatePresence>
+              </div>
+
+              {shots.length > 1 && (
+                <button
+                  type="button"
+                  className="lightbox-arrow-btn next"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setZoomIndex((cur) => (cur === shots.length - 1 ? 0 : cur + 1));
+                  }}
+                  title="Foto siguiente (→)"
+                  aria-label="Foto siguiente"
+                >
+                  →
+                </button>
+              )}
+            </div>
+
+            {/* Píldora inferior de estado y atajos */}
+            <div className="lightbox-status-pill" onClick={(e) => e.stopPropagation()}>
+              <span className="lightbox-counter-text">
+                {zoomIndex + 1} / {shots.length}
+              </span>
+              <span className="lightbox-sep">·</span>
+              <span className="lightbox-project-name">{p.name}</span>
+              <span className="lightbox-sep">·</span>
+              <span className="lightbox-keyboard-hint">Esc para salir</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
@@ -2215,75 +2313,143 @@ export default function App() {
         </div>
       )}
 
-      <nav className="controls">
-        <button id="prev" className="btn-nav" onClick={goPrev} aria-label="Anterior">←</button>
-        <button id="timeline" className={idx === 1 ? 'active' : ''} onClick={() => go(1)}><span>📊</span> Timeline</button>
-        <button id="milestones" className={idx === 2 ? 'active' : ''} onClick={() => go(2)}><span>🎯</span> Hitos</button>
-        <AnimatePresence initial={false}>
-          {execMode && (
-            <motion.div
-              key="flagship-dock-group"
-              className="controls-flagship-group"
-              initial={{ opacity: 0, width: 0, scale: 0.9 }}
-              animate={{ opacity: 1, width: 'auto', scale: 1 }}
-              exit={{ opacity: 0, width: 0, scale: 0.9 }}
-              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <button
-                id="btn-flagships"
-                className={FLAGSHIP_SLIDES.includes(idx) ? 'active flagship-active' : ''}
-                onClick={() => {
-                  if (!FLAGSHIP_SLIDES.includes(idx)) {
-                    go(FLAGSHIP_SLIDES[0]);
-                  } else {
-                    const curF = FLAGSHIP_SLIDES.indexOf(idx);
-                    go(FLAGSHIP_SLIDES[(curF + 1) % FLAGSHIP_SLIDES.length]);
-                  }
-                }}
-                title="Ver los 4 Casos Estrella de Alto Impacto (Atajo: C)"
+      <LayoutGroup id="dockLavaTracker">
+        <nav className="controls">
+          <button id="prev" className="btn-nav" onClick={goPrev} aria-label="Anterior">←</button>
+          <button id="timeline" className={idx === 1 ? 'active' : ''} onClick={() => go(1)}>
+            {idx === 1 && (
+              <motion.div
+                layoutId="dockLavaBubble"
+                className="dock-lava-bubble"
+                transition={{ type: 'spring', stiffness: 350, damping: 26, mass: 0.75 }}
+              />
+            )}
+            <span className="dock-btn-label"><span>📊</span> Timeline</span>
+          </button>
+          <button id="milestones" className={idx === 2 ? 'active' : ''} onClick={() => go(2)}>
+            {idx === 2 && (
+              <motion.div
+                layoutId="dockLavaBubble"
+                className="dock-lava-bubble"
+                transition={{ type: 'spring', stiffness: 350, damping: 26, mass: 0.75 }}
+              />
+            )}
+            <span className="dock-btn-label"><span>🎯</span> Hitos</span>
+          </button>
+          <AnimatePresence initial={false}>
+            {execMode && (
+              <motion.div
+                key="flagship-dock-group"
+                className="controls-flagship-group"
+                initial={{ opacity: 0, width: 0, scale: 0.9 }}
+                animate={{ opacity: 1, width: 'auto', scale: 1 }}
+                exit={{ opacity: 0, width: 0, scale: 0.9 }}
+                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
               >
-                <span>⭐</span> Casos Estrella
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-        <AnimatePresence initial={false}>
-          {!execMode && (
-            <motion.div
-              key="years-dock-group"
-              className="controls-years-group"
-              initial={{ opacity: 0, width: 0, scale: 0.9 }}
-              animate={{ opacity: 1, width: 'auto', scale: 1 }}
-              exit={{ opacity: 0, width: 0, scale: 0.9 }}
-              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <button
-                id="btn-2025"
-                className={idx >= FIRST_2025_INDEX && idx < FIRST_2026_INDEX ? 'active' : ''}
-                onClick={() => go(FIRST_2025_INDEX)}
+                <button
+                  id="btn-flagships"
+                  className={FLAGSHIP_SLIDES.includes(idx) ? 'active flagship-active' : ''}
+                  onClick={() => {
+                    if (!FLAGSHIP_SLIDES.includes(idx)) {
+                      go(FLAGSHIP_SLIDES[0]);
+                    } else {
+                      const curF = FLAGSHIP_SLIDES.indexOf(idx);
+                      go(FLAGSHIP_SLIDES[(curF + 1) % FLAGSHIP_SLIDES.length]);
+                    }
+                  }}
+                  title="Ver los 4 Casos Estrella de Alto Impacto (Atajo: C)"
+                >
+                  {FLAGSHIP_SLIDES.includes(idx) && (
+                    <motion.div
+                      layoutId="dockLavaBubble"
+                      className="dock-lava-bubble"
+                      transition={{ type: 'spring', stiffness: 350, damping: 26, mass: 0.75 }}
+                    />
+                  )}
+                  <span className="dock-btn-label"><span>⭐</span> Casos Estrella</span>
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <AnimatePresence initial={false}>
+            {!execMode && (
+              <motion.div
+                key="years-dock-group"
+                className="controls-years-group"
+                initial={{ opacity: 0, width: 0, scale: 0.9 }}
+                animate={{ opacity: 1, width: 'auto', scale: 1 }}
+                exit={{ opacity: 0, width: 0, scale: 0.9 }}
+                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
               >
-                <span>📅</span> 2025
-              </button>
-              <button
-                id="btn-2026"
-                className={idx >= FIRST_2026_INDEX && idx < ROI_INDEX ? 'active' : ''}
-                onClick={() => go(FIRST_2026_INDEX)}
-              >
-                <span>🚀</span> 2026
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-        <button id="btn-roi" className={idx === ROI_INDEX ? 'active' : ''} onClick={() => go(ROI_INDEX)}><span>💰</span> Retorno & Ahorro</button>
-        <button id="seniority" className={idx === SENIORITY_INDEX ? 'active' : ''} onClick={() => go(SENIORITY_INDEX)}><span>⭐</span> Seniority</button>
-        <button id="btn-vision" className={idx === VISION_INDEX ? 'active' : ''} onClick={() => go(VISION_INDEX)}><span>🚀</span> Visión 2027</button>
-        <span className="counter">
-          <strong className="counter-current">{execMode ? Math.max(1, EXEC_SLIDES.indexOf(idx) + 1) : idx + 1}</strong>
-          <span className="counter-sep">/</span>
-          <span className="counter-total">{execMode ? EXEC_SLIDES.length : TOTAL}</span>
-        </span>
-        <button id="next" className="btn-nav" onClick={goNext} aria-label="Siguiente">→</button>
-      </nav>
+                <button
+                  id="btn-2025"
+                  className={idx >= FIRST_2025_INDEX && idx < FIRST_2026_INDEX ? 'active' : ''}
+                  onClick={() => go(FIRST_2025_INDEX)}
+                >
+                  {idx >= FIRST_2025_INDEX && idx < FIRST_2026_INDEX && (
+                    <motion.div
+                      layoutId="dockLavaBubble"
+                      className="dock-lava-bubble"
+                      transition={{ type: 'spring', stiffness: 350, damping: 26, mass: 0.75 }}
+                    />
+                  )}
+                  <span className="dock-btn-label"><span>📅</span> 2025</span>
+                </button>
+                <button
+                  id="btn-2026"
+                  className={idx >= FIRST_2026_INDEX && idx < ROI_INDEX ? 'active' : ''}
+                  onClick={() => go(FIRST_2026_INDEX)}
+                >
+                  {idx >= FIRST_2026_INDEX && idx < ROI_INDEX && (
+                    <motion.div
+                      layoutId="dockLavaBubble"
+                      className="dock-lava-bubble"
+                      transition={{ type: 'spring', stiffness: 350, damping: 26, mass: 0.75 }}
+                    />
+                  )}
+                  <span className="dock-btn-label"><span>🚀</span> 2026</span>
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <button id="btn-roi" className={idx === ROI_INDEX ? 'active' : ''} onClick={() => go(ROI_INDEX)}>
+            {idx === ROI_INDEX && (
+              <motion.div
+                layoutId="dockLavaBubble"
+                className="dock-lava-bubble"
+                transition={{ type: 'spring', stiffness: 350, damping: 26, mass: 0.75 }}
+              />
+            )}
+            <span className="dock-btn-label"><span>💰</span> Retorno & Ahorro</span>
+          </button>
+          <button id="seniority" className={idx === SENIORITY_INDEX ? 'active' : ''} onClick={() => go(SENIORITY_INDEX)}>
+            {idx === SENIORITY_INDEX && (
+              <motion.div
+                layoutId="dockLavaBubble"
+                className="dock-lava-bubble"
+                transition={{ type: 'spring', stiffness: 350, damping: 26, mass: 0.75 }}
+              />
+            )}
+            <span className="dock-btn-label"><span>⭐</span> Seniority</span>
+          </button>
+          <button id="btn-vision" className={idx === VISION_INDEX ? 'active' : ''} onClick={() => go(VISION_INDEX)}>
+            {idx === VISION_INDEX && (
+              <motion.div
+                layoutId="dockLavaBubble"
+                className="dock-lava-bubble"
+                transition={{ type: 'spring', stiffness: 350, damping: 26, mass: 0.75 }}
+              />
+            )}
+            <span className="dock-btn-label"><span>🚀</span> Visión 2027</span>
+          </button>
+          <span className="counter">
+            <strong className="counter-current">{execMode ? Math.max(1, EXEC_SLIDES.indexOf(idx) + 1) : idx + 1}</strong>
+            <span className="counter-sep">/</span>
+            <span className="counter-total">{execMode ? EXEC_SLIDES.length : TOTAL}</span>
+          </span>
+          <button id="next" className="btn-nav" onClick={goNext} aria-label="Siguiente">→</button>
+        </nav>
+      </LayoutGroup>
       <motion.div
         className="progress"
         initial={false}

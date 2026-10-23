@@ -1408,16 +1408,39 @@ h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -
   transform: translateY(0) scale(0.97);
 }
 
-/* Active Dock Item */
+/* Active Dock Item - Lava Lamp Morphing Bubble */
+.controls button {
+  position: relative;
+}
+
 .controls button.active {
-  background: linear-gradient(135deg, #e32626, #ff4d4d);
-  color: #ffffff;
-  border-color: rgba(255, 140, 140, 0.4);
-  box-shadow:
-    0 4px 18px rgba(227, 38, 38, 0.6),
-    0 0 0 1px rgba(255, 255, 255, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
   font-weight: 700;
+}
+
+.dock-lava-bubble {
+  position: absolute;
+  inset: -1px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #e32626 0%, #ff4d4d 55%, #ff7347 100%);
+  border: 1px solid rgba(255, 140, 140, 0.45);
+  box-shadow:
+    0 4px 20px rgba(227, 38, 38, 0.65),
+    0 0 14px rgba(255, 77, 77, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.dock-btn-label {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 /* Navigation Arrow Buttons - STRICT CIRCULAR SHAPE */
@@ -1982,8 +2005,153 @@ h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -
   display: block;
 }
 
-.lightbox { position: fixed; inset: 0; z-index: 100; background: #000e; display: grid; place-items: center; cursor: zoom-out; animation: enter .25s; }
-.lightbox img { max-width: 92vw; max-height: 92vh; border-radius: 12px; }
+/* ============================================================
+   Lightbox / Fullscreen Gallery Modal (Frosted Glass & Controls)
+   ============================================================ */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(10, 8, 12, 0.76);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 3vh, 32px);
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.lightbox-btn-close {
+  position: absolute;
+  top: clamp(16px, 3vh, 28px);
+  right: clamp(16px, 3vw, 32px);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #fff;
+  font-size: 1.15rem;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  transition: all 0.22s ease;
+  z-index: 10001;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-btn-close:hover {
+  background: rgba(227, 38, 38, 0.88);
+  border-color: #ff4d4d;
+  transform: scale(1.1) rotate(90deg);
+  box-shadow: 0 6px 22px rgba(227, 38, 38, 0.65);
+}
+
+.lightbox-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 2.2vw, 28px);
+  width: 100%;
+  max-width: 1400px;
+  max-height: 84vh;
+}
+
+.lightbox-image-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: min(88vw, 1200px);
+  max-height: 78vh;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.85),
+    0 0 60px rgba(227, 38, 38, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.18);
+  background: #0d0b0c;
+}
+
+.lightbox-active-img {
+  max-width: 100%;
+  max-height: 78vh;
+  object-fit: contain;
+  display: block;
+}
+
+.lightbox-arrow-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(20, 16, 18, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 1.35rem;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  backdrop-filter: blur(16px);
+  transition: all 0.22s ease;
+  flex-shrink: 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  z-index: 10001;
+}
+
+.lightbox-arrow-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.45);
+  transform: scale(1.12);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.75);
+}
+
+.lightbox-arrow-btn.prev:hover {
+  transform: scale(1.12) translateX(-2px);
+}
+
+.lightbox-arrow-btn.next:hover {
+  transform: scale(1.12) translateX(2px);
+}
+
+.lightbox-status-pill {
+  margin-top: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 18px;
+  border-radius: 999px;
+  background: rgba(20, 16, 18, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  font-size: 0.82rem;
+  color: #ddd;
+}
+
+.lightbox-counter-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: #ffda85;
+}
+
+.lightbox-sep {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.lightbox-project-name {
+  font-weight: 600;
+  color: #fff;
+}
+
+.lightbox-keyboard-hint {
+  color: #888;
+  font-size: 0.75rem;
+}
 
 /* ============================================================
    ROI & Ahorro Económico Slide (Impacto Financiero Directo)
@@ -2850,7 +3018,7 @@ h2 { font-size: clamp(2.2rem, 4.5vw, 4rem); margin: 0 0 .5rem; letter-spacing: -
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  overflow: hidden;
+  overflow: visible;
   white-space: nowrap;
   flex-shrink: 0;
 }

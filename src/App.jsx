@@ -241,9 +241,10 @@ const FIRST_2025_INDEX = 3;
 const FIRST_2026_INDEX = FIRST_2025_INDEX + sorted.filter((p) => p.start.startsWith('2025')).length; // 13
 const ROI_INDEX = FIRST_2025_INDEX + sorted.length; // 33
 const SENIORITY_INDEX = ROI_INDEX + 1; // 34
-const CLOSING_INDEX = SENIORITY_INDEX + 1; // 35
-const THANKS_INDEX = CLOSING_INDEX + 1; // 36
-const TOTAL = THANKS_INDEX + 1; // 37
+const VISION_INDEX = SENIORITY_INDEX + 1; // 35 (Visión 2026—2027 & Cierre de Negocio)
+const CLOSING_INDEX = VISION_INDEX + 1; // 36
+const THANKS_INDEX = CLOSING_INDEX + 1; // 37
+const TOTAL = THANKS_INDEX + 1; // 38
 const PROJECT_OFFSET = FIRST_2025_INDEX; // 3
 
 // 4 Casos Estrella para el Pitch Ejecutivo (Fase 3):
@@ -293,7 +294,7 @@ export const FLAGSHIP_PROJECTS = [
 export const FLAGSHIP_IDS = new Set(FLAGSHIP_PROJECTS.map((f) => f.id));
 export const FLAGSHIP_SLIDES = FLAGSHIP_PROJECTS.map((f) => FIRST_2025_INDEX + (indexById[f.id] ?? 0));
 
-// Secuencia curada para el Pitch Ejecutivo (11 slides de alto impacto)
+// Secuencia curada para el Pitch Ejecutivo (12 slides de alto impacto)
 export const EXEC_SLIDES = [
   0, // Portada
   1, // Línea de tiempo interactiva
@@ -301,6 +302,7 @@ export const EXEC_SLIDES = [
   ...FLAGSHIP_SLIDES, // 4 Casos Estrella
   ROI_INDEX, // Retorno de Inversión (ROI) & Ahorro
   SENIORITY_INDEX, // Seniority & Liderazgo
+  VISION_INDEX, // Visión 2026—2027 & Cierre de Negocio
   CLOSING_INDEX, // Resumen de Capacidades & Stack
   THANKS_INDEX, // Agradecimiento & Cierre
 ];
@@ -1006,6 +1008,207 @@ function SenioritySlide({ go }) {
   );
 }
 
+// ============================================================
+// Visión 2026—2027 & Cierre de Negocio (Fase 4)
+// ============================================================
+export const roadmapPillars = [
+  {
+    id: 'app',
+    num: '01',
+    title: 'App Mi Gusto Lovers',
+    subtitle: 'Venta Directa & Fidelización',
+    icon: '📱',
+    color: '#ff4d4d',
+    horizon: 'Q1—Q2 2027',
+    kpi: '+18% Margen',
+    kpiLabel: 'Sin comisiones a apps externas',
+    desc: 'App móvil oficial (iOS/Android/PWA) con pedidos directos en 1-click, catálogo geolocalizado en vivo y billetera digital de Golden Tickets.',
+    deliverables: [
+      'Eliminación de comisiones de intermediarios',
+      'Push notifications por geocercas cerca de locales',
+      'Fidelización cautiva y acumulación de puntos',
+      'Sincronización instantánea con carta y precios',
+    ],
+    tech: ['React Native', 'Supabase Realtime', 'Push API', 'MercadoPago'],
+  },
+  {
+    id: 'pos',
+    num: '02',
+    title: 'Integración POS / ERP & Red',
+    subtitle: 'Omnicanalidad en Tiempo Real',
+    icon: '⚡',
+    color: '#ffb020',
+    horizon: 'Q2—Q3 2027',
+    kpi: '< 200ms',
+    kpiLabel: 'Sincronización local ↔ fábrica',
+    desc: 'Conexión automática de comandas, stock central y facturación entre la planta de producción y cada sucursal de la marca en tiempo real.',
+    deliverables: [
+      'Conexión directa entre salón, web y app',
+      'Descarga automática de stock en fábrica por orden',
+      'Actualización masiva de precios en 1 clic',
+      'Arquitectura Offline-First tolerante a cortes de red',
+    ],
+    tech: ['WebSockets', 'Supabase Edge', 'PostgreSQL RLS', 'Electron'],
+  },
+  {
+    id: 'ai',
+    num: '03',
+    title: 'IA Predictiva de Demanda',
+    subtitle: 'Machine Learning en Fábrica & Tiendas',
+    icon: '🧠',
+    color: '#3dd6a5',
+    horizon: 'Q3—Q4 2027',
+    kpi: '-25% Mermas',
+    kpiLabel: 'Optimización de materias primas',
+    desc: 'Modelos predictivos que anticipan la cantidad exacta de empanadas a elaborar y hornear según clima, feriados, partidos y estacionalidad.',
+    deliverables: [
+      'Pronóstico diario por variedad de empanada',
+      'Sugerencias automáticas de compras de insumos',
+      'Disminución drástica de producto no vendido',
+      'Alertas tempranas de quiebre de stock en locales',
+    ],
+    tech: ['Python FastAPI', 'Pandas', 'Scikit-Learn', 'Supabase Vector'],
+  },
+  {
+    id: 'b2b',
+    num: '04',
+    title: 'Portal Franquicias 360°',
+    subtitle: 'Escala para +50 Nuevos Locales',
+    icon: '🏢',
+    color: '#5aa9ff',
+    horizon: '2027 Continuo',
+    kpi: '50+ Locales',
+    kpiLabel: 'Mismo costo operativo central',
+    desc: 'Plataforma unificada para franquiciados: pedidos mayoristas a fábrica, seguimiento GPS de camiones (MG Orbital), scoring de calidad y liquidaciones.',
+    deliverables: [
+      'Autogestión de compras mayoristas a planta',
+      'Trazabilidad en tiempo real de despachos y flota',
+      'Auditorías continuas de calidad y scoring bromatológico',
+      'Tablero de analítica y facturación unificado',
+    ],
+    tech: ['React 19', 'TypeScript', 'Tailwind', 'PDF Executive Engine'],
+  },
+];
+
+function VisionSlide({ go }) {
+  const [activePillar, setActivePillar] = useState(null);
+
+  return (
+    <section className="slide vision-slide">
+      <header className="vision-header">
+        <div className="brand-badge">
+          <span className="brand-dot-pulse">
+            <span className="brand-dot-core" style={{ background: '#3dd6a5', boxShadow: '0 0 8px #3dd6a5' }} />
+            <span className="brand-dot-ring" style={{ background: 'rgba(61, 214, 165, 0.45)' }} />
+          </span>
+          <span className="brand-badge-company">Mi Gusto</span>
+          <span className="brand-badge-divider">·</span>
+          <span className="brand-badge-label">Hoja de Ruta Tecnológica 2026 – 2027</span>
+        </div>
+        <h1>
+          Visión 2026—2027: <span>El Próximo Salto de Escala</span>
+        </h1>
+        <p className="vision-subtitle">
+          De herramientas operativas a una plataforma omnicanal líder: 4 pilares estratégicos diseñados para multiplicar la rentabilidad, eliminar intermediarios externos y acompañar la expansión nacional de Mi Gusto.
+        </p>
+      </header>
+
+      {/* 4 Pilares del Roadmap */}
+      <div className="vision-pillars-grid">
+        {roadmapPillars.map((p, idx) => {
+          const isSelected = activePillar === p.id;
+          return (
+            <motion.div
+              key={p.id}
+              className={`vision-pillar-card ${isSelected ? 'selected' : ''}`}
+              style={{ '--c': p.color }}
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.42, delay: 0.08 + idx * 0.07, ease: [0.2, 0.8, 0.2, 1] }}
+              onClick={() => {
+                playSfx('click');
+                setActivePillar((prev) => (prev === p.id ? null : p.id));
+              }}
+              onMouseEnter={() => playSfx('hover')}
+            >
+              <div className="vpc-header">
+                <div className="vpc-num-badge">
+                  <span>PILAR {p.num}</span>
+                  <span className="vpc-horizon">{p.horizon}</span>
+                </div>
+                <div className="vpc-icon-box">{p.icon}</div>
+              </div>
+
+              <div className="vpc-title-box">
+                <h3>{p.title}</h3>
+                <span className="vpc-subtitle">{p.subtitle}</span>
+              </div>
+
+              <div className="vpc-kpi-chip">
+                <span className="vpc-kpi-value">{p.kpi}</span>
+                <span className="vpc-kpi-label">{p.kpiLabel}</span>
+              </div>
+
+              <p className="vpc-desc">{p.desc}</p>
+
+              <div className="vpc-deliverables-box">
+                <div className="vpc-box-title">Entregables Clave:</div>
+                <ul className="vpc-deliverables-list">
+                  {p.deliverables.map((d, dIdx) => (
+                    <li key={dIdx}>
+                      <span className="vpc-bullet" style={{ color: p.color }}>✓</span>
+                      <span>{d}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="vpc-tech-tags">
+                {p.tech.map((t) => (
+                  <span key={t} className="vpc-tag">{t}</span>
+                ))}
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Strategic Call to Action / Cierre de Negocio */}
+      <motion.div
+        className="vision-executive-banner"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, delay: 0.4 }}
+      >
+        <div className="veb-left">
+          <div className="banner-badge-terminal">
+            <span className="terminal-dot" style={{ background: '#ffb020', boxShadow: '0 0 8px #ffb020' }} />
+            <span style={{ color: '#ffb020' }}>LIDERAZGO TÉCNICO & CONTINUIDAD DE NEGOCIO</span>
+          </div>
+          <p className="veb-statement">
+            Ejecutar esta visión mediante agencias externas costaría <strong>+$120.000 USD</strong> y meses de inducción con alto riesgo de desvío. El equipo actual posee el <strong>know-how operativo integral</strong>, la <strong>confianza de las áreas clave</strong> y la <strong>velocidad probada (30 sistemas en producción)</strong> para liderar esta transformación como <strong>Semi Senior Technical Leads</strong>.
+          </p>
+        </div>
+
+        <div className="veb-kpis">
+          <div className="veb-kpi-item">
+            <span className="veb-kpi-val">3x</span>
+            <span className="veb-kpi-sub">Velocidad frente a agencias</span>
+          </div>
+          <div className="veb-kpi-item highlight">
+            <span className="veb-kpi-val">$0</span>
+            <span className="veb-kpi-sub">Fricción de inducción</span>
+          </div>
+          <div className="veb-kpi-item">
+            <span className="veb-kpi-val">100%</span>
+            <span className="veb-kpi-sub">Alineación con Mi Gusto</span>
+          </div>
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
 const milestoneMeta = [
   {
     year: '2025',
@@ -1644,6 +1847,9 @@ function ThankYouSlide({ go }) {
           <button className="btn-secondary" onClick={() => { playSfx('click'); go(SENIORITY_INDEX); }}>
             ⭐ Repasar Seniority
           </button>
+          <button className="btn-secondary" onClick={() => { playSfx('click'); go(VISION_INDEX); }}>
+            🚀 Visión 2027
+          </button>
           <button className="btn-secondary" onClick={() => { playSfx('click'); go(CLOSING_INDEX); }}>
             📈 Resumen de Capacidades
           </button>
@@ -1740,6 +1946,7 @@ export default function App() {
       }
       else if (e.key.toLowerCase() === 'r') go(ROI_INDEX);
       else if (e.key.toLowerCase() === 's') go(SENIORITY_INDEX);
+      else if (e.key.toLowerCase() === 'v') go(VISION_INDEX);
       else if (e.key.toLowerCase() === 'g' || e.key === 'Escape') setGrid((g) => !g);
       else if (e.key.toLowerCase() === 'f') {
         if (document.fullscreenElement) {
@@ -1763,6 +1970,7 @@ export default function App() {
   }
   else if (idx === ROI_INDEX) content = <RoiSlide go={go} />;
   else if (idx === SENIORITY_INDEX) content = <SenioritySlide go={go} />;
+  else if (idx === VISION_INDEX) content = <VisionSlide go={go} />;
   else if (idx === CLOSING_INDEX) content = <Closing go={go} />;
   else if (idx === THANKS_INDEX) content = <ThankYouSlide go={go} />;
   else content = <Cover go={go} />;
@@ -1771,7 +1979,7 @@ export default function App() {
     <main className="deck">
       <div className="bg" />
 
-      {/* Floating Executive Mode Switch (Fase 3) */}
+      {/* Floating Executive Mode Switch (Fase 3 & 4) */}
       <div className="exec-mode-switch-container">
         <button
           type="button"
@@ -1784,7 +1992,7 @@ export default function App() {
         >
           <span className="toggle-indicator-dot" />
           <span className="toggle-text">
-            {execMode ? '⚡ Modo Ejecutivo Activo (10 min)' : '⚡ Modo Ejecutivo (10 min)'}
+            {execMode ? '⚡ Modo Ejecutivo Activo (12 slides)' : '⚡ Modo Ejecutivo (10 min)'}
           </span>
           <span className="toggle-shortcut-badge">E</span>
         </button>
@@ -1829,6 +2037,9 @@ export default function App() {
             <button className="grid-special-btn highlight" onClick={() => go(SENIORITY_INDEX)}>
               <span>⭐</span>Seniority & Liderazgo
             </button>
+            <button className="grid-special-btn highlight" onClick={() => go(VISION_INDEX)}>
+              <span>🚀</span>Visión 2026—2027 & Cierre
+            </button>
             <button className="grid-special-btn highlight" onClick={() => go(CLOSING_INDEX)}>
               <span>📈</span>Resumen de Capacidades
             </button>
@@ -1850,7 +2061,7 @@ export default function App() {
                   setExecMode((v) => !v);
                 }}
               >
-                {execMode ? '✓ Modo Ejecutivo Activado (11 slides)' : '⚡ Activar Modo Ejecutivo'}
+                {execMode ? '✓ Modo Ejecutivo Activado (12 slides)' : '⚡ Activar Modo Ejecutivo'}
               </button>
             </div>
             {FLAGSHIP_PROJECTS.map((f) => {
@@ -1910,8 +2121,9 @@ export default function App() {
         <button id="btn-2026" className={idx >= FIRST_2026_INDEX && idx < ROI_INDEX && !FLAGSHIP_SLIDES.includes(idx) ? 'active' : ''} onClick={() => go(FIRST_2026_INDEX)}><span>🚀</span> 2026</button>
         <button id="btn-roi" className={idx === ROI_INDEX ? 'active' : ''} onClick={() => go(ROI_INDEX)}><span>💰</span> Retorno & Ahorro</button>
         <button id="seniority" className={idx === SENIORITY_INDEX ? 'active' : ''} onClick={() => go(SENIORITY_INDEX)}><span>⭐</span> Seniority</button>
+        <button id="btn-vision" className={idx === VISION_INDEX ? 'active' : ''} onClick={() => go(VISION_INDEX)}><span>🚀</span> Visión 2027</button>
         {execMode ? (
-          <span className="counter exec-counter" title="Modo Ejecutivo Activo (11 slides)">
+          <span className="counter exec-counter" title="Modo Ejecutivo Activo (12 slides)">
             <strong className="counter-current">{Math.max(1, EXEC_SLIDES.indexOf(idx) + 1)}</strong>
             <span className="counter-sep">/</span>
             <span className="counter-total">{EXEC_SLIDES.length}</span>

@@ -2063,41 +2063,69 @@ export default function App() {
         <button id="prev" className="btn-nav" onClick={goPrev} aria-label="Anterior">←</button>
         <button id="timeline" className={idx === 1 ? 'active' : ''} onClick={() => go(1)}><span>📊</span> Timeline</button>
         <button id="milestones" className={idx === 2 ? 'active' : ''} onClick={() => go(2)}><span>🎯</span> Hitos</button>
-        <button
-          id="btn-flagships"
-          className={FLAGSHIP_SLIDES.includes(idx) ? 'active flagship-active' : ''}
-          onClick={() => {
-            playSfx('click');
-            if (!FLAGSHIP_SLIDES.includes(idx)) {
-              go(FLAGSHIP_SLIDES[0]);
-            } else {
-              const curF = FLAGSHIP_SLIDES.indexOf(idx);
-              go(FLAGSHIP_SLIDES[(curF + 1) % FLAGSHIP_SLIDES.length]);
-            }
-          }}
-          title="Ver los 4 Casos Estrella de Alto Impacto (Atajo: C)"
-        >
-          <span>⭐</span> Casos Estrella
-        </button>
-        <button id="btn-2025" className={idx >= FIRST_2025_INDEX && idx < FIRST_2026_INDEX && !FLAGSHIP_SLIDES.includes(idx) ? 'active' : ''} onClick={() => go(FIRST_2025_INDEX)}><span>📅</span> 2025</button>
-        <button id="btn-2026" className={idx >= FIRST_2026_INDEX && idx < ROI_INDEX && !FLAGSHIP_SLIDES.includes(idx) ? 'active' : ''} onClick={() => go(FIRST_2026_INDEX)}><span>🚀</span> 2026</button>
+        <AnimatePresence initial={false}>
+          {execMode && (
+            <motion.div
+              key="flagship-dock-group"
+              className="controls-flagship-group"
+              initial={{ opacity: 0, width: 0, scale: 0.9 }}
+              animate={{ opacity: 1, width: 'auto', scale: 1 }}
+              exit={{ opacity: 0, width: 0, scale: 0.9 }}
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <button
+                id="btn-flagships"
+                className={FLAGSHIP_SLIDES.includes(idx) ? 'active flagship-active' : ''}
+                onClick={() => {
+                  if (!FLAGSHIP_SLIDES.includes(idx)) {
+                    go(FLAGSHIP_SLIDES[0]);
+                  } else {
+                    const curF = FLAGSHIP_SLIDES.indexOf(idx);
+                    go(FLAGSHIP_SLIDES[(curF + 1) % FLAGSHIP_SLIDES.length]);
+                  }
+                }}
+                title="Ver los 4 Casos Estrella de Alto Impacto (Atajo: C)"
+              >
+                <span>⭐</span> Casos Estrella
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <AnimatePresence initial={false}>
+          {!execMode && (
+            <motion.div
+              key="years-dock-group"
+              className="controls-years-group"
+              initial={{ opacity: 0, width: 0, scale: 0.9 }}
+              animate={{ opacity: 1, width: 'auto', scale: 1 }}
+              exit={{ opacity: 0, width: 0, scale: 0.9 }}
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <button
+                id="btn-2025"
+                className={idx >= FIRST_2025_INDEX && idx < FIRST_2026_INDEX && !FLAGSHIP_SLIDES.includes(idx) ? 'active' : ''}
+                onClick={() => go(FIRST_2025_INDEX)}
+              >
+                <span>📅</span> 2025
+              </button>
+              <button
+                id="btn-2026"
+                className={idx >= FIRST_2026_INDEX && idx < ROI_INDEX && !FLAGSHIP_SLIDES.includes(idx) ? 'active' : ''}
+                onClick={() => go(FIRST_2026_INDEX)}
+              >
+                <span>🚀</span> 2026
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
         <button id="btn-roi" className={idx === ROI_INDEX ? 'active' : ''} onClick={() => go(ROI_INDEX)}><span>💰</span> Retorno & Ahorro</button>
         <button id="seniority" className={idx === SENIORITY_INDEX ? 'active' : ''} onClick={() => go(SENIORITY_INDEX)}><span>⭐</span> Seniority</button>
         <button id="btn-vision" className={idx === VISION_INDEX ? 'active' : ''} onClick={() => go(VISION_INDEX)}><span>🚀</span> Visión 2027</button>
-        {execMode ? (
-          <span className="counter exec-counter" title="Modo Ejecutivo Activo (12 slides)">
-            <strong className="counter-current">{Math.max(1, EXEC_SLIDES.indexOf(idx) + 1)}</strong>
-            <span className="counter-sep">/</span>
-            <span className="counter-total">{EXEC_SLIDES.length}</span>
-            <span className="counter-exec-badge">⚡ EXEC</span>
-          </span>
-        ) : (
-          <span className="counter">
-            <strong className="counter-current">{idx + 1}</strong>
-            <span className="counter-sep">/</span>
-            <span className="counter-total">{TOTAL}</span>
-          </span>
-        )}
+        <span className="counter">
+          <strong className="counter-current">{execMode ? Math.max(1, EXEC_SLIDES.indexOf(idx) + 1) : idx + 1}</strong>
+          <span className="counter-sep">/</span>
+          <span className="counter-total">{execMode ? EXEC_SLIDES.length : TOTAL}</span>
+        </span>
         <button id="next" className="btn-nav" onClick={goNext} aria-label="Siguiente">→</button>
       </nav>
       <motion.div

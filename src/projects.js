@@ -520,19 +520,85 @@ export const seniorityProgression = [
 const n = (id, count, ext = 'png') => Array.from({ length: count }, (_, i) => `/shots/${id}/${i + 1}.${ext}`);
 
 export const images = {
-  // Proyectos con nuevas capturas añadidas:
+  // Proyectos con capturas añadidas:
   site: Array.from({ length: 11 }, (_, i) => `/shots/Mi Gusto Web/Screenshot_${i + 1}.png`),
   autoanswers: ['/shots/AutoMailAnswers/demo.png'],
   translate: ['/shots/RealTimeTranslate/Demo-Translate.png'],
+  flamin: Array.from({ length: 5 }, (_, i) => `/shots/FlaminHot/Screenshot_${i + 1}.png`),
   multimail: ['/shots/MultiMailSender/Demo.png'],
   massivemail: ['/shots/MassiveMailSender/Demo.png'],
+  crunchy: [
+    '/shots/ValidadorCrunchy/Screenshot_5.png',
+    '/shots/ValidadorCrunchy/Screenshot_6.png',
+    '/shots/ValidadorCrunchy/Screenshot_7.png',
+  ],
+  iae: ['/shots/IAE/Screenshot_5.png'],
+  influencers: [
+    '/shots/InfluencersForm/screenshot-main.png',
+    '/shots/InfluencersForm/screenshot-admin.png',
+    '/shots/InfluencersForm/screenshot-history.png',
+  ],
   rooms: [
     '/shots/RemindersRooms/Dashboard.png',
     '/shots/RemindersRooms/Dashboard2.png',
     '/shots/RemindersRooms/Inicio.png',
     '/shots/RemindersRooms/Login.png',
   ],
+  games: [
+    '/shots/Games/Menu.png',
+    '/shots/Games/Menu2.png',
+    '/shots/Games/BubbleShooterGame.png',
+    '/shots/Games/PacmanGame.png',
+    '/shots/Games/CatchGame.png',
+    '/shots/Games/CrushGame.png',
+    '/shots/Games/MemoryGame.png',
+    '/shots/Games/PuzzleGame.png',
+  ],
+  ordercaller: [
+    '/shots/OrderCallerLocales/Llamador.png',
+    '/shots/OrderCallerLocales/Llamador-TV.png',
+    '/shots/OrderCallerLocales/Contador.png',
+    '/shots/OrderCallerLocales/Contador-Interactive.png',
+  ],
   golden: Array.from({ length: 5 }, (_, i) => `/shots/GoldenTickets/Screenshot_${i + 1}.png`),
+  qr: [
+    '/shots/QRGenPro/Screenshot_5.png',
+    '/shots/QRGenPro/Screenshot_6.png',
+    '/shots/QRGenPro/Screenshot_7.png',
+  ],
+  lolla: [
+    '/shots/LollaOrderCaller/Llamador.png',
+    '/shots/LollaOrderCaller/Contador.png',
+  ],
+  copa: Array.from({ length: 4 }, (_, i) => `/shots/CopaInocuidad/screenshot_${i + 1}.png`),
+  roulette: [
+    '/shots/RuletaApertura/landing.png',
+    '/shots/RuletaApertura/roulette.png',
+    '/shots/RuletaApertura/start.png',
+    '/shots/RuletaApertura/form.png',
+  ],
+  audit: [
+    '/shots/AuditApp/Screenshot_4.png',
+    '/shots/AuditApp/Screenshot_5.png',
+    '/shots/AuditApp/Screenshot_6.png',
+    '/shots/AuditApp/Screenshot_7.png',
+    '/shots/AuditApp/Screenshot_8.png',
+    '/shots/AuditApp/Screenshot_9.png',
+    '/shots/AuditApp/Screenshot_10.png',
+  ],
+  consolidado: [
+    '/shots/ConsolidadoDiario/Screenshot_5.png',
+    '/shots/ConsolidadoDiario/Screenshot_6.png',
+    '/shots/ConsolidadoDiario/Screenshot_7.png',
+    '/shots/ConsolidadoDiario/Screenshot_8.png',
+    '/shots/ConsolidadoDiario/Screenshot_9.png',
+    '/shots/ConsolidadoDiario/Screenshot_10.png',
+  ],
+  mgops: [
+    '/shots/CentroOps/Screenshot_5.png',
+    '/shots/CentroOps/Screenshot_6.png',
+  ],
+  sensorial: Array.from({ length: 7 }, (_, i) => `/shots/Sensorial/image${i + 1}.png`),
 
   // Proyectos preexistentes con ajustes de orden especificados por el usuario:
   // En MG Orbital la foto principal debe ser la segunda (donde aparece la botonera)

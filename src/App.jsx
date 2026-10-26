@@ -446,17 +446,42 @@ function Timeline({ go }) {
           <h2>Línea de tiempo de entregables</h2>
         </div>
         <div className="tl-actions">
-          <button
-            className={`btn-chip-toggle ${showMilestones ? 'active' : ''}`}
-            onClick={() => { playSfx('click'); setShowMilestones(!showMilestones); }}
-            title="Mostrar u ocultar los hitos estratégicos de la empresa en el tiempo"
-          >
-            🎯 {showMilestones ? 'Ocultar hitos empresa' : 'Superponer hitos empresa'}
-          </button>
-          <div className="tl-toggle" role="tablist" aria-label="Tipo de vista">
-            <button id="tl-view-lanes" role="tab" aria-selected={view === 'lanes'} className={view === 'lanes' ? 'on' : ''} onClick={() => { playSfx('click'); setView('lanes'); }}>☰ Por carriles</button>
-            <button id="tl-view-chrono" role="tab" aria-selected={view === 'chrono'} className={view === 'chrono' ? 'on' : ''} onClick={() => { playSfx('click'); setView('chrono'); }}>↘ Cronológica</button>
-          </div>
+          <LayoutGroup id="tlViewLavaGroup">
+            <div className="tl-toggle" role="tablist" aria-label="Tipo de vista">
+              <button
+                id="tl-view-lanes"
+                role="tab"
+                aria-selected={view === 'lanes'}
+                className={view === 'lanes' ? 'on' : ''}
+                onClick={() => { playSfx('click'); setView('lanes'); }}
+              >
+                {view === 'lanes' && (
+                  <motion.div
+                    layoutId="tlViewLavaBubble"
+                    className="tl-lava-bubble"
+                    transition={{ type: 'spring', stiffness: 350, damping: 26, mass: 0.75 }}
+                  />
+                )}
+                <span className="tl-tab-label"><span>☰</span> Por carriles</span>
+              </button>
+              <button
+                id="tl-view-chrono"
+                role="tab"
+                aria-selected={view === 'chrono'}
+                className={view === 'chrono' ? 'on' : ''}
+                onClick={() => { playSfx('click'); setView('chrono'); }}
+              >
+                {view === 'chrono' && (
+                  <motion.div
+                    layoutId="tlViewLavaBubble"
+                    className="tl-lava-bubble"
+                    transition={{ type: 'spring', stiffness: 350, damping: 26, mass: 0.75 }}
+                  />
+                )}
+                <span className="tl-tab-label"><span>↘</span> Cronológica</span>
+              </button>
+            </div>
+          </LayoutGroup>
         </div>
       </header>
 

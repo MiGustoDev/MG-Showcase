@@ -1456,6 +1456,53 @@ function MiniProgressBar({ value, color = '#3dd6a5' }) {
 }
 
 
+// Proyectos con capturas verticales/celular nativas
+// Detección precisa de capturas con formato vertical (celular / móvil)
+const VERTICAL_SHOT_EXACT = new Set([
+  // Games (Arcade móvil)
+  '/shots/Games/BubbleShooterGame.png',
+  '/shots/Games/CatchGame.png',
+  '/shots/Games/CrushGame.png',
+  '/shots/Games/MemoryGame.png',
+  '/shots/Games/Menu2.png',
+  '/shots/Games/PacmanGame.png',
+  '/shots/Games/PuzzleGame.png',
+  // Copa Mundial de Inocuidad
+  '/shots/CopaInocuidad/screenshot_1.png',
+  '/shots/CopaInocuidad/screenshot_2.png',
+  '/shots/CopaInocuidad/screenshot_3.png',
+  '/shots/CopaInocuidad/screenshot_4.png',
+  // Degustación
+  '/shots/degu/1.jpeg',
+  // IAE
+  '/shots/IAE/Screenshot_5.png',
+  // Ruleta Apertura
+  '/shots/RuletaApertura/form.png',
+  '/shots/RuletaApertura/landing.png',
+  '/shots/RuletaApertura/roulette.png',
+  '/shots/RuletaApertura/start.png',
+  // Sensorial (image1 a 4 móviles; 5 a 7 son web horizontales)
+  '/shots/Sensorial/image1.png',
+  '/shots/Sensorial/image2.png',
+  '/shots/Sensorial/image3.png',
+  '/shots/Sensorial/image4.png',
+  // Validador Crunchy
+  '/shots/ValidadorCrunchy/Screenshot_5.png',
+  '/shots/ValidadorCrunchy/Screenshot_6.png',
+  '/shots/ValidadorCrunchy/Screenshot_7.png',
+]);
+
+const dynamicVerticalRatios = new Map();
+
+export const isShotVertical = (src) => {
+  if (!src) return false;
+  // Todas las imágenes de Reminders Rooms son tratadas como horizontales
+  if (src.includes('RemindersRooms')) return false;
+  if (VERTICAL_SHOT_EXACT.has(src)) return true;
+  if (dynamicVerticalRatios.has(src)) return dynamicVerticalRatios.get(src);
+  return false;
+};
+
 // Slide de cada proyecto (Ficha ejecutiva interactiva en pantalla completa)
 function ProjectSlide({ p, i, go, execMode }) {
   const c = categories[p.cat];
@@ -1464,6 +1511,7 @@ function ProjectSlide({ p, i, go, execMode }) {
   const [direction, setDirection] = useState(1);
   const [isPaused, setIsPaused] = useState(false);
   const [zoomIndex, setZoomIndex] = useState(null);
+  const [, setAspectTrigger] = useState(0);
   const activeShot = shots.length > 0 ? ((step % shots.length) + shots.length) % shots.length : 0;
   const year = p.start.slice(0, 4);
   const kpi = projectKpis[p.id];
@@ -1478,6 +1526,16 @@ function ProjectSlide({ p, i, go, execMode }) {
     setIsPaused(false);
     setZoomIndex(null);
   }, [p.id]);
+
+  const onImgLoad = (src, e) => {
+    if (src.includes('RemindersRooms')) return;
+    if (e.target && e.target.naturalHeight > e.target.naturalWidth * 1.15) {
+      if (!dynamicVerticalRatios.has(src)) {
+        dynamicVerticalRatios.set(src, true);
+        setAspectTrigger((v) => v + 1);
+      }
+    }
+  };
 
   // Atajos de teclado en el lightbox (Esc para salir, flechas para navegar fotos)
   useEffect(() => {
@@ -1522,7 +1580,40 @@ function ProjectSlide({ p, i, go, execMode }) {
   };
 
   // Posiciones de los 3 slots en el arco circular con amplia separación vertical
-  const getSlotProps = (slot, paused) => {
+  const getSlotProps = (slot, paused, isVert) => {
+    if (isVert) {
+      switch (slot) {
+        case 'top':
+          return {
+            x: paused ? 24 : 16,
+            y: paused ? -235 : -220,
+            rotate: paused ? 5 : 3.5,
+            scale: paused ? 0.86 : 0.82,
+            opacity: paused ? 0.72 : 0.45,
+            zIndex: 2,
+          };
+        case 'center':
+          return {
+            x: 0,
+            y: 0,
+            rotate: 0,
+            scale: paused ? 1.02 : 1,
+            opacity: 1,
+            zIndex: 10,
+          };
+        case 'bottom':
+          return {
+            x: paused ? -12 : -8,
+            y: paused ? 235 : 220,
+            rotate: paused ? -4 : -2.5,
+            scale: paused ? 0.86 : 0.82,
+            opacity: paused ? 0.72 : 0.45,
+            zIndex: 2,
+          };
+        default:
+          return {};
+      }
+    }
     switch (slot) {
       case 'top':
         return {
@@ -1559,32 +1650,26 @@ function ProjectSlide({ p, i, go, execMode }) {
   // Lista de items visibles con IDs virtuales persistentes para que las tarjetas se trasladen físicamente de un slot a otro
   const visibleItems = useMemo(() => {
     if (shots.length === 0) return [];
+    const makeItem = (shotIdx, virtualIdx, slot) => {
+      const src = shots[shotIdx];
+      return {
+        virtualIndex: virtualIdx,
+        shotIndex: shotIdx,
+        src,
+        slot,
+        isVertical: isShotVertical(src),
+      };
+    };
+
     if (shots.length === 1) {
-      return [
-        {
-          virtualIndex: step,
-          shotIndex: 0,
-          src: shots[0],
-          slot: 'center',
-        },
-      ];
+      return [makeItem(0, step, 'center')];
     }
     if (shots.length === 2) {
       const centerIdx = ((step % 2) + 2) % 2;
       const topIdx = (((step + 1) % 2) + 2) % 2;
       return [
-        {
-          virtualIndex: step + 1,
-          shotIndex: topIdx,
-          src: shots[topIdx],
-          slot: 'top',
-        },
-        {
-          virtualIndex: step,
-          shotIndex: centerIdx,
-          src: shots[centerIdx],
-          slot: 'center',
-        },
+        makeItem(topIdx, step + 1, 'top'),
+        makeItem(centerIdx, step, 'center'),
       ];
     }
 
@@ -1594,24 +1679,9 @@ function ProjectSlide({ p, i, go, execMode }) {
     const bottomIdx = (((step - 1) % len) + len) % len;
 
     return [
-      {
-        virtualIndex: step + 1,
-        shotIndex: topIdx,
-        src: shots[topIdx],
-        slot: 'top',
-      },
-      {
-        virtualIndex: step,
-        shotIndex: centerIdx,
-        src: shots[centerIdx],
-        slot: 'center',
-      },
-      {
-        virtualIndex: step - 1,
-        shotIndex: bottomIdx,
-        src: shots[bottomIdx],
-        slot: 'bottom',
-      },
+      makeItem(topIdx, step + 1, 'top'),
+      makeItem(centerIdx, step, 'center'),
+      makeItem(bottomIdx, step - 1, 'bottom'),
     ];
   }, [shots, step]);
 
@@ -1739,7 +1809,7 @@ function ProjectSlide({ p, i, go, execMode }) {
                 {visibleItems.map((item) => (
                   <motion.div
                     key={item.virtualIndex}
-                    className={`stack-card ${
+                    className={`stack-card ${item.isVertical ? 'is-vertical' : 'is-horizontal'} ${
                       item.slot === 'center'
                         ? 'card-layer-center'
                         : item.slot === 'top'
@@ -1747,21 +1817,29 @@ function ProjectSlide({ p, i, go, execMode }) {
                         : 'card-layer-bottom'
                     }`}
                     initial={
-                      direction > 0
-                        ? { x: 36, y: -380, rotate: 6, scale: 0.72, opacity: 0 }
-                        : { x: -14, y: 380, rotate: -4, scale: 0.72, opacity: 0 }
+                      item.isVertical
+                        ? (direction > 0
+                            ? { x: 20, y: -340, rotate: 5, scale: 0.72, opacity: 0 }
+                            : { x: -10, y: 340, rotate: -4, scale: 0.72, opacity: 0 })
+                        : (direction > 0
+                            ? { x: 36, y: -380, rotate: 6, scale: 0.72, opacity: 0 }
+                            : { x: -14, y: 380, rotate: -4, scale: 0.72, opacity: 0 })
                     }
-                    animate={getSlotProps(item.slot, isPaused)}
+                    animate={getSlotProps(item.slot, isPaused, item.isVertical)}
                     exit={
-                      direction > 0
-                        ? { x: -14, y: 380, rotate: -4, scale: 0.72, opacity: 0 }
-                        : { x: 36, y: -380, rotate: 6, scale: 0.72, opacity: 0 }
+                      item.isVertical
+                        ? (direction > 0
+                            ? { x: -10, y: 340, rotate: -4, scale: 0.72, opacity: 0 }
+                            : { x: 20, y: -340, rotate: 5, scale: 0.72, opacity: 0 })
+                        : (direction > 0
+                            ? { x: -14, y: 380, rotate: -4, scale: 0.72, opacity: 0 }
+                            : { x: 36, y: -380, rotate: 6, scale: 0.72, opacity: 0 })
                     }
                     whileHover={
                       item.slot !== 'center'
                         ? {
-                            scale: 0.88,
-                            opacity: 0.82,
+                            scale: item.isVertical ? 0.94 : 0.88,
+                            opacity: 0.85,
                             transition: { duration: 0.2 },
                           }
                         : undefined
@@ -1789,6 +1867,7 @@ function ProjectSlide({ p, i, go, execMode }) {
                       src={item.src}
                       alt={`${p.name} - Captura ${item.shotIndex + 1}`}
                       loading="lazy"
+                      onLoad={(e) => onImgLoad(item.src, e)}
                     />
                     {item.slot !== 'center' && <div className="card-layer-sheen" />}
                   </motion.div>
@@ -1843,7 +1922,7 @@ function ProjectSlide({ p, i, go, execMode }) {
                 </button>
               )}
 
-              <div className="lightbox-image-wrapper">
+              <div className={`lightbox-image-wrapper ${isShotVertical(shots[zoomIndex]) ? 'is-vertical' : ''}`}>
                 <AnimatePresence mode="wait">
                   <motion.img
                     key={shots[zoomIndex]}

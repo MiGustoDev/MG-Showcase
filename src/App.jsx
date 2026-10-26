@@ -197,16 +197,15 @@ export const techColors = {
 // 13 .. 32: Desarrollos 2026 (Fichas individuales de proyectos 2026)
 // 33: Retorno de Inversión (ROI) & Ahorro Operativo para Mi Gusto
 // 34: Seniority & Evolución de Liderazgo (Semi Senior Technical Lead)
-// 35: Cierre & Métricas Globales (Resumen de Capacidades & Stack)
+// 35: Visión 2026—2027 & Cierre de Negocio
 // 36: Agradecimiento & Fin de la Presentación
 const FIRST_2025_INDEX = 3;
 const FIRST_2026_INDEX = FIRST_2025_INDEX + sorted.filter((p) => p.start.startsWith('2025')).length; // 13
 const ROI_INDEX = FIRST_2025_INDEX + sorted.length; // 33
 const SENIORITY_INDEX = ROI_INDEX + 1; // 34
 const VISION_INDEX = SENIORITY_INDEX + 1; // 35 (Visión 2026—2027 & Cierre de Negocio)
-const CLOSING_INDEX = VISION_INDEX + 1; // 36
-const THANKS_INDEX = CLOSING_INDEX + 1; // 37
-const TOTAL = THANKS_INDEX + 1; // 38
+const THANKS_INDEX = VISION_INDEX + 1; // 36
+const TOTAL = THANKS_INDEX + 1; // 37
 const PROJECT_OFFSET = FIRST_2025_INDEX; // 3
 
 // 4 Casos Estrella para el Pitch Ejecutivo (Fase 3):
@@ -256,7 +255,7 @@ export const FLAGSHIP_PROJECTS = [
 export const FLAGSHIP_IDS = new Set(FLAGSHIP_PROJECTS.map((f) => f.id));
 export const FLAGSHIP_SLIDES = FLAGSHIP_PROJECTS.map((f) => FIRST_2025_INDEX + (indexById[f.id] ?? 0));
 
-// Secuencia curada para el Pitch Ejecutivo (12 slides de alto impacto)
+// Secuencia curada para el Pitch Ejecutivo (11 slides de alto impacto)
 export const EXEC_SLIDES = [
   0, // Portada
   1, // Línea de tiempo interactiva
@@ -265,7 +264,6 @@ export const EXEC_SLIDES = [
   ROI_INDEX, // Retorno de Inversión (ROI) & Ahorro
   SENIORITY_INDEX, // Seniority & Liderazgo
   VISION_INDEX, // Visión 2026—2027 & Cierre de Negocio
-  CLOSING_INDEX, // Resumen de Capacidades & Stack
   THANKS_INDEX, // Agradecimiento & Cierre
 ];
 
@@ -1893,107 +1891,6 @@ function ProjectSlide({ p, i, go, execMode }) {
   );
 }
 
-function Closing({ go }) {
-  const stack = {};
-  sorted.forEach((p) => p.stack.forEach((s) => { stack[s] = (stack[s] || 0) + 1; }));
-  const top = Object.entries(stack).sort((a, b) => b[1] - a[1]).slice(0, 10);
-
-  return (
-    <section className="slide closing">
-      <motion.div
-        className="closing-content"
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
-      >
-        <p className="eyebrow">Resumen de Capacidades & Stack</p>
-        <h1>Construyendo el futuro de <span>Mi Gusto</span></h1>
-        
-        <div className="closing-kpis">
-          <motion.div
-            className="kpi-box"
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, delay: 0.05 }}
-          >
-            <strong><AnimatedNumber value={sorted.length} delay={0.05} duration={0.5} /></strong>
-            <span>Proyectos Entregados</span>
-          </motion.div>
-          <motion.div
-            className="kpi-box"
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, delay: 0.08 }}
-          >
-            <strong><AnimatedNumber value={100} suffix="%" delay={0.08} duration={0.5} /></strong>
-            <span>Desarrollo In-House</span>
-          </motion.div>
-          <motion.div
-            className="kpi-box"
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, delay: 0.11 }}
-          >
-            <strong><AnimatedNumber value={4} delay={0.11} duration={0.4} /></strong>
-            <span>Áreas Clave Impactadas</span>
-          </motion.div>
-          <motion.div
-            className="kpi-box"
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, delay: 0.14 }}
-          >
-            <strong><AnimatedNumber value={0} prefix="$" delay={0.14} duration={0.3} /></strong>
-            <span>Dependencia de Agencias</span>
-          </motion.div>
-        </div>
-
-        <div className="cloud-wrapper">
-          <p className="cloud-title">Ecosistema Tecnológico Dominado</p>
-          <div className="cloud">
-            {top.map(([s, n], idx) => {
-              const color = techColors[s] || '#ffb020';
-              return (
-                <motion.span
-                  key={s}
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, delay: 0.05 + idx * 0.025 }}
-                  style={{
-                    fontSize: `${1 + n / 7}rem`,
-                    '--tech-c': color,
-                  }}
-                  onMouseEnter={() => playSfx('hover')}
-                >
-                  {s}
-                  <motion.sup
-                    initial={{ opacity: 0, y: -4, scale: 0.6 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ duration: 0.35, delay: 0.08 + idx * 0.025 }}
-                  >
-                    <AnimatedNumber value={n} delay={0.08 + idx * 0.025} duration={0.45} />
-                  </motion.sup>
-                </motion.span>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="closing-cta">
-          <button className="btn-brand" onClick={() => { playSfx('click'); go(THANKS_INDEX); }}>
-            Agradecimiento & Cierre →
-          </button>
-          <button className="btn-secondary" onClick={() => { playSfx('click'); go(SENIORITY_INDEX); }}>
-            Revisar Seniority
-          </button>
-          <button className="btn-secondary" onClick={() => { playSfx('click'); go(0); }}>
-            Volver al Inicio
-          </button>
-        </div>
-      </motion.div>
-    </section>
-  );
-}
 
 // Slide Final: Agradecimiento por el espacio & Cierre de la Presentación
 function ThankYouSlide({ go }) {
@@ -2090,9 +1987,6 @@ function ThankYouSlide({ go }) {
           </button>
           <button className="btn-secondary" onClick={() => { playSfx('click'); go(VISION_INDEX); }}>
             🚀 Visión 2027
-          </button>
-          <button className="btn-secondary" onClick={() => { playSfx('click'); go(CLOSING_INDEX); }}>
-            📈 Resumen de Capacidades
           </button>
         </div>
       </motion.div>
@@ -2212,7 +2106,6 @@ export default function App() {
   else if (idx === ROI_INDEX) content = <RoiSlide go={go} />;
   else if (idx === SENIORITY_INDEX) content = <SenioritySlide go={go} />;
   else if (idx === VISION_INDEX) content = <VisionSlide go={go} />;
-  else if (idx === CLOSING_INDEX) content = <Closing go={go} />;
   else if (idx === THANKS_INDEX) content = <ThankYouSlide go={go} />;
   else content = <Cover go={go} />;
 
@@ -2281,9 +2174,6 @@ export default function App() {
             <button className="grid-special-btn highlight" onClick={() => go(VISION_INDEX)}>
               <span>🚀</span>Visión 2026—2027 & Cierre
             </button>
-            <button className="grid-special-btn highlight" onClick={() => go(CLOSING_INDEX)}>
-              <span>📈</span>Resumen de Capacidades
-            </button>
             <button className="grid-special-btn highlight" onClick={() => go(THANKS_INDEX)}>
               <span>🤝</span>Agradecimiento & Cierre
             </button>
@@ -2302,7 +2192,7 @@ export default function App() {
                   setExecMode((v) => !v);
                 }}
               >
-                {execMode ? '✓ Modo Ejecutivo Activado (12 slides)' : '⚡ Activar Modo Ejecutivo'}
+                {execMode ? `✓ Modo Ejecutivo Activado (${EXEC_SLIDES.length} slides)` : '⚡ Activar Modo Ejecutivo'}
               </button>
             </div>
             {FLAGSHIP_PROJECTS.map((f) => {
